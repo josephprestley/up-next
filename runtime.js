@@ -153,6 +153,15 @@ function start() {
     get uid() { return current ? current.uid : ""; },
     get claude() { return !!sample; },
     signOut: async () => { await signOut(auth); location.reload(); },
+    // anything else the Worker does for Joey (episode alerts), with his sign-in
+    call: async (body) => {
+      if (!CONFIG.workerUrl) throw err("no_worker");
+      const u = await signedIn;
+      const res = await fetch(CONFIG.workerUrl, { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + (await u.getIdToken()) }, body: JSON.stringify(body) }).catch(() => { throw err("network"); });
+      const j = await res.json().catch(() => null);
+      if (!res.ok) throw err((j && j.error) || "failed");
+      return j || {};
+    },
   };
 
   // ---- the sign-in screen

@@ -1161,7 +1161,9 @@ html.tv .un-lineup { font-size: 17px; }
         c.seasons = Object.keys(per).map(Number).sort((a, b) => a - b).map((n) => per[n]);
       });
       syncAllCatalog();
+      DATA.guides = true;
       render();
+      queueAlertShows();
     } catch (e) { /* episode titles unavailable; counts still work */ }
   }
   function ensureSynopses() {
@@ -1185,6 +1187,7 @@ html.tv .un-lineup { font-size: 17px; }
     else if (result) shows.set(id, result);
     persist(id);
     render();
+    queueAlertShows();
     if (message) toast(message, () => {
       if (before) shows.set(id, before); else shows.delete(id);
       persist(id); render();
@@ -1291,6 +1294,7 @@ html.tv .un-lineup { font-size: 17px; }
   }
 
   function render() {
+    if (!alerts.started && acct() && acct().uid) alertsStart();
     const up = upcomingList().length;
     document.querySelectorAll(".tab").forEach((b) => {
       b.setAttribute("aria-current", b.dataset.tab === ui.tab ? "page" : "false");
@@ -1555,6 +1559,7 @@ html.tv .un-lineup { font-size: 17px; }
     h += '<div class="row">' + (caps.downloads ? '<button class="btn" data-action="backup"' + (list.length ? "" : " disabled") + ">Download backup</button>" : "") +
       '<button class="btn" data-action="restore">Restore from backup</button></div></div>';
     const A = window.__hbAccount;
+    h += alertsPanel();
     if (A && A.uid) h += '<div class="panel acct"><div>Signed in as <b>' + esc(A.email) + '</b>.' + (A.claude ? "" : " The Claude features (finding a show, episode summaries and titles) turn on once the Claude Worker is set up.") +
       '</div><div><code>User ID: ' + esc(A.uid) + '</code></div><div class="row"><button class="btn" data-action="acct-copy">Copy user ID</button><button class="btn" data-action="acct-signout">Sign out</button></div></div>';
     h += '</div>';
@@ -1994,6 +1999,119 @@ html.tv .un-lineup { font-size: 17px; }
     if (msg) toast(msg);
   }
 
+  // ---------- Episode alerts ----------
+  // Phone notifications when a new episode of a show on the list comes out. The Worker checks TVmaze every hour and
+  // sends them (quiet 10 PM to 8 AM); this device subscribes, and the Worker keeps a copy of which shows to watch for.
+  // On an iPhone this only works in the app opened from the Home Screen.
+  const LS_ALERT_SHOWS = "upnext.alertShows.v1";
+  const IOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const STANDALONE = (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true;
+  const alerts = { state: "checking", note: "", started: false };
+  let alertTimer = null;
+  const acct = () => window.__hbAccount;
+  const b64uBytes = (s) => { s = String(s).replace(/-/g, "+").replace(/_/g, "/"); while (s.length % 4) s += "="; return Uint8Array.from(atob(s), (c) => c.charCodeAt(0)); };
+  const bytesB64u = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf || []))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  function alertShows() {
+    return snapshotArray().filter((s) => !s.stopped).map((s) => {
+      const c = CAT.get(guideId(s));
+      const tv = (c && c.tvmaze) || (s.photo && s.photo.from === "tvmaze" && s.photo.tvmaze) || null;
+      return tv ? { tv: tv, t: s.title, id: s.id } : null;
+    }).filter(Boolean).sort((a, b) => a.tv - b.tv);
+  }
+  // the service worker (it shows the notifications); null if it isn't running within a few seconds
+  const swReady = () => Promise.race([navigator.serviceWorker.ready, new Promise((r) => setTimeout(() => r(null), 6000))]);
+  async function currentSub() {
+    if (!("serviceWorker" in navigator)) return null;
+    const reg = await swReady();
+    return reg && reg.pushManager ? reg.pushManager.getSubscription() : null;
+  }
+  async function alertsStart() {
+    const A = acct();
+    if (alerts.started || !A || !A.uid || !A.claude || !A.call) return;
+    alerts.started = true;
+    if (IOS && !STANDALONE) alerts.state = "needs-home";
+    else if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window) || !window.isSecureContext) alerts.state = "unsupported";
+    else if (Notification.permission === "denied") alerts.state = "denied";
+    else if (!(await swReady())) alerts.state = "unsupported";
+    else {
+      try { alerts.state = (await currentSub()) && Notification.permission === "granted" ? "on" : "off"; } catch (e) { alerts.state = "off"; }
+    }
+    render();
+    if (alerts.state === "on") queueAlertShows();
+  }
+  // the Worker's copy of the show list follows changes here (a few seconds after the last one)
+  function queueAlertShows() {
+    if (alerts.state !== "on" || !DATA.guides) return;
+    clearTimeout(alertTimer);
+    alertTimer = setTimeout(async () => {
+      const list = alertShows(), j = JSON.stringify(list);
+      if (j === lsGet(LS_ALERT_SHOWS)) return;
+      try { await acct().call({ push: "shows", shows: list }); lsSet(LS_ALERT_SHOWS, j); } catch (e) { /* tries again on the next change */ }
+    }, 4000);
+  }
+  async function alertsOn() {
+    let perm = "default";
+    try { perm = await Notification.requestPermission(); } catch (e) { perm = Notification.permission; }   // must be the first thing after the tap
+    if (perm !== "granted") {
+      alerts.state = perm === "denied" ? "denied" : "off";
+      alerts.note = perm === "denied" ? "" : "Up Next needs your OK to send notifications.";
+      render(); return;
+    }
+    alerts.state = "busy"; alerts.note = "Turning on…"; render();
+    try {
+      const A = acct();
+      const key = (await A.call({ push: "key" })).key;
+      const reg = await swReady();
+      if (!reg) throw Object.assign(new Error(), { code: "no_service_worker" });
+      let sub = await reg.pushManager.getSubscription();
+      if (sub && sub.options && sub.options.applicationServerKey && bytesB64u(sub.options.applicationServerKey) !== key) { await sub.unsubscribe(); sub = null; }
+      if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64uBytes(key) });
+      const list = alertShows();
+      await A.call({ push: "subscribe", sub: sub.toJSON(), shows: DATA.guides ? list : undefined, device: IOS ? "iPhone" : /Android/.test(navigator.userAgent) ? "Android" : "Computer" });
+      if (DATA.guides) lsSet(LS_ALERT_SHOWS, JSON.stringify(list));
+      alerts.state = "on"; alerts.note = "Alerts are on. Tap Send a test to see one.";
+      queueAlertShows();
+    } catch (e) {
+      alerts.state = "off";
+      alerts.note = "Alerts didn’t turn on (" + ((e && (e.code || e.name)) || "error") + "). Try again in a moment.";
+    }
+    render();
+  }
+  async function alertsTest() {
+    alerts.note = "Sending…"; render();
+    try {
+      const sub = await currentSub();
+      const r = await acct().call({ push: "test", endpoint: sub && sub.endpoint });
+      alerts.note = r.sent ? "Sent. It should arrive in a few seconds." : "The test didn’t go through. Turn alerts off and on again.";
+    } catch (e) { alerts.note = "Couldn’t send a test (" + ((e && e.code) || "error") + ")."; }
+    render();
+  }
+  async function alertsOff() {
+    alerts.state = "busy"; alerts.note = "Turning off…"; render();
+    try {
+      const sub = await currentSub();
+      if (sub) { const endpoint = sub.endpoint; await sub.unsubscribe(); await acct().call({ push: "unsubscribe", endpoint: endpoint }).catch(() => {}); }
+      alerts.state = "off"; alerts.note = "Alerts are off on this device.";
+    } catch (e) { alerts.state = "on"; alerts.note = "Couldn’t turn alerts off. Try again."; }
+    render();
+  }
+  function alertsPanel() {
+    const A = acct();
+    if (TV || !A || !A.uid || !A.claude) return "";
+    if (!alerts.started) setTimeout(alertsStart, 0);
+    const busy = alerts.state === "busy" || alerts.state === "checking";
+    let h = '<div class="panel acct"><div><b>Episode alerts</b><br>';
+    if (alerts.state === "needs-home") h += "To get alerts on your iPhone, open Up Next from its Home Screen icon. (In Safari: Share → Add to Home Screen.)</div>";
+    else if (alerts.state === "unsupported") h += "This browser can’t show notifications.</div>";
+    else if (alerts.state === "denied") h += "Notifications are off for Up Next. Turn them on in your phone’s Settings → Notifications → Up Next, then come back.</div>";
+    else if (alerts.state === "on") h += "On for this device. When a new episode of a show on your list comes out, you’ll get a notification (none from 10 PM to 8 AM; those come at 8).</div>" +
+      '<div class="row"><button class="btn" data-action="alerts-test">Send a test</button><button class="btn btn-ghost" data-action="alerts-off">Turn off</button></div>';
+    else h += "Get a notification when a new episode of a show on your list comes out. None from 10 PM to 8 AM.</div>" +
+      '<div class="row"><button class="btn btn-primary" data-action="alerts-on"' + (busy ? " disabled" : "") + ">" + (busy ? '<span class="spinner"></span>' + (alerts.state === "checking" ? "Checking" : "Working") : "Turn on alerts") + "</button></div>";
+    if (alerts.note) h += '<p class="note">' + esc(alerts.note) + "</p>";
+    return h + "</div>";
+  }
+
   // ---------- Backup ----------
   async function backup() {
     if (!caps.downloads) return;
@@ -2126,6 +2244,9 @@ html.tv .un-lineup { font-size: 17px; }
       case "backup": backup(); break;
       case "acct-copy": { const A = window.__hbAccount; if (A && A.uid) { (navigator.clipboard ? navigator.clipboard.writeText(A.uid) : Promise.reject()).then(() => toast("User ID copied"), () => toast("Your user ID: " + A.uid)); } break; }
       case "acct-signout": { const A = window.__hbAccount; if (A) A.signOut(); break; }
+      case "alerts-on": alertsOn(); break;
+      case "alerts-test": alertsTest(); break;
+      case "alerts-off": alertsOff(); break;
       case "restore": $("#restore-input").click(); break;
     }
   });
