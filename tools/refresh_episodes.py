@@ -89,7 +89,7 @@ def refresh(eps_doc, syn_doc, get=fetch_json):
             if r["num"] is None:
                 continue
             s, n = r["season"], r["num"]
-            kept.append([s, n, r["date"], r["rt"], r["title"] or old_titles.get((s, n), "")])
+            kept.append([s, n, r["date"], r["rt"], old_titles.get((s, n)) or r["title"]])   # a title, once there, stays (TVmaze sometimes swaps in another language)
             if r["summary"]:
                 newsyn[f"{s}-{n}"] = r["summary"]
             if (s, n) not in old_titles:
