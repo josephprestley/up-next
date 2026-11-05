@@ -88,6 +88,8 @@ h1, h2, h3 { margin: 0; text-wrap: balance; }
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
 .bar-in { display: flex; align-items: center; gap: 12px 24px; flex-wrap: wrap; padding-block: 12px; }
+/* on the iPhone home screen, iOS fades whatever sits just under the status bar; start the header below that band */
+@media (display-mode: standalone) { .bar-in { padding-top: 34px; } }
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand-mark { display: flex; gap: 3px; align-items: center; }
 .brand-mark i { display: block; width: 7px; height: 7px; border-radius: 50%; background: var(--honey); box-shadow: 0 0 6px var(--honey); }
