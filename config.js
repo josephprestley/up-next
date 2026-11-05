@@ -11,5 +11,5 @@ export default {
     appId: "1:72317541982:web:2cfefdd2a4698059afdecf",
   },
   // Joey's Cloudflare Worker (worker/worker.js), which calls Claude with the Anthropic key kept on Cloudflare
-  workerUrl: "",
+  workerUrl: "https://up-next-claude.josephprestley.workers.dev/",
 };
