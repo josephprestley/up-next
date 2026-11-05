@@ -1151,6 +1151,7 @@ html.tv .un-lineup { font-size: 17px; }
         c.end = m.end || null;
         if (m.status) c.status = m.status;
         if (m.runtime) c.runtime = m.runtime;
+        if (m.tvmaze) c.tvmaze = m.tvmaze;
       });
       EP.forEach((m, id) => {
         const c = CAT.get(id); if (!c) return;
@@ -1198,6 +1199,7 @@ html.tv .un-lineup { font-size: 17px; }
     const s = normalize(Object.assign({}, data, { id: id, source: source, addedAt: Date.now(), watched: {}, epx: {}, favorite: false, stopped: false }));
     if (CAT.has(id)) syncCatalogShow(Object.assign(s, { catalog: true }));
     commit(id, () => s, "Added " + s.title);
+    if (!s.photo) setTimeout(() => findPoster(id, true), 0);   // its poster from TVmaze, quietly
   }
 
   function markNext(id) {
@@ -1655,6 +1657,7 @@ html.tv .un-lineup { font-size: 17px; }
       (w && !s.rw ? '<button class="btn btn-sm" data-action="rewatch-start">↻ Rewatch from the start</button>' : "") +
       '<button class="btn btn-sm" data-action="fav" aria-pressed="' + !!s.favorite + '">' + (s.favorite ? "★ Favorite" : "☆ Favorite") + "</button>" +
       '<button class="btn btn-sm" data-action="stop">' + (s.stopped ? "Resume watching" : "Stop watching") + "</button>" +
+      (!s.photo ? '<button class="btn btn-sm" data-action="poster"' + (ui.busy["poster:" + s.id] ? " disabled" : "") + ">" + (ui.busy["poster:" + s.id] ? '<span class="spinner"></span>Finding poster' : "Find poster") + "</button>" : "") +
       (caps.assets ? '<button class="btn btn-sm" data-action="photo"' + (ui.busy["photo:" + s.id] ? " disabled" : "") + ">" + (ui.busy["photo:" + s.id] ? '<span class="spinner"></span>Uploading' : (s.photo ? "Change photo" : "Add photo")) + "</button>" : "") +
       (s.photo ? '<button class="btn btn-sm btn-ghost" data-action="photo-remove">Remove photo</button>' : "") +
       '<button class="btn btn-sm" data-action="edit">Edit details</button>' +
@@ -1696,6 +1699,7 @@ html.tv .un-lineup { font-size: 17px; }
 
     if (hasGuide(s)) h += '<p class="credit">Episode guide from <a href="https://www.tvmaze.com" target="_blank" rel="noopener">TVmaze</a> (CC BY-SA).</p>';
     else if (s.titles && Object.keys(s.titles).length) h += '<p class="credit">Episode titles from Claude may contain mistakes.</p>';
+    if (s.photo && s.photo.from === "tvmaze") h += '<p class="credit">Poster from <a href="https://www.tvmaze.com' + (s.photo.tvmaze ? "/shows/" + encodeURIComponent(s.photo.tvmaze) : "") + '" target="_blank" rel="noopener">TVmaze</a>.</p>';
 
     h += fillBar(s);
     return h;
@@ -1929,6 +1933,65 @@ html.tv .un-lineup { font-size: 17px; }
     render();
   }
 
+  // ---------- Posters from TVmaze ----------
+  // TVmaze, where the episode guides come from, has poster art for most shows (free, no key, open to web apps). A show
+  // gets its poster when it's added, and a show without a photo has a Find poster button. A photo you add always wins.
+  const TVM = "https://api.tvmaze.com";
+  const bareTitle = (t) => String(t || "").toLowerCase().replace(/\s*\(.*?\)\s*/g, " ").replace(/&/g, "and").replace(/^the\s+/, "").replace(/[^a-z0-9]+/g, "");
+  async function tvmGet(path) {
+    const r = await fetch(TVM + path, { headers: { Accept: "application/json" } });
+    if (r.status === 404) return null;
+    if (!r.ok) throw new Error("tvmaze " + r.status);
+    return r.json();
+  }
+  // the TVmaze show for one of yours: the guide's own ID when it has one, otherwise a title search, with the year it
+  // started and the network telling same-named shows apart. `loose` (a button press) takes the top result when no
+  // title matches exactly; adding a show only takes an exact title.
+  async function tvmazeShow(s, loose) {
+    const c = CAT.get(guideId(s)), known = c && c.tvmaze;
+    if (known) { const t = await tvmGet("/shows/" + encodeURIComponent(known)); if (t) return t; }
+    const list = (await tvmGet("/search/shows?q=" + encodeURIComponent(s.title))) || [];
+    const want = bareTitle(s.title), net = String(s.network || "").toLowerCase().replace(/\+$/, "");
+    const score = (sh) => {
+      let p = 0;
+      const yr = parseInt(String(sh.premiered || "").slice(0, 4), 10);
+      if (s.start && yr === s.start) p += 2; else if (s.start && yr && Math.abs(yr - s.start) === 1) p += 1;
+      const n = ((sh.network && sh.network.name) || (sh.webChannel && sh.webChannel.name) || "").toLowerCase().replace(/\+$/, "");
+      if (net && n && (n.includes(net) || net.includes(n))) p += 1;
+      if (sh.image) p += 0.5;
+      return p;
+    };
+    const found = list.map((x) => x && x.show).filter(Boolean);
+    const exact = found.filter((sh) => bareTitle(sh.name) === want);
+    const pool = exact.length ? exact : (loose ? found.slice(0, 1) : []);
+    let best = null, bs = -1;
+    pool.forEach((sh) => { const v = score(sh); if (v > bs) { bs = v; best = sh; } });
+    return best;
+  }
+  async function findPoster(id, auto) {
+    const s = shows.get(id);
+    if (!s || s.photo || ui.busy["poster:" + id]) return;
+    ui.busy["poster:" + id] = true; if (!auto) renderSheet();
+    let msg = "";
+    try {
+      const tm = await tvmazeShow(s, !auto);
+      const src = tm && tm.image && (tm.image.original || tm.image.medium);
+      if (!src) msg = auto ? "" : "TVmaze doesn’t have a poster for " + s.title + ". You can add your own photo.";
+      else {
+        let photo = { id: "tvmaze-" + tm.id, url: src, from: "tvmaze", tvmaze: tm.id };
+        // keep a small copy in the show so it works offline; if TVmaze won't hand over the file, link to it instead
+        if (caps.assets) {
+          try { const r = await fetch(src); if (r.ok) { const up = await caps.assets.upload(await r.blob()); photo = Object.assign(photo, { id: up.id, url: up.url }); } } catch (e) {}
+        }
+        const cur = shows.get(id);
+        if (cur && !cur.photo) commit(id, (c) => { c.photo = photo; return c; }, auto ? "" : "Poster added");
+      }
+    } catch (e) { msg = auto ? "" : "Couldn’t reach TVmaze. Try again in a moment."; }
+    delete ui.busy["poster:" + id];
+    render();
+    if (msg) toast(msg);
+  }
+
   // ---------- Backup ----------
   async function backup() {
     if (!caps.downloads) return;
@@ -2037,6 +2100,7 @@ html.tv .un-lineup { font-size: 17px; }
       case "summary": if (s && v) getSummary(s, v.s, v.e); break;
       case "titles": if (s) getTitles(s, +el.dataset.s); break;
       case "photo": $("#photo-input").click(); break;
+      case "poster": if (s) findPoster(s.id, false); break;
       case "photo-remove": if (s && s.photo) { const old = s.photo.id; commit(s.id, (c) => { delete c.photo; return c; }, "Photo removed"); if (caps.assets && caps.assets.delete && old) caps.assets.delete(old).catch(() => {}); } break;
       case "rewatch-start":
         if (s) { ui.expanded = new Set([1]); commit(s.id, (cur) => { cur.rw = { startedAt: Date.now(), watched: {} }; cur.stopped = false; cur.lastWatchedAt = Date.now(); return cur; }, "Rewatch started. It’s on your Up next list."); }
