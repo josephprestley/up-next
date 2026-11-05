@@ -1,6 +1,6 @@
 /* Up Next works offline: the app's own files come from the network when it's there (so updates show up right away)
    and from this cache when it isn't. Your shows are cached separately by Firebase. */
-const CACHE = "up-next-v1";
+const CACHE = "up-next-v2";
 const SHELL = ["./", "index.html", "runtime.js", "config.js", "firebase.js", "gb.js", "gb.css", "manifest.webmanifest", "episodes.json", "icons/icon-192.png", "icons/apple-touch-icon.png"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
