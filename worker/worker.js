@@ -101,7 +101,8 @@ export async function trelloRoute(body, env, now = Date.now()) {
   if (rate.minute !== m) { rate.minute = m; rate.n = 0; }
   if (++rate.n > 120) return { error: "rate_limited", status: 429 };
   const get = async (path, params) => {
-    const q = new URLSearchParams(Object.assign({}, params, { key: env.TRELLO_KEY, token: env.TRELLO_TOKEN }));
+    // trimmed: a key or token pasted into the dashboard can bring a space or line break along
+    const q = new URLSearchParams(Object.assign({}, params, { key: String(env.TRELLO_KEY).trim(), token: String(env.TRELLO_TOKEN).trim() }));
     const r = await fetch(TRELLO + path + "?" + q.toString(), { headers: { Accept: "application/json" } });
     if (r.status === 401) throw Object.assign(new Error("auth"), { code: "trello_auth" });
     if (r.status === 404) throw Object.assign(new Error("gone"), { code: "not_found" });
