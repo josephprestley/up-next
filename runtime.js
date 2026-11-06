@@ -1,36 +1,48 @@
-/* Up Next, standalone: the pieces claude.ai used to provide, rebuilt on Joey's own services.
+/* Up Next and Daily Spin, standalone: the pieces claude.ai used to provide, rebuilt on Joey's own services.
    - db: Firebase Firestore, the same paths as before (data/users/<uid>/<show id>), kept on the device for offline use
    - user: Firebase sign-in with email and password (works inside a home-screen app on an iPhone)
    - sample: the Claude features, through Joey's Cloudflare Worker, which keeps the Anthropic key off this page
    - assets: show photos, stored right in the show as a small JPEG
    - downloads: an ordinary file download
-   Up Next's page asks for these through window.__wc.use(name), exactly as it did on claude.ai. */
+   - trello: Daily Spin's read-only Trello (named lists only), through the same Worker
+   Each page asks for these through window.__wc.use(name), exactly as it did on claude.ai. The page's <html> says which
+   app it is (data-app-name) and whether new sign-ins are offered (data-signup="off"). */
 import {
   initializeApp, getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword,
   sendPasswordResetEmail, signOut, setPersistence, indexedDBLocalPersistence, browserLocalPersistence,
   initializeFirestore, persistentLocalCache, persistentMultipleTabManager, memoryLocalCache,
-  collection, doc, getDoc, getDocs, setDoc, deleteDoc, onSnapshot,
+  collection, doc, getDoc, getDocs, setDoc, deleteDoc, onSnapshot, runTransaction,
 } from "./firebase.js";
 import CONFIG from "./config.js";
 
 const gate = document.getElementById("hb-gate");
+const APP = document.documentElement.dataset.appName || "Up Next";
+const SIGNUP = document.documentElement.dataset.signup !== "off";
+const IOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+const STANDALONE = (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true;
+// a home-screen app keeps its own storage, so on an iPhone Daily Spin asks to be added to the Home Screen before sign-in
+let installFirst = document.documentElement.dataset.installFirst === "on" && IOS && !STANDALONE;
 const $g = (sel) => gate.querySelector(sel);
 const err = (code, message) => Object.assign(new Error(message || code), { code });
 
 // ------------------------------------------------------------------ sign-in screen
 let mode = "in";   // "in" = sign in, "up" = make an account
 function showGate(state, note) {
+  if (state === "form" && installFirst && $g('[data-show="install"]')) state = "install";
   document.documentElement.classList.add("hb-gated");
   gate.hidden = false;
   $g("[data-state]").dataset.state = state;
+  if (state === "install") $g("#hb-title").textContent = "Add " + APP + " to your Home Screen";
   $g("#hb-note").textContent = note || "";
   if (state === "form") { paintMode(); setTimeout(() => { try { $g("#hb-email").focus(); } catch (e) {} }, 50); }
 }
 function hideGate() { gate.hidden = true; document.documentElement.classList.remove("hb-gated"); }
 function paintMode() {
-  $g("#hb-title").textContent = mode === "up" ? "Make your Up Next sign-in" : "Sign in to Up Next";
+  if (!SIGNUP) mode = "in";
+  $g("#hb-title").textContent = mode === "up" ? "Make your " + APP + " sign-in" : "Sign in to " + APP;
   $g("#hb-go").textContent = mode === "up" ? "Create my sign-in" : "Sign in";
   $g("#hb-switch").textContent = mode === "up" ? "I already have one" : "First time? Make your sign-in";
+  $g("#hb-switch").hidden = !SIGNUP;
   $g("#hb-pass").autocomplete = mode === "up" ? "new-password" : "current-password";
   $g("#hb-forgot").hidden = mode === "up";
 }
@@ -61,7 +73,7 @@ function localOnly(note) {
 }
 
 if (!CONFIG || !CONFIG.firebase || !CONFIG.firebase.apiKey) {
-  localOnly("Up Next isn't connected to its database yet. Claude adds that once Firebase is set up.");
+  localOnly(APP + " isn't connected to its database yet. Claude adds that once Firebase is set up.");
 } else {
   start();
 }
@@ -100,7 +112,13 @@ function start() {
       onSnapshot: (cb, onErr) => onSnapshot(c, { includeMetadataChanges: true }, (q) => cb(querySnap(q)), onErr),
     };
   };
-  const db = { collection: colRef, doc: docRef };
+  // a transaction reads from the server and writes only if nothing it read changed meanwhile (Firestore retries it),
+  // so two devices can't both pay the same reward; it needs a connection
+  const transaction = (fn) => runTransaction(fs, (tx) => fn({
+    get: async (path) => docSnap(await tx.get(doc(fs, path))),
+    set: (path, data) => { tx.set(doc(fs, path), JSON.parse(JSON.stringify(data))); },
+  }));
+  const db = { collection: colRef, doc: docRef, transaction };
 
   // ---- user
   const user = { id: async () => (await signedIn).uid, email: async () => (await signedIn).email || "" };
@@ -144,7 +162,10 @@ function start() {
     },
   };
 
-  const caps = { db, user, sample, assets, downloads };
+  // ---- trello: read-only, named lists, through the Worker (Daily Spin)
+  const trello = CONFIG.workerUrl ? { read: (what, opts) => window.__hbAccount.call(Object.assign({}, opts || {}, { trello: what })) } : null;
+
+  const caps = { db, user, sample, assets, downloads, trello };
   resolveRt({ use: async (name) => caps[name] || null });
 
   // ---- account details for Up Next's "Your data" panel
@@ -213,5 +234,8 @@ function toJpeg(blob, max, q) {
   });
 }
 
-// the "use it on this device only" button on the not-set-up screen
-gate.addEventListener("click", (e) => { if (e.target.closest("#hb-local")) hideGate(); });
+// the "use it on this device only" button on the not-set-up screen, and "sign in here anyway" on the install screen
+gate.addEventListener("click", (e) => {
+  if (e.target.closest("#hb-local")) hideGate();
+  if (e.target.closest("#hb-anyway")) { installFirst = false; showGate("form"); }
+});

@@ -25,3 +25,11 @@ Open the link in Safari, sign in, then Share → Add to Home Screen. It opens fu
 - `sw.js`, `manifest.webmanifest`, `icons/`: what makes it an installable, offline app
 - `worker/worker.js`: the Cloudflare Worker (checks it's you, then asks Claude)
 - `firestore.rules`: the database rules to paste into Firebase
+
+## Daily Spin (spin/)
+Joey's habit game, moved off claude.ai on Nov 5, 2026: https://josephprestley.github.io/up-next/spin/. It shares Up Next's
+Firebase sign-in and database (`data/users/<uid>/lake/lucky` for the park, `lake/world/{grants,ledger}` for Trello
+rewards) and runtime (`runtime.js`), and reads Trello only through the Worker's read-only route (`{trello: "health" |
+"cards" | "activity"}`; the board, list and card ids are the Worker's `TRELLO_IDS` setting, the key and a read-only token
+its `TRELLO_KEY` and `TRELLO_TOKEN` secrets). `spin/rewards.js` pays finished personal cards; `spin/sw.js` keeps it
+working offline. Its tests (made-up data) live outside this public repository.
