@@ -11,6 +11,9 @@
      ALLOWED_UID         text     your user ID, from Up Next → Your data → Copy user ID
      ALLOWED_ORIGIN      text     https://josephprestley.github.io
      MODEL               text     optional; default claude-sonnet-5-5
+     TRELLO_KEY          secret   Daily Spin: the Trello Power-Up's API key
+     TRELLO_TOKEN        secret   Daily Spin: a read-only token (authorize with scope=read)
+     TRELLO_IDS          text     Daily Spin: the board, list and card ids it may read (see trelloRoute)
    Bindings (Worker → Settings → Bindings): a KV namespace named PUSH.
    Triggers (Worker → Settings → Triggers → Cron Triggers): 0 * * * * (every hour). */
 
@@ -36,6 +39,12 @@ export default {
     if (!claims || claims.sub !== env.ALLOWED_UID) return reply({ error: "unauthorized" }, 401, cors);
 
     const body = await req.json().catch(() => null);
+    if (body && typeof body.trello === "string") {
+      try {
+        const out = await trelloRoute(body, env);
+        return reply(out, out.error ? (out.status || 400) : 200, cors);
+      } catch (e) { return reply({ error: "trello_failed" }, 502, cors); }
+    }
     if (body && typeof body.push === "string") {
       try {
         const out = await pushRoute(body, env, claims.sub);
@@ -72,6 +81,76 @@ export default {
 
 function reply(obj, status, headers) {
   return new Response(JSON.stringify(obj), { status, headers: Object.assign({ "content-type": "application/json" }, headers) });
+}
+
+// ------------------------------------------------------------------ Trello, read only (Daily Spin)
+/* Daily Spin asks for a few named things; the board, list and card ids live in the TRELLO_IDS setting, not in the page,
+   and the key and a read-only token are secrets (TRELLO_KEY, TRELLO_TOKEN). Replies carry only the fields the game
+   reads, in the shapes it already knows, and Chief of Staff lists come back with Personal-labeled cards only.
+   TRELLO_IDS (text): {"personalBoard","personalToday","personalDone","cosBoard","cosToday","cosDone","healthCard"} */
+const TRELLO = "https://api.trello.com/1/";
+const LISTS = ["personalToday", "personalDone", "cosToday", "cosDone"];
+const HEX24 = /^[0-9a-f]{24}$/;
+const KEEP_DAYS = 60;   // cards whose last activity is older than this can't pay any more
+const rate = { minute: 0, n: 0 };
+export async function trelloRoute(body, env, now = Date.now()) {
+  if (!env.TRELLO_KEY || !env.TRELLO_TOKEN || !env.TRELLO_IDS) return { error: "trello_not_set_up", status: 500 };
+  let ids;
+  try { ids = typeof env.TRELLO_IDS === "string" ? JSON.parse(env.TRELLO_IDS) : env.TRELLO_IDS; } catch (e) { return { error: "trello_not_set_up", status: 500 }; }
+  const m = Math.floor(now / 60000);
+  if (rate.minute !== m) { rate.minute = m; rate.n = 0; }
+  if (++rate.n > 120) return { error: "rate_limited", status: 429 };
+  const get = async (path, params) => {
+    const q = new URLSearchParams(Object.assign({}, params, { key: env.TRELLO_KEY, token: env.TRELLO_TOKEN }));
+    const r = await fetch(TRELLO + path + "?" + q.toString(), { headers: { Accept: "application/json" } });
+    if (r.status === 401) throw Object.assign(new Error("auth"), { code: "trello_auth" });
+    if (r.status === 404) throw Object.assign(new Error("gone"), { code: "not_found" });
+    if (r.status === 429) throw Object.assign(new Error("busy"), { code: "rate_limited" });
+    if (!r.ok) throw Object.assign(new Error("trello " + r.status), { code: "upstream" });
+    return r.json();
+  };
+  try {
+    switch (body.trello) {
+      case "cards": {
+        if (!LISTS.includes(body.list) || !HEX24.test(String(ids[body.list] || ""))) return { error: "bad_request" };
+        const raw = await get("lists/" + ids[body.list] + "/cards", { filter: body.filter === "all" ? "all" : "open", fields: "name,labels,due,dueComplete,closed,dateLastActivity,url,idList", limit: "1000" });
+        const cos = body.list.startsWith("cos");
+        const floor = now - KEEP_DAYS * 86400000;
+        const listName = /done/i.test(body.list) ? "Done" : "Today";
+        const nodes = (Array.isArray(raw) ? raw : [])
+          .filter((c) => c && HEX24.test(String(c.id)) && (!cos || (c.labels || []).some((l) => /^personal$/i.test(String(l.name || "")))))
+          .filter((c) => body.filter !== "all" || !c.dateLastActivity || Date.parse(c.dateLastActivity) >= floor)
+          .map((c) => ({ id: c.id, name: String(c.name || "").slice(0, 200), labels: (c.labels || []).map((l) => ({ name: String(l.name || "") })), due: c.due || null, dueComplete: !!c.dueComplete, complete: !!c.dueComplete, closed: !!c.closed, lastActivityAt: c.dateLastActivity || null, webUrl: c.url || "", list: { name: listName } }));
+        return { cards: { nodes, pageInfo: { hasNextPage: false, endCursor: null } } };
+      }
+      case "activity": {
+        const id = String(body.card || "").split("/").pop();
+        if (!HEX24.test(id)) return { error: "bad_request" };
+        const card = await get("cards/" + id, { fields: "idBoard" });
+        if (!card || ![ids.personalBoard, ids.cosBoard].includes(card.idBoard)) return { error: "forbidden", status: 403 };
+        const acts = await get("cards/" + id + "/actions", { filter: "updateCard:idList,updateCard:closed,updateCard:dueComplete,createCard,copyCard,moveCardToBoard,convertToCardFromCheckItem", display: "true", limit: "25" });
+        const list = (Array.isArray(acts) ? acts : []).map((a) => {
+          const d = a.data || {}, key = (a.display && a.display.translationKey) || a.type || "";
+          const out = { id: a.id, type: a.type, displayKey: key, date: a.date };
+          if (d.listBefore) out.listBefore = { name: String(d.listBefore.name || "") };
+          if (d.listAfter) out.listAfter = { name: String(d.listAfter.name || "") };
+          if (!d.listAfter && d.list && /create|copy|convert|moveCardToBoard/i.test(a.type)) out.listAfter = { name: String(d.list.name || "") };
+          return out;
+        });
+        return { activity: list, pageInfo: { hasNextPage: list.length >= 25, endCursor: null } };
+      }
+      case "health": {
+        if (!HEX24.test(String(ids.healthCard || ""))) return { error: "trello_not_set_up", status: 500 };
+        const acts = await get("cards/" + ids.healthCard + "/actions", { filter: "commentCard", limit: "5" });
+        const comments = (Array.isArray(acts) ? acts : []).map((a) => ({ id: a.id, text: String((a.data && a.data.text) || "").slice(0, 2000), createdAt: a.date, lastEditedAt: (a.data && a.data.dateLastEdited) || null }));
+        return { comments };
+      }
+      default: return { error: "bad_request" };
+    }
+  } catch (e) {
+    const code = (e && e.code) || "upstream";
+    return { error: code, status: code === "trello_auth" ? 502 : code === "rate_limited" ? 429 : code === "not_found" ? 404 : 502 };
+  }
 }
 
 // ------------------------------------------------------------------ episode alerts
