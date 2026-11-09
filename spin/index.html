@@ -1226,10 +1226,10 @@ function merge3(base,loc,rem){
   const out=clone(rem);
   const keys=new Set([...Object.keys(base||{}),...Object.keys(loc||{}),...Object.keys(rem||{})]);
   keys.forEach(k=>{
-    if(k==='updatedAt'||k==='parentAt')return;
+    if(k==='updatedAt'||k==='parentAt'||k==='lineage')return;   // version bookkeeping: the cloud's copy stands
     const b=base[k],l=loc[k],r=rem[k];
     if(sameJ(l,b))return;                         // only the cloud changed it (or nobody did)
-    if(sameJ(r,b)){out[k]=clone(l);return;}        // only this device changed it
+    if(sameJ(r,b)){if(l===undefined)delete out[k];else out[k]=clone(l);return;}        // only this device changed it
     // both changed
     if(k==='log'){const o={};new Set([...Object.keys(b||{}),...Object.keys(l||{}),...Object.keys(r||{})]).forEach(d=>{const bb=(b||{})[d],ll=(l||{})[d],rr=(r||{})[d];o[d]=sameJ(ll,bb)?clone(rr||{done:[],paid:[]}):sameJ(rr,bb)?clone(ll):mergeDay(bb,ll,rr);});out.log=o;return;}
     if(k==='spins'||k==='coins'){out[k]=Math.max(0,numv(r)+numv(l)-numv(b));return;}
@@ -1243,6 +1243,7 @@ function merge3(base,loc,rem){
     if(k==='weeks'){const o=clone(r||{});Object.keys(l||{}).forEach(wk=>{const L=l[wk],R=o[wk];if(!R){o[wk]=clone(L);return;}const pay=Object.assign({},R.pay||{});Object.keys(L.pay||{}).forEach(id=>{const a=L.pay[id]||{},c=pay[id]||{};pay[id]=mergePay(a,c);});o[wk]={...R,pay,allCore:!!(R.allCore||L.allCore),result:R.result||L.result};});out.weeks=o;return;}
     if(k==='village'){const o=clone(r||{});o.trail=Math.max(0,numv((r||{}).trail)+numv((l||{}).trail)-numv((b||{}).trail));if(numv((l||{}).n)>numv(o.n))return out[k]=clone(l);if(numv((l||{}).n)===numv(o.n)){o.levels=(o.levels||[]).map((x,i)=>Math.max(x,((l||{}).levels||[])[i]||0));o.damaged=(o.damaged||[]).map((x,i)=>x&&!!(((l||{}).damaged||[])[i]));}out.village=o;return;}
     if(k==='weight'){const o=clone(r||{});const seen=new Set((o.entries||[]).map(e=>e.d));(l&&l.entries||[]).forEach(e=>{if(!seen.has(e.d))(o.entries=o.entries||[]).push(e);});(o.entries||[]).sort((x,y)=>x.d<y.d?-1:1);out.weight=o;return;}
+    if(l===undefined)return;                       // gone here, changed there: keep the cloud's
     out[k]=clone(l);                               // anything else: this device's newer edit wins
   });
   // Counters always merge additively (when one side didn't change, that's simply the other side's value); then one copy
@@ -1316,6 +1317,13 @@ function persist(){S.updatedAt=Date.now();try{localStorage.setItem(KEY,JSON.stri
 const hist=new Map();
 function remember(v){const u=v&&v.updatedAt;if(!u||hist.has(u))return;hist.set(u,clone(v));while(hist.size>6)hist.delete(hist.keys().next().value);}
 function ancestorFor(r,base){if(r&&base&&r.parentAt&&r.parentAt!==(base.updatedAt||0)&&hist.has(r.parentAt))return hist.get(r.parentAt);return base;}
+/* Our own save that reached the cloud before this device noted it (the app closed mid-save, or a write that timed out here
+   but landed later) used to be counted twice on the next merge: +20 spins came back as +40 (Nov 9, found by the coding
+   expert). A copy of what was sent is kept until the save is noted, and each save lists the versions it was built on, so
+   the next merge starts from that copy whenever the cloud has it. */
+const INFL=KEY+'-inflight';
+function ownLanded(r){let f=null;try{f=JSON.parse(lsGet(INFL)||'null');}catch(e){}const u=f&&f.updatedAt;if(!u||!r)return null;
+  return ((r.updatedAt||0)===u||(r.parentAt||0)===u||(Array.isArray(r.lineage)&&r.lineage.indexOf(u)>=0))?f:null;}
 /* Sync trouble (Nov 4): shown quietly and retried with backoff (2 s, 4 s ... 60 s). Nothing is dropped: the copy here stays
    marked unsynced until a save lands, and a read that fails means nothing is written that round. A view whose access
    was withdrawn (revoked) keeps everything on this device and says so. */
@@ -1339,18 +1347,21 @@ async function flush(){
     // read the cloud first: a newer version from another device is merged in, and a failed read means no write
     const qs=await dbCol.get();
     const docs=qs.docs.filter(d=>d.exists).map(d=>({id:d.id,data:clone(d.data())}));const r=remoteFrom(docs);
-    const ru=r?(r.updatedAt||0):0;
-    if(r&&ru!==parent&&!hist.has(ru)){
-      S=normalize(base?merge3(ancestorFor(r,base),S,r):unionLogs(S,r));S.cloudLinked=true;fixDays();S.updatedAt=Date.now();
+    const ru=r?(r.updatedAt||0):0,own=ownLanded(r);
+    if(own&&ru===own.updatedAt){remember(r);setBase(clone(r));parent=ru;}   // our own earlier save: S already has it
+    else if(r&&ru!==parent&&!hist.has(ru)){
+      S=normalize(base||own?merge3(own||ancestorFor(r,base),S,r):unionLogs(S,r));S.cloudLinked=true;fixDays();S.updatedAt=Date.now();
       try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}remember(r);parent=ru;setTimeout(renderAll,0);
     }else if(r&&ru!==parent)parent=ru;
     // write a snapshot taken now, so edits made while the write is in flight stay unsynced and go out next round
     const sent=clone(S);sent.parentAt=parent;inflightAt=sent.updatedAt||0;
+    const pv=(r&&ru===parent)?r:getBase();sent.lineage=[parent].concat(pv&&Array.isArray(pv.lineage)?pv.lineage:[]).filter(Boolean).slice(0,12);
+    lsSet(INFL,JSON.stringify(sent));
     const {core,months}=splitState(sent);
     for(const m of Object.keys(months).sort()){const id='m-'+m,js=JSON.stringify(months[m]);if(synced[id]!==js){await dbCol.doc(id).set(JSON.parse(js));synced[id]=js;}}
     for(const id of Object.keys(synced)){if(id.startsWith('m-')&&!months[id.slice(2)]){const body={m:id.slice(2),days:{},weights:[]},js=JSON.stringify(body);if(synced[id]!==js){await dbCol.doc(id).set(body);synced[id]=js;}}}
     const js=JSON.stringify(core);if(synced.game!==js){await dbCol.doc('game').set(core);synced.game=js;}
-    remember(sent);setBase(sent);if(!dirty)lsSet(UNSYNC,null);syncOk();
+    remember(sent);setBase(sent);lsSet(INFL,null);if(!dirty)lsSet(UNSYNC,null);syncOk();
   }catch(e){failed=true;dirty=true;syncFail(e,flush);}
   inflightAt=0;writing=false;
   if(dirty&&!failed){clearTimeout(saveTimer);saveTimer=setTimeout(flush,800);}
@@ -1389,9 +1400,9 @@ async function connectCloud(){
     remember(getBase());
     dbCol=col;cloudOn=true;syncOk();setTimeout(lakeClaim,900);
     if(remote){
-      const base=getBase(),uns=lsGet(UNSYNC)==='1';
-      const next=(S.cloudLinked&&base&&uns)?merge3(ancestorFor(remote,base),S,remote):(S.cloudLinked&&!base)?unionLogs(S,remote):remote;
-      remember(remote);S=normalize(next);S.cloudLinked=true;setBase(clone(remote));
+      const base=getBase(),uns=lsGet(UNSYNC)==='1',own=ownLanded(remote),mine=!!own&&(remote.updatedAt||0)===own.updatedAt;
+      const next=(S.cloudLinked&&mine)?S:(S.cloudLinked&&own&&uns)?merge3(own,S,remote):(S.cloudLinked&&base&&uns)?merge3(ancestorFor(remote,base),S,remote):(S.cloudLinked&&!base)?unionLogs(S,remote):remote;
+      remember(remote);S=normalize(next);S.cloudLinked=true;setBase(clone(remote));if(own)lsSet(INFL,null);
       const fixed=fixDays(),moved=moveIn();resetReels();renderAll();
       if(next!==remote||fixed||moved){persist();flush();}else lsSet(UNSYNC,null);
     }
@@ -1600,10 +1611,12 @@ function lakeWriteClaims(){
 function adopt(d,save){S=normalize(d);S.cloudLinked=true;const fixed=fixDays();resetReels();const ev=booted?dailyChecks():[];if((save||fixed)&&!ev.length)persist();renderAll();if(ev.length)showAway(ev);setTimeout(lakeClaim,600);if(booted)setTimeout(()=>checkVillageComplete(false),900);}
 function takeRemote(r){
   if(!r||hist.has(r.updatedAt||0))return;
+  const own=ownLanded(r);
+  if(own&&(r.updatedAt||0)===own.updatedAt){remember(r);setBase(clone(r));if(!writing)lsSet(INFL,null);return;}   // our own save, already here
   const base=getBase(),uns=dirty||writing||lsGet(UNSYNC)==='1';let next=r;
   // merge when this device has unsaved changes, or when the incoming save was built on an older version than ours
-  if(base){const anc=ancestorFor(r,base);if(uns||anc!==base)next=merge3(anc,S,r);}
-  remember(r);setBase(clone(r));adopt(next,next!==r);
+  if(base||own){const anc=own||ancestorFor(r,base);if(uns||anc!==base)next=merge3(anc,S,r);}
+  remember(r);setBase(clone(r));if(own&&!writing)lsSet(INFL,null);adopt(next,next!==r);
 }
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){clearTimeout(saveTimer);flush();}else if(booted){if(Date.now()-healthAt>5*60000)healthPull();if(window.SpinRewards)window.SpinRewards.scan().catch(()=>{});}});   // an iPhone app comes back rather than reopening
 
