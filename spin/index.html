@@ -374,7 +374,7 @@ select.field{padding:0 8px}
 .lairs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .lair{position:relative;padding:8px 8px 10px;border-radius:18px;border:1px solid var(--line);background:var(--bg);color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:4px}
 .lair .art{width:100%;aspect-ratio:1;max-width:120px}
-.lair .art svg{width:100%;height:100%;filter:var(--stk-sm)}
+.lair .art svg{width:100%;height:100%;filter:var(--stk-sm);overflow:visible}
 .lair .ln{font:700 13px var(--body)}
 .lair.smashed{background:var(--honey-soft)}
 .lair.blocked{background:var(--fjord-soft)}
@@ -597,53 +597,198 @@ pause:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="
 };
 /* A Craving stand after the mallet lands, and the sand you dig in */
 /* The high striker's targets (Joey, Nov 5): little craving goblins. A bonk squishes him and makes him dizzy, spiral
-   eyes and stars and all, then he wobbles it off; nobody gets hurt. A goblin who ducks in time has a pot lid on. */
+   eyes and stars and all, then he wobbles it off; nobody gets hurt. A goblin who ducks in time has a pot lid on.
+   New look (Joey, Nov 9): three artists drew new goblins independently and Joey picked artist 3's designer-toy set. */
+/* Craving goblins, Series 1 (artist 3): designer-toy figures. Every goblin shares one vinyl "platform" (bean head,
+   big pointy ears, blush, a single fang) and each wears ONE gimmick that is his craving, so the silhouettes differ:
+   a crown of fries, a frosted donut ruff, a soda-cup bath with a striped straw, a peaked hoodie and a glowing phone,
+   a bandit mask and a bitten cookie moon, a little gold car with a takeout bag, a blanket burrito with a nightcap.
+   States come from the game's CSS: .eye-n is the whole normal face (eyes + mouth), .eye-d the dizzy face, .stars the
+   ring of stars, .lid the pot lid plus squeezed-shut eyes, .cap headwear the lid replaces. Feet sit on y=92 so the
+   squash (origin 50 92) keeps them planted. Helpers live inside GOB_ART so nothing collides with the game's globals. */
 const GOBLINS={fry:'Deep-Fry Goblin',donut:'Donut Goblin',soda:'Soda Goblin',phone:'Doomscroll Goblin',moon:'Midnight Snack Goblin',car:'Drive-Thru Goblin',zzz:'Snooze Goblin'};
-const GOB_SKIN=['#86c86a','#9fd06a','#6fc29c','#a9c95a'];
-function gobProp(v){
-  const k='stroke="#2b1a10" stroke-width="2" stroke-linejoin="round"';
-  if(v==='fry')return `<g ${k}><path d="M70 62h14l-2 16h-10z" fill="#e4472f"/><path d="M72 62l-1-8M76 62v-10M80 62l1-8" stroke="#f5c542" stroke-width="3.2" stroke-linecap="round"/></g>`;
-  if(v==='donut')return `<g ${k}><circle cx="78" cy="68" r="9" fill="#f6a5c8"/><circle cx="78" cy="68" r="3.2" fill="#e8d29a"/><path d="M73 63l2 1M80 61l1 2M84 67l2-1" stroke="#7bdc3a" stroke-width="1.6"/></g>`;
-  if(v==='soda')return `<g ${k}><path d="M71 60h14l-2 19h-10z" fill="#5fb0d6"/><path d="M78 60l4-10" stroke-width="2.4"/><path d="M72 66h12" stroke="#fbf1dc"/></g>`;
-  if(v==='phone')return `<g ${k}><rect x="70" y="56" width="13" height="22" rx="3" fill="#2a2d31"/><rect x="72.5" y="59" width="8" height="14" rx="1" fill="#9be7ff" stroke="none"/></g>`;
-  if(v==='moon')return `<g ${k}><circle cx="78" cy="68" r="9" fill="#d9a866"/><path d="M83 60a5 5 0 0 0 4 8" fill="#e8d29a"/><circle cx="75" cy="66" r="1.4" fill="#5a3a22" stroke="none"/><circle cx="79" cy="71" r="1.4" fill="#5a3a22" stroke="none"/><circle cx="74" cy="72" r="1.2" fill="#5a3a22" stroke="none"/></g>`;
-  if(v==='car')return `<g ${k}><path d="M70 60h15l1 19h-17z" fill="#c9a46a"/><path d="M70 60l3-4h9l3 4" fill="#b48a5a"/></g>`;
-  return '';
-}
-function gobSVG(v,i){
-  const sk=GOB_SKIN[i%GOB_SKIN.length],sh='#2b1a10',k=`stroke="${sh}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"`,tunic=CR_ROOFS[i%CR_ROOFS.length];
-  const cap=v==='zzz'?`<g class="cap" ${k}><path d="M32 26Q50 4 70 24Q58 18 50 20Q40 18 32 26Z" fill="#7aa7e0"/><path d="M68 23q10 2 12 10" fill="none"/><circle cx="81" cy="34" r="4" fill="#fbf1dc"/></g>`:'';
-  return `<svg class="gob" viewBox="0 0 100 100" aria-hidden="true">
-   <ellipse cx="50" cy="92" rx="30" ry="5" fill="rgba(43,26,16,.18)"/>
-   <g class="squash"><g class="wob">
-    <g ${k}>
-     <path d="M30 89Q27 62 50 58Q73 62 70 89Z" fill="${tunic}"/>
-     <path d="M37 89v-4M63 89v-4" stroke-width="5"/>
-     <path d="M31 72q-9 -2 -10 -10" fill="none" stroke="${sk}" stroke-width="6"/><path d="M31 72q-9 -2 -10 -10" fill="none"/>
-     <path d="M69 70q5 -2 7 -4" fill="none" stroke="${sk}" stroke-width="6"/>
-    </g>
-    ${gobProp(v)}
-    <g ${k}>
-     <path d="M31 40L9 27L30 50Z" fill="${sk}"/><path d="M69 40L91 27L70 50Z" fill="${sk}"/>
-     <path d="M15 31l9 9M85 31l-9 9" stroke="#e98f8f" stroke-width="2"/>
-     <ellipse cx="50" cy="43" rx="22" ry="19" fill="${sk}"/>
-     <path d="M47 46q3 4 6 0" fill="none"/>
-     <path d="M40 53q10 7 20 0" fill="#7a2a2a"/><path d="M44 54.4l2 3 2-2.6" fill="#fbf1dc" stroke-width="1.4"/>
-    </g>
-    <g class="eye-n"><ellipse cx="42" cy="39" rx="5.2" ry="6" fill="#fff" stroke="${sh}" stroke-width="2"/><ellipse cx="58" cy="39" rx="5.2" ry="6" fill="#fff" stroke="${sh}" stroke-width="2"/><circle cx="43" cy="40" r="2.6" fill="${sh}"/><circle cx="57" cy="40" r="2.6" fill="${sh}"/></g>
-    <g class="eye-d" fill="none" stroke="${sh}" stroke-width="1.8" stroke-linecap="round"><circle cx="42" cy="39" r="5.6" fill="#fff"/><circle cx="58" cy="39" r="5.6" fill="#fff"/><path d="M42 39m-1 0a1 1 0 1 1 1.6 .8a2.4 2.4 0 1 1 -3 -2.6a3.6 3.6 0 1 1 1 5.4"/><path d="M58 39m-1 0a1 1 0 1 1 1.6 .8a2.4 2.4 0 1 1 -3 -2.6a3.6 3.6 0 1 1 1 5.4"/></g>
-    ${cap}
-    <g class="lid" ${k}><path d="M26 32Q50 4 74 32Z" fill="#aab4bd"/><path d="M26 32h48" /><rect x="46" y="12" width="8" height="5" rx="2" fill="#2a2d31"/></g>
-   </g></g>
-   <g class="stars" fill="#ffd66b" stroke="${sh}" stroke-width="1.4" stroke-linejoin="round">
-    <path class="st" d="M27 15l1.8 3.6 4 .6-2.9 2.8.7 4-3.6-1.9-3.6 1.9.7-4-2.9-2.8 4-.6z"/>
-    <path class="st" d="M50 5l1.5 3 3.3.5-2.4 2.3.6 3.3-3-1.6-3 1.6.6-3.3-2.4-2.3 3.3-.5z"/>
-    <path class="st" d="M73 13l1.8 3.6 4 .6-2.9 2.8.7 4-3.6-1.9-3.6 1.9.7-4-2.9-2.8 4-.6z"/>
-   </g>
+const GOB_ART=(()=>{
+  const INK='#2b1a10',K=`stroke="${INK}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"`;
+  const MOUTH='#8a2f2a',FANG='#fffaf0',BLUSH='#f4998a',CREAM='#fbf1dc';
+  const r1=n=>Math.round(n*10)/10;
+  /* outlined thick stroke (fries, straws, arms): ink underneath, color on top */
+  const tube=(d,col,w,cap='round')=>`<path d="${d}" fill="none" stroke="${INK}" stroke-width="${r1(w+4.4)}" stroke-linecap="${cap}"/><path d="${d}" fill="none" stroke="${col}" stroke-width="${w}" stroke-linecap="${cap}"/>`;
+  const star=(x,y,r)=>{let d='';for(let k=0;k<10;k++){const a=(-90+k*36)*Math.PI/180,rr=k%2?r*.48:r;d+=(k?'L':'M')+r1(x+rr*Math.cos(a))+' '+r1(y+rr*Math.sin(a));}return `<path class="st" d="${d}Z"/>`;};
+  const spiral=(x,y)=>`<circle cx="${x}" cy="${y}" r="5.2" fill="#fff"/><path d="M${x} ${y}a.6 .6 0 0 1 1.2 0a1.2 1.2 0 0 1-2.4 0a1.8 1.8 0 0 1 3.6 0a2.4 2.4 0 0 1-4.8 0a3 3 0 0 1 6 0" fill="none"/>`;
+
+  /* ---- the shared platform, drawn around a face centre (0,0) ---- */
+  const HEAD='M-21 1C-21-14-12-19 0-19C12-19 21-14 21 1C21 13 12 19 0 19C-12 19-21 13-21 1Z';
+  const EARS={
+    up:  ['M-19-7Q-30-11-37-16Q-31 0-18 7Z','M-21-3Q-28-7-32-11Q-28-1-20 3Z'],
+    low: ['M-19-5Q-29-4-37 4Q-29 9-18 8Z','M-21-2Q-27-1-32 3Q-27 6-20 5Z'],
+    droop:['M-17-3Q-28 0-35 13Q-25 12-16 8Z','M-19 0Q-25 3-30 9Q-24 9-18 6Z']
+  };
+  const ears=(style,skin,inner,dx=0)=>{const [o,n]=EARS[style];
+    return `<g ${K}><path d="${o}" fill="${skin}" transform="translate(${-dx} 0)"/><path d="${n}" fill="${inner}" stroke="none" transform="translate(${-dx} 0)"/>`+
+      `<path d="${o}" fill="${skin}" transform="translate(${dx} 0) scale(-1 1)"/><path d="${n}" fill="${inner}" stroke="none" transform="translate(${dx} 0) scale(-1 1)"/></g>`;};
+  const EYES={
+    smug:`<path d="M-12-1.4H-4.2V.6A3.9 4.4 0 0 1-12 .6ZM4.2-1.4H12V.6A3.9 4.4 0 0 1 4.2 .6Z"/><path d="M-13.2-1.4H-3M3-1.4H13.2" stroke="${INK}" stroke-width="2.2" stroke-linecap="round"/><circle cx="-9.4" cy="1" r="1.3" fill="#fff"/><circle cx="6.6" cy="1" r="1.3" fill="#fff"/>`,
+    round:`<ellipse cx="-8" cy=".4" rx="4.2" ry="5"/><ellipse cx="8" cy=".4" rx="4.2" ry="5"/><circle cx="-9.4" cy="-1.2" r="1.5" fill="#fff"/><circle cx="6.6" cy="-1.2" r="1.5" fill="#fff"/><circle cx="-6.6" cy="2.3" r=".8" fill="#fff"/><circle cx="9.4" cy="2.3" r=".8" fill="#fff"/>`,
+    bliss:`<path d="M-12.2 2.2Q-8-4.2-3.8 2.2M3.8 2.2Q8-4.2 12.2 2.2" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/>`,
+    sleepy:`<path d="M-12.2 1.4H-4A4.1 3.6 0 0 1-12.2 1.4ZM4 1.4H12.2A4.1 3.6 0 0 1 4 1.4Z"/><path d="M-13.4 1.2H-2.8M2.8 1.2H13.4" stroke="${INK}" stroke-width="2.2" stroke-linecap="round"/><circle cx="-9.6" cy="2.9" r="1" fill="#fff"/><circle cx="6.6" cy="2.9" r="1" fill="#fff"/>`,
+    glow:`<ellipse cx="-8" cy=".4" rx="4" ry="4.8"/><ellipse cx="8" cy=".4" rx="4" ry="4.8"/><rect x="-8.9" y="-2.6" width="2.4" height="3.4" rx=".6" fill="#9be7ff"/><rect x="7.1" y="-2.6" width="2.4" height="3.4" rx=".6" fill="#9be7ff"/>`,
+    mask:`<g stroke="${INK}" stroke-width="1.6"><ellipse cx="-8" cy=".2" rx="4.2" ry="3.7" fill="#fff"/><ellipse cx="8" cy=".2" rx="4.2" ry="3.7" fill="#fff"/></g><circle cx="-5.9" cy=".6" r="2"/><circle cx="10.1" cy=".6" r="2"/>`
+  };
+  const MOUTHS={
+    grin:`<path d="M-8 7Q0 9.5 8 6Q6.5 14.5-.5 14Q-7 13.5-8 7Z" fill="${MOUTH}" ${K} stroke-width="2"/><path d="M1.4 7.9L3.1 11.4L4.6 7.3Z" fill="${FANG}" stroke="${INK}" stroke-width="1.3" stroke-linejoin="round"/>`,
+    blep:`<path d="M.5 10.2Q.5 15.8 3.3 15.8Q6.3 15.8 5.5 8.5Z" fill="#f07f8f" stroke="${INK}" stroke-width="1.8" stroke-linejoin="round"/><path d="M-7 7.5Q0 13 7 7.5" fill="none" ${K}/>`,
+    cat:`<path d="M-6.5 7.6Q-3.2 11.6 0 8Q3.2 11.6 6.5 7.6" fill="none" ${K}/><path d="M2.6 9.6L3.6 12.2L4.8 9.4Z" fill="${FANG}" stroke="${INK}" stroke-width="1.2" stroke-linejoin="round"/>`,
+    smirk:`<path d="M-6 9Q1 12.5 7.5 6.5" fill="none" ${K}/><path d="M4.4 8.8L5.5 11.8L6.6 7.5Z" fill="${FANG}" stroke="${INK}" stroke-width="1.3" stroke-linejoin="round"/>`,
+    sneak:`<path d="M-9 7Q0 13 9 7" fill="none" ${K}/><path d="M5.4 8.9L4.2 11.9L3 9.7Z" fill="${FANG}" stroke="${INK}" stroke-width="1.3" stroke-linejoin="round"/>`,
+    doze:`<path d="M-5 8.4Q0 12.6 5 8.4" fill="none" ${K}/><path d="M1.6 10L2.6 12.6L3.8 9.6Z" fill="${FANG}" stroke="${INK}" stroke-width="1.2" stroke-linejoin="round"/>`,
+  };
+  /* the whole face: blush always on, normal face in .eye-n, dizzy face in .eye-d */
+  const face=(x,y,eyes,mouth,blush=14)=>`<g transform="translate(${x} ${y})">
+     <ellipse cx="${-blush}" cy="7.2" rx="3.4" ry="2.1" fill="${BLUSH}"/><ellipse cx="${blush}" cy="7.2" rx="3.4" ry="2.1" fill="${BLUSH}"/>
+     <g class="eye-n" fill="${INK}">${EYES[eyes]}${MOUTHS[mouth]}</g>
+     <g class="eye-d" stroke="${INK}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${spiral(-8,.4)}${spiral(8,.4)}<path d="M-6 10.6q1.5-2.4 3 0t3 0t3 0t3 0" fill="none" stroke-width="2"/></g>
+    </g>`;
+  /* pot lid (dome, shine, rim, knob) plus the flinch: patches over the eyes and squeezed > < */
+  const lid=(cx,rimY,w,fx,fy,patch,sq=INK)=>`<g class="lid" ${K}>
+     <rect x="${cx-5}" y="${rimY-23.5}" width="10" height="7" rx="2.6" fill="#3a3f45"/>
+     <path d="M${cx-w} ${rimY}Q${cx-w+1} ${rimY-19} ${cx} ${rimY-19}Q${cx+w-1} ${rimY-19} ${cx+w} ${rimY}Z" fill="#b9c3cb"/>
+     <path d="M${cx-w+6} ${rimY-5}Q${cx-w+9} ${rimY-14} ${cx-6} ${rimY-15.5}" fill="none" stroke="#f1f5f8" stroke-width="2.6"/>
+     <rect x="${cx-w-2.5}" y="${rimY-2.6}" width="${2*w+5}" height="5.6" rx="2.8" fill="#8995a0"/>
+     <g transform="translate(${fx} ${fy})"><ellipse cx="-8" cy=".4" rx="5.7" ry="5.6" fill="${patch}" stroke="none"/><ellipse cx="8" cy=".4" rx="5.7" ry="5.6" fill="${patch}" stroke="none"/>
+      <path d="M-11.6-2.8L-4.8.4L-11.6 3.6M11.6-2.8L4.8.4L11.6 3.6" fill="none" stroke="${sq}" stroke-width="2.4"/>
+      <path d="M19-7q-2.6 3.6 0 5.2q2.6-1.6 0-5.2Z" fill="#9fdcf5" stroke-width="1.4"/></g>
+    </g>`;
+  const stars=pts=>`<g class="stars" fill="#ffd66b" stroke="${INK}" stroke-width="1.5" stroke-linejoin="round">${pts.map(p=>star(p[0],p[1],r1(p[2]*1.18))).join('')}</g>`;
+  const legs=(skin,y=84,gap=5.5)=>`<g ${K} fill="${skin}"><path d="M${50-gap-8} ${y}V89.4Q${50-gap-8} 92 ${50-gap-5.2} 92H${50-gap}V${y}Z"/><path d="M${50+gap} ${y}V92H${50+gap+5.2}Q${50+gap+8} 92 ${50+gap+8} 89.4V${y}Z"/></g>`;
+  const hand=(x,y,skin,r=4)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${skin}" ${K}/>`;
+  const head=(skin,earStyle,inner)=>`${ears(earStyle,skin,inner)}<path d="${HEAD}" fill="${skin}" ${K}/>`;
+  const at=(x,y,s)=>`<g transform="translate(${x} ${y})">${s}</g>`;
+
+  /* ---- the seven figures: [body markup, stars, shadow rx] ---- */
+  const FIG={
+    fry(){const S='#a8d35a',IN='#f0a49b';
+      const fries=[[38,40,29.5,15],[45,36,40.5,9.5],[50,36,50.8,7.6],[56,36,60.5,10],[62,40,70.5,16]].map(f=>tube(`M${f[0]} ${f[1]}L${f[2]} ${f[3]}`,'#f2b33d',5,'square')).join('');
+      return [`${fries}
+        ${legs(S)}
+        <g ${K}><path d="M33 64L24 74" fill="none" stroke-width="8.4"/><path d="M33 64L24 74" fill="none" stroke="${S}" stroke-width="4"/></g>
+        ${tube('M77.4 64L83.4 43.4','#f2b33d',4.4,'square')}<path d="M82.3 47.2L83.4 43.4" stroke="#e4472f" stroke-width="4.4" stroke-linecap="square"/>
+        <g ${K}><path d="M24.5 50Q31 48.5 35.5 55Q42 63.5 50 63.5Q58 63.5 64.5 55Q69 48.5 75.5 50L68.5 86.5Q50 89 31.5 86.5Z" fill="#e4472f"/>
+         <path d="M27.5 53.5Q31.5 53 34 57" fill="none" stroke="#ff8a72" stroke-width="2"/><path d="M42 76Q50 81 58 76" fill="none" stroke="${CREAM}" stroke-width="2.8"/></g>
+        ${hand(23.5,74.5,S)}${hand(78,63,S)}
+        ${at(50,41,head(S,'up',IN))}
+        ${face(50,41,'smug','grin')}
+        ${lid(50,32,25,50,41,S)}`,
+       [[20,14,4.6],[50,7.5,3.6],[80,14,4.6]],27];},
+    donut(){const S='#7fd3a6',IN='#f0a49b',DO='#d99a50',FR='#f59bc3';
+      const spr=[[24,64,26,61,'#fbf1dc'],[30,70,33,71,'#5fb0d6'],[22,69.5,23,72.5,'#7a4fb5'],[70,70,67,71,'#f2b33d'],[77,64,74,61.5,'#5fb0d6'],[78,69.5,77,72.5,'#e4472f'],[40,73,43,74.5,'#7a4fb5'],[57,74.5,60,73,'#fbf1dc'],[48.5,75.6,51.5,75.6,'#e4472f']];
+      return [`${legs(S,80,4.5)}
+        <g ${K}><path d="M40 78Q38 70 50 70Q62 70 60 78V86H40Z" fill="#7a4fb5"/>
+         <ellipse cx="50" cy="68" rx="33.5" ry="11.5" fill="${DO}"/>
+         <path d="M17.2 67.2C17.2 60 31 56.5 50 56.5S82.8 60 82.8 67.2C82.8 70.4 80.6 71.6 79 71.4C77 71.2 77.6 74.6 74.8 74.8C72 75 72.4 72.4 69.6 73.4C67.2 74.2 67.6 77.6 64.2 77.4C61.4 77.2 61.8 74.6 58.6 75.6C55.6 76.6 54.4 78.8 50 78.6C45.6 78.8 44.4 76.6 41.4 75.6C38.2 74.6 38.6 77.2 35.8 77.4C32.4 77.6 32.8 74.2 30.4 73.4C27.6 72.4 28 75 25.2 74.8C22.4 74.6 23 71.2 21 71.4C19.4 71.6 17.2 70.4 17.2 67.2Z" fill="${FR}"/></g>
+        <g stroke-linecap="round" stroke-width="2.2">${spr.map(s=>`<path d="M${s[0]} ${s[1]}L${s[2]} ${s[3]}" stroke="${s[4]}"/>`).join('')}</g>
+        ${at(50,44,head(S,'up',IN))}
+        <g ${K}><path d="M29 58.5Q50 62.5 71 58.5L72 65Q50 71 28 65Z" fill="${FR}" stroke="none"/><path d="M29 58.5Q50 62.5 71 58.5" fill="none"/></g>
+        <g stroke-linecap="round" stroke-width="2.2"><path d="M44 66L46.5 66.8" stroke="#5fb0d6"/><path d="M54.5 66.6L57 65.6" stroke="#f2b33d"/></g>
+        ${hand(17.5,66.5,S)}${hand(82.5,66.5,S)}
+        ${face(50,42.5,'round','blep')}
+        ${lid(50,34.5,25,50,42.5,S)}`,
+       [[20,16,4.6],[50,8.5,3.6],[80,16,4.6]],27];},
+    soda(){const S='#6cc46e',IN='#f0a49b';
+      return [`<g ${K}><path d="M66 58L68 15Q68.4 9.6 63.4 8.8L57.6 8" fill="none" stroke-width="8.6"/></g>
+        <path d="M66 58L68 15Q68.4 9.6 63.4 8.8L57.6 8" fill="none" stroke="#fffaf0" stroke-width="4.2" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M66 58L68 15Q68.4 9.6 63.4 8.8L57.6 8" fill="none" stroke="#e4472f" stroke-width="4.2" stroke-dasharray="4.4 4.4"/>
+        ${at(50,40,head(S,'up',IN))}
+        ${face(50,39.5,'bliss','cat')}
+        <g ${K}><path d="M26 58H74L67.4 89Q67 91.6 64.2 91.6H35.8Q33 91.6 32.6 89Z" fill="#5fb0d6"/>
+         <path d="M29.2 72.5Q33.4 69 37.6 72.5T46 72.5T54.4 72.5T62.8 72.5T71 72.5L69.8 78.4Q65.6 75 61.4 78.4T53 78.4T44.6 78.4T36.2 78.4T30.4 78.4Z" fill="${CREAM}" stroke-width="1.8"/>
+         <rect x="22.5" y="54.2" width="55" height="7" rx="3.5" fill="#2f7aa3"/>
+         <circle cx="19.5" cy="47.5" r="2.8" fill="#d8f2fb"/><circle cx="15" cy="39.5" r="1.9" fill="#d8f2fb"/><circle cx="82" cy="47" r="2.2" fill="#d8f2fb"/></g>
+        ${hand(44,57.6,S,3.8)}${hand(57,57.6,S,3.8)}
+        ${lid(50,31,25,50,39.5,S)}`,
+       [[21,15,4.6],[44,8,3.6],[80,25,4.4]],27];},
+    phone(){const S='#86d6c0',IN='#f0a49b',HO='#7a4fb5',HD='#5a378f';
+      return [`${legs(S)}
+        <g ${K}><path d="M31 62Q28 86 31 86H69Q72 86 69 62Z" fill="${HO}"/>
+         <path d="M39 75H61L58.5 82H41.5Z" fill="${HD}"/>
+         <path d="M31 66L24 77" fill="none" stroke-width="8.4"/><path d="M31 66L24 77" fill="none" stroke="${HO}" stroke-width="4"/></g>
+        ${hand(23.5,77.5,S)}
+        <g ${K}><path d="M50.5 9Q47 14 40 17C29 21 22.5 32 22.5 46C22.5 57 28.5 63.5 37 63.5H63C71.5 63.5 77.5 57 77.5 46C77.5 32 71 21 60.5 17.6Q54 15.4 50.5 9Z" fill="${HO}"/>
+         <ellipse cx="50" cy="45.6" rx="20.2" ry="18.2" fill="${HD}" stroke="none"/></g>
+        ${at(50,46,ears('up',S,IN,-1))}
+        <ellipse cx="50" cy="46" rx="17.6" ry="15.8" fill="${S}" ${K}/>
+        <path d="M44.5 63.5L44 70M55.5 63.5L56 70" stroke="${CREAM}" stroke-width="2.4" stroke-linecap="round"/>
+        ${face(50,44.5,'glow','smirk',12.2)}
+        <g transform="translate(-4 1) rotate(8 78 63)" ${K}><rect x="68.5" y="47" width="19" height="31" rx="4" fill="#2a2d31"/>
+         <rect x="71" y="51" width="14" height="21.5" rx="1.6" fill="#9be7ff" stroke="none"/>
+         <path d="M75.6 55.8V63.2L81.6 59.5Z" fill="#e4472f" stroke-width="1.6"/><path d="M73.6 67.2H82.4" stroke="#2f7aa3" stroke-width="2"/>
+         <circle cx="87" cy="47.6" r="3.6" fill="#e4472f" stroke-width="1.8"/></g>
+        ${hand(67,74.4,S)}
+        ${lid(50,27,27,50,44.5,S)}`,
+       [[19,14,4.6],[50,7.5,3.6],[80,13,4.4]],27];},
+    moon(){const S='#a4b3ec',IN='#e9a3b4',NV='#2e3765',MK='#252b4d';
+      const cx=75.5,cy=27.5,R=11.5;
+      const P=a=>[r1(cx+R*Math.cos(a*Math.PI/180)),r1(cy+R*Math.sin(a*Math.PI/180))];
+      const [ax,ay]=P(-78),[bx,by]=P(-8),mx=r1((ax+bx)/2-(bx-ax)*.05-3.2),my=r1((ay+by)/2+3.2);
+      const cookie=`M${ax} ${ay}A${R} ${R} 0 1 0 ${bx} ${by}A4.6 4.6 0 0 1 ${mx} ${my}A4.6 4.6 0 0 1 ${ax} ${ay}Z`;
+      return [`${legs(S)}
+        <g ${K}><path d="M31 61Q28 86 32 86H68Q72 86 69 61Z" fill="${NV}"/></g>
+        <path d="M30.3 68H69.7M30 76H70" stroke="${CREAM}" stroke-width="3.4"/>
+        <g ${K}><path d="M31 61Q28 86 32 86H68Q72 86 69 61Z" fill="none"/>
+         <path d="M33 65L25 76" fill="none" stroke-width="8.4"/><path d="M33 65L25 76" fill="none" stroke="${NV}" stroke-width="4"/>
+         <path d="M67 64L70.6 41" fill="none" stroke-width="8.4"/><path d="M67 64L70.6 41" fill="none" stroke="${NV}" stroke-width="4"/>
+         <path d="${cookie}" fill="#d9a35f"/></g>
+        <g fill="#5a3a22"><circle cx="69" cy="27" r="1.8"/><circle cx="74.4" cy="33.4" r="1.8"/><circle cx="80.6" cy="30.6" r="1.6"/><circle cx="70" cy="20.4" r="1.4"/><circle cx="67.4" cy="33.6" r="1.2"/></g>
+        ${hand(24.5,76.5,S)}${hand(70.4,39.4,S)}
+        ${at(48,42,head(S,'low',IN))}
+        <g transform="translate(48 42)"><path d="M-21.4-5.8Q0-9.6 21.4-5.8V5Q11 8.8 0 3.6Q-11 8.8-21.4 5Z" fill="${MK}" ${K} stroke-width="1.6"/>
+         <path d="M-21-3L-28-7.5L-27.6-1.6Z" fill="${MK}" ${K} stroke-width="1.6"/></g>
+        ${face(48,41.5,'mask','sneak')}
+        ${lid(48,32,25,48,41.5,MK,CREAM)}`,
+       [[19,15,4.6],[45,7.5,3.6],[66,11,3.8]],27];},
+    car(){const S='#a3c24c',IN='#f0a49b';
+      return [`${at(49.5,44,head(S,'up',IN))}
+        ${face(49.5,43,'smug','grin')}
+        <g ${K}><path d="M72 48.5L73 63H85L86 48.5Z" fill="#c9a46a"/>
+         <path d="M71.2 44.8Q73.8 42.8 76.4 44.4Q79 42.8 81.6 44.4Q84.2 42.8 86.8 44.8L86.2 50.4H71.8Z" fill="#b08550"/>
+         <path d="M73.8 54.8L75.4 57.8M84.2 54.8L82.6 57.8" fill="none" stroke-width="1.4"/><circle cx="79" cy="50.2" r="2.5" fill="#e4472f" stroke-width="1.6"/></g>
+        <g ${K}><path d="M14 76C14 66.5 17.5 62 24.5 62H60Q66 62 72 64L83 66.6Q88.5 68 88.5 75V80Q88.5 84.6 84.4 84.6H18Q14 84.6 14 80Z" fill="#f2b33d"/>
+         <path d="M15 73.6H87.6" stroke="#e4472f" stroke-width="3.2" stroke-linecap="butt"/>
+         <path d="M25 62Q23 68 25 73" fill="none" stroke-width="1.8"/>
+         <circle cx="85" cy="69.6" r="3" fill="${CREAM}" stroke-width="1.8"/><rect x="12.6" y="66.4" width="4" height="5.4" rx="1.4" fill="#e4472f" stroke-width="1.6"/>
+         <circle cx="28.5" cy="85.6" r="6.4" fill="#3a2a22"/><circle cx="28.5" cy="85.6" r="2.4" fill="#cfd5da" stroke-width="1.4"/>
+         <circle cx="72" cy="85.6" r="6.4" fill="#3a2a22"/><circle cx="72" cy="85.6" r="2.4" fill="#cfd5da" stroke-width="1.4"/></g>
+        ${hand(28,61.6,S)}${hand(71,59,S)}
+        ${lid(49.5,34,25,49.5,43,S)}`,
+       [[20,15,4.6],[48,7.5,3.6],[77,14,4.6]],37];},
+    zzz(){const S='#c3dcaa',IN='#ecb0a6',BL='#a9c6ef',BD='#7f9fd6';
+      return [`<g ${K}><path d="M50 15.5C31 15.5 21 31 21 51C21 70 23 85 28 91H72C77 85 79 70 79 51C79 31 69 15.5 50 15.5Z" fill="${BL}"/>
+         <path d="M22 62Q44 64 75 83" fill="none" stroke="${BD}" stroke-width="2"/><path d="M22.4 62.6Q44 65 75.2 83.6" fill="none"/>
+         <path d="M27 76Q30 84 31 90M70 33Q75 42 76 52" fill="none" stroke="${CREAM}" stroke-width="1.8" stroke-dasharray="2.6 2.6"/></g>
+        ${at(50,47,ears('droop',S,IN,-1))}
+        <g ${K}><ellipse cx="50" cy="45.5" rx="19.6" ry="17.4" fill="${BD}" stroke="none"/><ellipse cx="50" cy="46" rx="17" ry="15.2" fill="${S}"/></g>
+        ${face(50,44.5,'sleepy','doze',12)}
+        <g ${K}><path d="M36.4 66.4A6.2 6.2 0 0 1 45.4 59.6Z" fill="#f2b33d" stroke-width="1.8"/><path d="M63.6 66.4A6.2 6.2 0 0 0 54.6 59.6Z" fill="#f2b33d" stroke-width="1.8"/>
+         <circle cx="50" cy="74" r="10.2" fill="#e4472f"/><circle cx="50" cy="74" r="6.8" fill="${CREAM}" stroke-width="1.6"/>
+         <path d="M50 74V69.6M50 74L53.4 75.6" fill="none" stroke-width="1.8"/>
+         <rect x="47" y="61.2" width="6" height="3.2" rx="1.2" fill="#3a3f45" stroke-width="1.4"/></g>
+        ${hand(38.6,76,S,4.2)}${hand(61.4,76,S,4.2)}
+        <g ${K} fill="${S}"><ellipse cx="41" cy="89.6" rx="5.4" ry="2.8"/><ellipse cx="59" cy="89.6" rx="5.4" ry="2.8"/></g>
+        <g class="cap" ${K}><path d="M31 27Q36 9 53 8.5Q72 8.5 81 31Q72 22 65 24Q50 18 31 27Z" fill="#2f7aa3"/>
+         <path d="M33.5 21.6Q49 15 64 19" fill="none" stroke="${CREAM}" stroke-width="2.6"/><circle cx="81.5" cy="33" r="5" fill="${CREAM}"/></g>
+        ${lid(50,30,25,50,44.5,S)}`,
+       [[19,22,4.6],[42,10,3.6],[80,17,4.4]],27];}
+  };
+  function svg(v,i){
+    const f=(FIG[v]||FIG.fry)();
+    return `<svg class="gob" viewBox="0 0 100 100" aria-hidden="true">
+   <ellipse cx="50" cy="92" rx="${f[2]}" ry="4.6" fill="rgba(43,26,16,.18)"/>
+   <g class="squash"><g class="wob">${f[0]}</g></g>
+   ${stars(f[1])}
   </svg>`;
-}
-const MOUND='<svg viewBox="0 0 64 40"><g stroke="#2b1a10" stroke-width="2" stroke-linejoin="round"><ellipse cx="32" cy="33" rx="28" ry="6" fill="#c9a868"/><path d="M5 33c4-15 14-23 27-23s23 8 27 23z" fill="#ead39c"/><path d="M42 24l3-4 3 4z" fill="#f39a8a" stroke-width="1.4"/></g><path d="M15 26c4-7 10-10 17-10" stroke="#f8e8bf" stroke-width="3" fill="none" stroke-linecap="round"/></svg>';
-const HOLE='<svg viewBox="0 0 64 40"><g stroke="#2b1a10" stroke-width="2"><ellipse cx="32" cy="30" rx="27" ry="8" fill="#e3c88d"/><ellipse cx="32" cy="29" rx="19" ry="5" fill="#7a5a32"/></g></svg>';
+  }
+  return {svg};
+})();
+function gobSVG(v,i){return GOB_ART.svg(v,i);}
 function chestSVG(t){t=String(t||'wood').split('*')[0];const c={wood:['#a5652a','#7a4416','#e6aa52'],silver:['#a3b4cf','#5f708d','#eef3fb'],gold:['#f2b33d','#b97300','#fff1b8']}[t]||['#a5652a','#7a4416','#e6aa52'];
 return `<svg viewBox="0 0 64 64"><g stroke="#2b1a10" stroke-width="2.6" stroke-linejoin="round"><rect x="8" y="28" width="48" height="27" rx="4" fill="${c[0]}"/><path d="M8 31v-7a12 12 0 0 1 12-12h24a12 12 0 0 1 12 12v7z" fill="${c[1]}"/><rect x="8" y="27" width="48" height="5" fill="${c[2]}"/><rect x="14" y="13" width="4" height="42" fill="${c[2]}" stroke-width="1.6"/><rect x="46" y="13" width="4" height="42" fill="${c[2]}" stroke-width="1.6"/><rect x="27" y="23" width="10" height="13" rx="2.5" fill="${c[2]}"/></g><circle cx="32" cy="29" r="2" fill="#2b1a10"/></svg>`;}
 
