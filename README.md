@@ -33,3 +33,12 @@ rewards) and runtime (`runtime.js`), and reads Trello only through the Worker's 
 "cards" | "activity"}`; the board, list and card ids are the Worker's `TRELLO_IDS` setting, the key and a read-only token
 its `TRELLO_KEY` and `TRELLO_TOKEN` secrets). `spin/rewards.js` pays finished personal cards; `spin/sw.js` keeps it
 working offline. Its tests (made-up data) live outside this public repository.
+
+## My Closet (closet/)
+Joey's wardrobe app, moved off claude.ai: https://josephprestley.github.io/up-next/closet/. It shares Up Next's Firebase
+sign-in and database (`data/users/<uid>/closet/{items,outfits,weeks,settings,photos,thumbs,drafts}`) and Worker. It has
+its own `closet/runtime.js` (a copy of `runtime.js` with the closet's additions: a database rooted at the closet, a photo
+store of two small JPEG documents per photo, backup and restore, today's weather from Open-Meteo, and Claude calls with
+photos), `closet/sw.js` (cache `closet-vN`) and manifest. `closet/index.html` is made from Home Base's closet page by a
+conversion script kept outside this repository; `closet/extra.js` holds the menu, backup and Add several. Pieces and photos
+stay in Firebase; nothing private is in this repository. Its tests (made-up data, a stand-in Firebase and Worker) live outside it.

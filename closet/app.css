@@ -1,0 +1,75 @@
+/* My Closet app layer: what the standalone app adds to the closet page (sign-in screen, loading screen, the menu, backup,
+   and Add several). The page's own look stays in index.html and gb.css. */
+html.hb-gated body{overflow:hidden}
+#hb-gate{position:fixed;inset:0;z-index:100;background:var(--bg);color:var(--ink);display:grid;place-items:center;padding:max(20px,env(safe-area-inset-top,0px)) 20px max(20px,env(safe-area-inset-bottom,0px));overflow:auto}
+#hb-gate .card{width:min(400px,100%);display:flex;flex-direction:column;gap:14px;background:transparent;box-shadow:none;border:0;padding:0}
+#hb-gate .logo{font:400 44px/1 var(--display);color:var(--ink);margin:0;text-align:center;letter-spacing:.01em}
+#hb-gate h1{font:600 21px/1.2 var(--body);margin:0}
+#hb-gate p{margin:0;color:var(--muted);font-size:15px;line-height:1.45}
+#hb-gate label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:var(--muted)}
+#hb-gate input{min-height:48px;border-radius:12px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);font:500 17px var(--body);padding:0 14px}
+#hb-gate input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+#hb-gate .go{min-height:50px;border:0;border-radius:12px;background:var(--accent);color:var(--on-accent);font:600 17px var(--body);cursor:pointer}
+#hb-gate .go[disabled]{opacity:.6}
+#hb-gate .link{min-height:44px;border:0;background:none;color:var(--accent);font:600 15px var(--body);text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:0 4px}
+#hb-gate .links{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px}
+#hb-gate #hb-msg{min-height:1.4em;color:var(--danger-bg,#bf613d)}
+#hb-gate .steps{margin:0;padding-left:22px;color:var(--ink);font-size:16px;line-height:1.6}
+#hb-gate [data-show]{display:none}
+#hb-gate [data-state="form"] [data-show="form"],#hb-gate [data-state="local"] [data-show="local"],#hb-gate [data-state="install"] [data-show="install"]{display:flex}
+#hb-loading{position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:var(--bg);color:var(--muted);font:500 16px var(--body)}
+#hb-loading p{margin:0;display:flex;flex-direction:column;align-items:center;gap:10px}
+#hb-loading b{font:400 34px/1 var(--display);color:var(--ink)}
+
+/* the menu button beside the header, and the sheets it opens */
+.chero-wrap{position:relative}
+.menu-btn{position:absolute;top:8px;right:max(8px,env(safe-area-inset-right,0px));width:44px;height:44px;border:0;background:none;border-radius:12px;color:var(--muted);display:grid;place-items:center;font-size:24px;line-height:1}
+.menu-btn:hover{background:var(--sunk)}
+.menu-list{display:flex;flex-direction:column;gap:8px;padding:6px 20px 20px}
+.menu-list .who{color:var(--muted);font-size:13px;margin:0 0 4px;overflow-wrap:anywhere}
+.menu-item{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;border:1px solid var(--line);background:var(--panel);border-radius:14px;padding:12px 14px;min-height:56px;width:100%}
+.menu-item b{font-weight:700;font-size:15px}
+.menu-item span{color:var(--muted);font-size:13px;line-height:1.35}
+.menu-item[disabled]{opacity:.55}
+.bk-msg{margin:6px 20px 0;font-size:14px;color:var(--ink)}
+.bk-bar{height:8px;border-radius:99px;background:var(--sunk);margin:12px 20px 4px;overflow:hidden}
+.bk-bar > i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s ease}
+.bk-list{margin:8px 20px 0;padding-left:18px;color:var(--muted);font-size:13px}
+.bk-actions{display:flex;flex-wrap:wrap;gap:8px;padding:12px 20px 18px}
+
+/* Add several */
+.as-tip{margin:0 20px 6px;color:var(--muted);font-size:13.5px;line-height:1.45}
+.as-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:0 20px 8px}
+.as-head .grow{flex:1}
+.as-count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.as-list{display:flex;flex-direction:column;gap:10px;padding:4px 20px 16px}
+.as-row{display:grid;grid-template-columns:76px minmax(0,1fr);gap:8px 12px;border:1px solid var(--line);border-radius:14px;padding:10px;background:var(--panel)}
+.as-row.done{opacity:.55}
+.as-row.flag{border-color:var(--mustard,#c4962b)}
+.as-pic{width:76px;height:96px;border-radius:10px;background:var(--stage);overflow:hidden;position:relative}
+.as-pic img{width:100%;height:100%;object-fit:cover;display:block}
+.as-pic .n{position:absolute;right:3px;bottom:3px;background:rgba(0,0,0,.55);color:#fff;border-radius:99px;font-size:11px;padding:1px 6px}
+.as-main{display:flex;flex-direction:column;gap:6px;min-width:0}
+.as-main input,.as-kind{width:100%;min-height:44px;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:0 10px;font:500 16px var(--body)}
+.as-kind{grid-column:1 / -1}
+.as-line{display:grid;grid-template-columns:1fr 84px;gap:6px}
+.as-fit{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;grid-column:1 / -1}
+.as-fit .chip{min-height:46px;padding:4px 2px;font-size:12.5px;line-height:1.15;border-radius:12px;text-align:center}
+.as-fit .chip[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.as-acts{display:flex;gap:6px;flex-wrap:wrap;grid-column:1 / -1}
+.as-acts .btn{min-height:44px;flex:1 1 auto;justify-content:center}
+.as-note{grid-column:1 / -1;margin:0;font-size:12.5px;color:var(--muted)}
+.as-note.warn{color:var(--warn,#7a5b14)}
+.as-work{padding:26px 20px;text-align:center;color:var(--muted)}
+.as-work b{display:block;color:var(--ink);font:400 24px/1.2 var(--display);margin-bottom:6px}
+.as-end{padding:6px 20px 18px;font-size:15px}
+.mini-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.mini-row img{width:56px;height:70px;object-fit:cover;border-radius:8px;border:1px solid var(--line);background:var(--stage)}
+
+/* iPhone: 44 px targets and 16 px inputs (nothing zooms when a field is tapped) */
+@media (max-width:700px){
+  input,select,textarea{font-size:16px}
+  .btn{min-height:40px}
+  .chip{min-height:40px}
+}
+.offline-note{position:fixed;left:50%;transform:translateX(-50%);bottom:max(14px,env(safe-area-inset-bottom,0px));z-index:40;background:var(--ink);color:var(--bg);border-radius:99px;padding:8px 14px;font-size:13px}

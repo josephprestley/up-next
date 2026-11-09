@@ -1,0 +1,157 @@
+/* Home Base: the shared base for every app page.
+   Tokens, type and components. Each app links this file first, then restyles itself by redefining the tokens
+   (colors, --display, --body) for :root[data-app="…"] in its own <style>, light and dark. */
+:root{
+  --bg:#f1ebe0; --surface:#fbf8f2; --sunk:#ece4d6; --ink:#2c241f; --muted:#6f6359; --line:#e3d8c6; --line-strong:#cdbfa8;
+  --falu:#8e3b2e; --falu-soft:#f3dfd8; --honey:#a86a14; --honey-soft:#f8e8c8; --honey-ink:#6e4407;
+  --moss:#56693e; --moss-soft:#e3e9d3; --fjord:#3b5a75; --fjord-soft:#dde7ef; --berry:#a4423a; --berry-soft:#f5dcd8;
+  --tag:#dcc6a1; --tag-ink:#3a2a1e; --door:#3a3f45; --door-ink:#f0e8db;
+  --accent:var(--falu); --accent-soft:var(--falu-soft); --on-accent:#fffaf0;
+  --display:"Young Serif", Georgia, "Times New Roman", serif;
+  --body:"Figtree", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --hand:"Caveat", "Segoe Print", "Bradley Hand", cursive;
+  --r-lg:20px; --r-md:16px; --r-sm:12px;
+  --shadow:0 12px 30px -20px #0007;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#191512; --surface:#221d18; --sunk:#1d1915; --ink:#efe6da; --muted:#a99b8c; --line:#3a3129; --line-strong:#54483c;
+  --falu:#e08a76; --falu-soft:#3b211b; --honey:#efb75e; --honey-soft:#3a2a12; --honey-ink:#ffd99a;
+  --moss:#a9bd84; --moss-soft:#26301b; --fjord:#93b6d4; --fjord-soft:#1c2a36; --berry:#ee8f84; --berry-soft:#3a1f1c;
+  --tag:#cdb48c; --tag-ink:#2e2118; --door:#2b3036; --door-ink:#efe6da; --on-accent:#191512; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#191512; --surface:#221d18; --sunk:#1d1915; --ink:#efe6da; --muted:#a99b8c; --line:#3a3129; --line-strong:#54483c;
+  --falu:#e08a76; --falu-soft:#3b211b; --honey:#efb75e; --honey-soft:#3a2a12; --honey-ink:#ffd99a;
+  --moss:#a9bd84; --moss-soft:#26301b; --fjord:#93b6d4; --fjord-soft:#1c2a36; --berry:#ee8f84; --berry-soft:#3a1f1c;
+  --tag:#cdb48c; --tag-ink:#2e2118; --door:#2b3036; --door-ink:#efe6da; --on-accent:#191512; color-scheme:dark}
+
+/* base */
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--body);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+img,svg{max-width:100%}
+a{color:var(--fjord)}
+.gb-page{padding-block:16px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.gb-wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1,h2,h3{text-wrap:balance}
+.gb-h2,h2.gb{margin:0;font:400 20px/1.2 var(--display)}
+.gb-h3,h3.gb{margin:4px 0 0;font:600 12.5px/1.2 var(--body);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.gb-hand{font:600 19px/1.1 var(--hand);color:var(--falu)}
+.gb-note{margin:0;font-size:13px;color:var(--muted)}
+.gb-note.err{color:var(--berry)}
+.gb-num{font-variant-numeric:tabular-nums}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--honey);outline-offset:2px}
+
+/* hero: the app's header (GB.hero). No art: the app's own soft color, its display face, a muted line under the title.
+   An app sets --hero-bg / --hero-ink / --hero-ink-2 to restyle it. */
+.gb-hero{position:relative;border-radius:var(--r-lg);display:block;padding:18px 20px 17px;background:var(--hero-bg,var(--accent-soft));color:var(--hero-ink,var(--ink))}
+.gb-hero .gb-txt{min-width:0}
+.gb-hero .gb-eyebrow{margin:0;font:700 12px/1.3 var(--body);letter-spacing:.07em;text-transform:uppercase;color:var(--hero-ink-2,var(--accent))}
+.gb-hero .gb-eyebrow:empty,.gb-hero .gb-sub:empty{display:none}
+.gb-hero h1{margin:4px 0 2px;font:400 28px/1.12 var(--display);text-wrap:balance}
+.gb-hero .gb-sub{margin:0;font:500 14.5px/1.45 var(--body);color:var(--hero-ink-2,var(--muted))}
+.gb-hero .gb-sky,.gb-hero .gb-art{display:none}
+
+/* cards */
+.gb-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.gb-card.sunk{background:var(--sunk)}
+.gb-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.gb-count{font-size:13px;color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums}
+.gb-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px}
+@media (max-width:820px){.gb-grid{grid-template-columns:minmax(0,1fr)}}
+
+/* buttons */
+.gb-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:var(--r-sm);padding:8px 14px;font-weight:600;font-size:14px;line-height:1.2;cursor:pointer;white-space:nowrap;min-height:38px;text-decoration:none;color:var(--ink)}
+.gb-btn:hover{border-color:var(--line-strong)}
+.gb-btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.gb-btn.primary:hover{filter:brightness(1.06)}
+.gb-btn.quiet{border-color:transparent;background:transparent;color:var(--fjord)}
+.gb-btn.danger{color:var(--berry)}
+.gb-btn.small{min-height:30px;padding:5px 10px;font-size:13px;border-radius:10px;position:relative}
+.gb-btn.small::after{content:"";position:absolute;inset:-7px -2px}
+/* chips that act get a ~40-44px touch area too, and a list row's little "open in Trello" arrow is a full-size target */
+button.gb-chip{position:relative;min-height:32px}
+button.gb-chip::after{content:"";position:absolute;inset:-6px -2px}
+.gb-open{display:inline-grid;place-items:center;min-width:44px;min-height:44px;margin:-10px -8px -10px 0;text-decoration:none}
+.gb-btn[disabled]{opacity:.5;cursor:default}
+.gb-btn svg{width:16px;height:16px}
+.gb-icon-btn{width:38px;height:38px;display:inline-grid;place-items:center;border:1px solid var(--line);background:var(--surface);border-radius:var(--r-sm);cursor:pointer;padding:0}
+.gb-icon-btn svg{width:18px;height:18px}
+
+/* chips, pills and the gift tag */
+.gb-chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 11px;font-size:13px;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+button.gb-chip{cursor:pointer}
+.gb-chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--ink)}
+.gb-pill{display:inline-block;font-size:11.5px;font-weight:700;border-radius:999px;padding:0 8px;line-height:1.7}
+.gb-pill.moss{background:var(--moss-soft);color:var(--moss)} .gb-pill.honey{background:var(--honey-soft);color:var(--honey-ink)}
+.gb-pill.berry{background:var(--berry-soft);color:var(--berry)} .gb-pill.fjord{background:var(--fjord-soft);color:var(--fjord)}
+.gb-tag{display:inline-flex;flex-direction:column;align-items:flex-start;background:var(--tag);color:var(--tag-ink);padding:4px 11px 5px 21px;position:relative;
+  clip-path:polygon(11px 0,100% 0,100% 100%,11px 100%,0 50%);border-radius:0 6px 6px 0;filter:drop-shadow(0 2px 3px #0004);transform:rotate(-2deg)}
+.gb-tag::before{content:"";position:absolute;left:8px;top:50%;width:6px;height:6px;margin-top:-3px;border-radius:50%;background:#00000038}
+.gb-tag b{font:400 14px/1.15 var(--display)} .gb-tag span{font:600 16px/1.05 var(--hand);opacity:.85}
+
+/* segmented control */
+.gb-seg{display:inline-flex;border:1px solid var(--line);background:var(--sunk);border-radius:999px;padding:3px;gap:2px;flex-wrap:wrap}
+.gb-seg button{border:0;background:transparent;border-radius:999px;padding:5px 12px;font-weight:600;font-size:13.5px;cursor:pointer;color:var(--muted)}
+.gb-seg button[aria-pressed="true"],.gb-seg button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px #0002}
+
+/* fields */
+.gb-field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.gb-field>span,.gb-label{font-size:13px;font-weight:600;color:var(--muted)}
+.gb-input,.gb-select,.gb-textarea{width:100%;min-width:0;border:1px solid var(--line);background:var(--bg);border-radius:var(--r-sm);padding:9px 12px;min-height:40px}
+.gb-textarea{min-height:84px;resize:vertical}
+.gb-row-add{display:flex;gap:8px}
+.gb-row-add .gb-input{flex:1}
+
+/* lists */
+.gb-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.gb-list>li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 2px;border-bottom:1px dashed var(--line)}
+.gb-list>li:last-child{border-bottom:0}
+.gb-check{width:26px;height:26px;border-radius:50%;border:2px solid var(--accent);background:transparent;cursor:pointer;display:grid;place-items:center;padding:0;position:relative}
+/* small visuals, roughly 44px touch targets: the hit area reaches past the drawn circle or button */
+.gb-check::after{content:"";position:absolute;inset:-9px}
+.gb-check:hover{background:var(--accent-soft)}
+.gb-check svg{width:14px;height:14px;opacity:0}
+.gb-check[aria-checked="true"]{background:var(--accent)} .gb-check[aria-checked="true"] svg{opacity:1;color:var(--surface)}
+.gb-check[aria-busy="true"]{animation:gbpulse .8s ease-in-out infinite alternate}
+@keyframes gbpulse{from{opacity:1}to{opacity:.45}}
+.gb-empty{font-size:14px;color:var(--muted);font-style:italic;margin:0}
+.gb-bar{height:8px;border-radius:99px;background:var(--sunk);overflow:hidden}
+.gb-bar>span{display:block;height:100%;background:var(--moss);border-radius:inherit}
+
+/* sheet (bottom sheet on phones, centered dialog on wide screens) and toast */
+.gb-scrim{position:fixed;inset:0;z-index:60;background:#0006;display:flex;align-items:flex-end;justify-content:center}
+.gb-sheet{background:var(--surface);color:var(--ink);width:min(560px,100%);max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 40px -10px #0008}
+.gb-sheet h2{margin:0 0 8px;font:400 21px/1.2 var(--display)}
+@media (min-width:700px){.gb-scrim{align-items:center}.gb-sheet{border-radius:22px}}
+.gb-toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:70;background:var(--ink);color:var(--bg);padding:9px 10px 9px 16px;border-radius:12px;font-size:14px;font-weight:600;max-width:min(92vw,520px);display:flex;gap:12px;align-items:center;box-shadow:0 10px 30px -10px #0009}
+.gb-toast button{border:0;background:var(--bg);color:var(--ink);border-radius:8px;padding:5px 10px;font-weight:700;cursor:pointer}
+
+/* status lines (GB.status): loading, empty, stale, failed, saving, saved and queued each have their own mark and words */
+.gb-status{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0;font-size:13.5px;line-height:1.35;color:var(--muted);padding:7px 11px;border-radius:10px;background:var(--sunk)}
+.gb-status .gb-status-tx{flex:1 1 12em;min-width:0}
+.gb-status .gb-status-ic{flex:none;width:16px;height:16px;border-radius:50%;display:inline-grid;place-items:center;font:800 11px/1 var(--body)}
+.gb-status[data-state="loading"] .gb-status-ic,.gb-status[data-state="saving"] .gb-status-ic{border:2px solid currentColor;border-right-color:transparent;animation:gbspin 1s linear infinite}
+.gb-status[data-state="empty"]{background:transparent;padding-inline:0;font-style:italic}
+.gb-status[data-state="empty"] .gb-status-ic{display:none}
+.gb-status[data-state="stale"],.gb-status[data-state="queued"]{background:var(--honey-soft);color:var(--honey-ink)}
+.gb-status[data-state="stale"] .gb-status-ic,.gb-status[data-state="queued"] .gb-status-ic{border:1.5px solid currentColor}
+.gb-status[data-state="failed"]{background:var(--berry-soft);color:var(--berry);font-weight:600}
+.gb-status[data-state="failed"] .gb-status-ic{background:var(--berry);color:var(--surface)}
+.gb-status[data-state="saving"]{color:var(--fjord)}
+.gb-status[data-state="saved"]{background:transparent;padding-inline:0;color:var(--moss)}
+.gb-status[data-state="saved"] .gb-status-ic{background:var(--moss);color:var(--surface)}
+@keyframes gbspin{to{transform:rotate(360deg)}}
+/* a first-run prompt in place of zero totals */
+.gb-first{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--accent-soft);border:1px dashed var(--accent);border-radius:var(--r-md);padding:14px 16px}
+.gb-first p{margin:0;flex:1 1 16em;min-width:0}
+.gb-first b{display:block;font:400 18px/1.25 var(--display)}
+
+/* the knit hem used under illustrated panels */
+.gb-hem{height:12px;background:repeating-linear-gradient(90deg,var(--falu) 0 6px,transparent 6px 12px),var(--falu-soft);opacity:.9}
+
+@media (max-width:560px){.gb-hero{padding:15px 16px 14px}.gb-hero h1{font-size:24px}.gb-hero .gb-sub{font-size:13.5px}}
+html.gb-modal-open{overflow:hidden}
+@media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}

@@ -14,6 +14,7 @@
      TRELLO_KEY          secret   Daily Spin: the Trello Power-Up's API key
      TRELLO_TOKEN        secret   Daily Spin: a read-only token (authorize with scope=read)
      TRELLO_IDS          text     Daily Spin: the board, list and card ids it may read (see trelloRoute)
+     CLOSET_DAILY_CAP    text     optional; My Closet's Claude calls allowed per day (default 400; counted in the PUSH KV)
    Bindings (Worker → Settings → Bindings): a KV namespace named PUSH.
    Triggers (Worker → Settings → Triggers → Cron Triggers): 0 * * * * (every hour). */
 
@@ -53,15 +54,16 @@ export default {
     }
 
     if (!env.ANTHROPIC_API_KEY) return reply({ error: "not_set_up" }, 500, cors);
-    const prompt = body && typeof body.prompt === "string" ? body.prompt.slice(0, 8000) : "";
-    if (!prompt) return reply({ error: "bad_request" }, 400, cors);
+    const built = claudeRequest(body, env);
+    if (built.error) return reply({ error: built.error }, built.status || 400, cors);
+    if (body.closet === true && !(await closetCap(env, claims.sub))) return reply({ error: "rate_limited", detail: "daily_cap" }, 429, cors);
 
     let r;
     try {
       r = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: { "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01", "content-type": "application/json" },
-        body: JSON.stringify({ model: env.MODEL || "claude-sonnet-5-5", max_tokens: 1500, messages: [{ role: "user", content: prompt + "\n\nReply with only the JSON, no other text." }] }),
+        body: JSON.stringify(built.payload),
       });
     } catch (e) { return reply({ error: "upstream" }, 502, cors); }
     if (r.status === 429 || r.status === 529) return reply({ error: "rate_limited" }, 429, cors);
@@ -78,6 +80,44 @@ export default {
     ctx.waitUntil(checkEpisodes(env, { now: event.scheduledTime || Date.now() }).catch(() => {}));
   },
 };
+
+/* The Claude request for a body {prompt, tier, images, closet, maxTokens}. Up Next sends a prompt of up to 8,000
+   characters (longer is cut, as before). My Closet ({closet: true}) may send up to 40,000 characters (longer is refused,
+   never quietly cut), up to 40 photos as JPEG data URLs (about 3 MB in all) and its own token budget. */
+export function claudeRequest(body, env) {
+  const closet = !!(body && body.closet === true);
+  let prompt = body && typeof body.prompt === "string" ? body.prompt : "";
+  if (!prompt) return { error: "bad_request", status: 400 };
+  if (closet) { if (prompt.length > 40000) return { error: "too_long", status: 413 }; }
+  else prompt = prompt.slice(0, 8000);
+  const content = [];
+  if (closet && Array.isArray(body.images) && body.images.length) {
+    const imgs = body.images.slice(0, 40);
+    let total = 0;
+    for (const u of imgs) {
+      const m = typeof u === "string" && /^data:image\/jpeg;base64,([A-Za-z0-9+/=]+)$/.exec(u);
+      if (!m) return { error: "bad_image", status: 400 };
+      total += u.length;
+      content.push({ type: "image", source: { type: "base64", media_type: "image/jpeg", data: m[1] } });
+    }
+    if (total > 3300000) return { error: "too_large", status: 413 };
+  }
+  content.push({ type: "text", text: prompt + "\n\nReply with only the JSON, no other text." });
+  const want = Number(body.maxTokens);
+  const max = closet && want >= 200 ? Math.min(Math.round(want), 4000) : 1500;
+  return { payload: { model: env.MODEL || "claude-sonnet-5-5", max_tokens: max, messages: [{ role: "user", content: content.length === 1 ? content[0].text : content }] } };
+}
+
+// My Closet's daily limit on Claude calls, kept in the PUSH KV (best effort: the count isn't atomic)
+async function closetCap(env, uid) {
+  if (!env.PUSH) return true;
+  const day = new Date().toLocaleDateString("en-CA", { timeZone: TZ });
+  const key = "closet-cap:" + uid + ":" + day;
+  const n = Number(await env.PUSH.get(key)) || 0;
+  if (n >= (Number(env.CLOSET_DAILY_CAP) || 400)) return false;
+  await env.PUSH.put(key, String(n + 1), { expirationTtl: 172800 });
+  return true;
+}
 
 function reply(obj, status, headers) {
   return new Response(JSON.stringify(obj), { status, headers: Object.assign({ "content-type": "application/json" }, headers) });
