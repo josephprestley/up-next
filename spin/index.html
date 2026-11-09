@@ -789,6 +789,8 @@ const GOB_ART=(()=>{
   return {svg};
 })();
 function gobSVG(v,i){return GOB_ART.svg(v,i);}
+const MOUND='<svg viewBox="0 0 64 40"><g stroke="#2b1a10" stroke-width="2" stroke-linejoin="round"><ellipse cx="32" cy="33" rx="28" ry="6" fill="#c9a868"/><path d="M5 33c4-15 14-23 27-23s23 8 27 23z" fill="#ead39c"/><path d="M42 24l3-4 3 4z" fill="#f39a8a" stroke-width="1.4"/></g><path d="M15 26c4-7 10-10 17-10" stroke="#f8e8bf" stroke-width="3" fill="none" stroke-linecap="round"/></svg>';
+const HOLE='<svg viewBox="0 0 64 40"><g stroke="#2b1a10" stroke-width="2"><ellipse cx="32" cy="30" rx="27" ry="8" fill="#e3c88d"/><ellipse cx="32" cy="29" rx="19" ry="5" fill="#7a5a32"/></g></svg>';
 function chestSVG(t){t=String(t||'wood').split('*')[0];const c={wood:['#a5652a','#7a4416','#e6aa52'],silver:['#a3b4cf','#5f708d','#eef3fb'],gold:['#f2b33d','#b97300','#fff1b8']}[t]||['#a5652a','#7a4416','#e6aa52'];
 return `<svg viewBox="0 0 64 64"><g stroke="#2b1a10" stroke-width="2.6" stroke-linejoin="round"><rect x="8" y="28" width="48" height="27" rx="4" fill="${c[0]}"/><path d="M8 31v-7a12 12 0 0 1 12-12h24a12 12 0 0 1 12 12v7z" fill="${c[1]}"/><rect x="8" y="27" width="48" height="5" fill="${c[2]}"/><rect x="14" y="13" width="4" height="42" fill="${c[2]}" stroke-width="1.6"/><rect x="46" y="13" width="4" height="42" fill="${c[2]}" stroke-width="1.6"/><rect x="27" y="23" width="10" height="13" rx="2.5" fill="${c[2]}"/></g><circle cx="32" cy="29" r="2" fill="#2b1a10"/></svg>`;}
 
