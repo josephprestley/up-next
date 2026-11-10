@@ -501,3 +501,6 @@ button.row:active{transform:translateY(2px);box-shadow:none}
 .bet{clip-path:none;transform:none;filter:none}.bet::before{display:none}
 .reward .mg-dot{display:none}.reward .mg-mini{margin-left:3px}
 .mg-shelf .row{border:0;background:none;box-shadow:none;min-height:0;font:inherit}
+.lights .lo-scene{transform:translate(-50%,-40%);-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 22%,#000 80%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 22%,#000 80%,transparent 100%)}
+.lights{justify-content:flex-start}
+.lo-rib{margin-top:calc(var(--sat) + 17vh)}
