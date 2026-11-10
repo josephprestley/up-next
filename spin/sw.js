@@ -1,8 +1,8 @@
 /* Daily Spin works offline: its files come from the network when it answers within 2.5 seconds and from this cache
    otherwise. It also keeps the shared runtime (../runtime.js, ../firebase.js, ../config.js), which pages it controls
    load from outside its folder, and the Google fonts once they've loaded. Up Next has its own worker and cache. */
-const CACHE = "daily-spin-v1";
-const SHELL = ["./", "index.html", "rewards.js", "art.js", "art_rooms_b.js", "gb.js", "gb.css", "manifest.webmanifest", "icons/icon-192.png", "icons/apple-touch-icon.png", "../runtime.js", "../firebase.js", "../config.js"];
+const CACHE = "daily-spin-v2";   // v2 (Nov 9): the Prize Booth's art
+const SHELL = ["./", "index.html", "rewards.js", "merge-art.js", "art.js", "art_rooms_b.js", "gb.js", "gb.css", "manifest.webmanifest", "icons/icon-192.png", "icons/apple-touch-icon.png", "../runtime.js", "../firebase.js", "../config.js"];
 const fresh = (u) => new Request(u, { cache: "no-cache", credentials: "same-origin" });
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL.map(fresh))).then(() => self.skipWaiting())); });
 self.addEventListener("activate", (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k.startsWith("daily-spin-") && k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
