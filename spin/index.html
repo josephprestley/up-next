@@ -1,8 +1,8 @@
-<!doctype html><html lang="en" data-app="spin" data-app-name="Daily Spin" data-signup="off" data-install-first="on"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#f8efe1;color:#2b1f19}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<!doctype html><html lang="en" data-theme="light" data-app="spin" data-app-name="Daily Spin" data-signup="off" data-install-first="on"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#f8efe1;color:#2b1f19}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
-<meta name="theme-color" content="#9e2229">
+<meta name="theme-color" content="#173a72">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -23,9 +23,6 @@
 </script>
 <script type="module" src="../runtime.js"></script>
 <title>Daily Spin</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rye&family=Young+Serif&family=Figtree:wght@400;500;600;700;800&family=Caveat:wght@500;700&display=swap">
 <link rel="stylesheet" href="gb.css">
 <style>
 /* Layout: one-column phone game on boardwalk sand — sticky HUD, scrolling stage, fixed tab bar; desktop centers a
@@ -70,36 +67,13 @@ h3{font-size:16px;font-weight:700}
 .sub{color:var(--muted);font-size:14px}
 .app{position:relative;z-index:1;min-height:100%}
 
-/* HUD */
-.hud{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:linear-gradient(var(--bg) 78%,transparent)}
-.hud-in{display:flex;align-items:center;gap:8px;max-width:var(--col);margin:0 auto;padding-block:10px 12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.syncnote{max-width:var(--col);margin:-6px auto 6px;padding-inline:max(16px,env(safe-area-inset-left,0px));font-size:12.5px;line-height:1.35;color:var(--muted,#6f6359)}
-.pill{display:inline-flex;align-items:center;gap:5px;height:38px;padding:0 12px 0 6px;border-radius:999px;background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:var(--soft);font:700 16px var(--body);font-variant-numeric:tabular-nums;white-space:nowrap}
-.pill svg{width:26px;height:26px;flex:none;display:block}
-.pill.coins{flex:1 1 auto;min-width:0}
-.pill.coins b{overflow:hidden;text-overflow:ellipsis}
-.pill.shields{gap:0;padding:0 7px}
-.pill.shields svg{width:22px;height:22px}
-.pill.shields .off{opacity:.25;filter:grayscale(1)}
-.pill.streak{padding-left:7px}
-.pill.streak svg{width:24px;height:24px}
-.icon-btn{width:38px;height:38px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:grid;place-items:center;box-shadow:var(--soft)}
-.icon-btn svg{width:20px;height:20px}
-.pill:active,.icon-btn:active{transform:translateY(1px)}
+/* HUD: see midway.css */
 .bump{animation:bump .45s cubic-bezier(.3,1.8,.5,1)}
 @keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.14)}100%{transform:scale(1)}}
 
 /* Stage + tabs */
 .stage{max-width:var(--col);margin:0 auto;padding-block:2px calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 22px);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .view{display:flex;flex-direction:column;gap:16px}
-.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
-.tabs-in{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));max-width:var(--col);height:var(--nav-h);margin:0 auto;padding-left:max(10px,env(safe-area-inset-left,0px));padding-right:max(10px,env(safe-area-inset-right,0px))}
-.tab{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:0;background:none;color:var(--muted);font:600 11px var(--body);letter-spacing:.03em}
-.tab svg{width:24px;height:24px}
-.tab.on{color:var(--falu)}
-.tab.on::before{content:"";position:absolute;top:-1px;left:26%;right:26%;height:3px;border-radius:0 0 3px 3px;background:var(--falu)}
-.badge{position:absolute;top:7px;left:calc(50% + 5px);min-width:18px;height:18px;padding:0 5px;box-sizing:border-box;border-radius:9px;background:var(--red);color:#fffaf0;border:2px solid var(--surface);font:700 11px/14px var(--body);letter-spacing:0;text-align:center}
-.badge.dot{min-width:12px;width:12px;height:12px;padding:0;top:9px}
 
 /* Park scene: the map's own Bay Beach art (see art_rooms_b.js) */
 .scene{position:relative;aspect-ratio:532/270;max-width:100%;border-radius:20px;overflow:hidden;background:var(--sunk);box-shadow:var(--shadow);isolation:isolate}
@@ -116,27 +90,14 @@ h3{font-size:16px;font-weight:700}
 @keyframes rain{to{transform:translate(-30px,260px)}}
 .ffly{position:absolute;width:4px;height:4px;border-radius:50%;background:#ffe98a;box-shadow:0 0 7px 2px rgba(255,233,138,.75);z-index:8;animation:blink 2.6s ease-in-out infinite}
 @keyframes blink{50%{opacity:.1;transform:translate(5px,-6px)}}
-.village-strip{position:relative;display:block;width:100%;padding:0;border:0;background:none;border-radius:20px;text-align:left}
-.village-strip .scene{aspect-ratio:532/196}
-.vs-label{position:absolute;left:12px;top:10px;z-index:9;display:inline-flex;align-items:baseline;gap:6px;background:var(--tag);color:var(--tag-ink);padding:4px 11px 5px 20px;
-  clip-path:polygon(10px 0,100% 0,100% 100%,10px 100%,0 50%);border-radius:0 6px 6px 0;filter:drop-shadow(0 2px 3px #0005);transform:rotate(-2deg);font:400 14px/1.15 var(--display)}
-.vs-label::before{content:"";position:absolute;left:7px;top:50%;width:6px;height:6px;margin-top:-3px;border-radius:50%;background:#00000038}
-.vs-label small{font:600 16px/1 var(--hand);opacity:.85}
-.ready-chip{position:absolute;right:10px;top:10px;z-index:9;padding:4px 10px;border-radius:999px;background:var(--gold);color:var(--gold-ink);font:700 12px var(--body);box-shadow:0 2px 6px -2px #0006;animation:breathe 1.6s ease-in-out infinite}
-@keyframes breathe{50%{transform:scale(1.06)}}
 
 /* The midway booth: Bay Beach red and cream, bulbs chasing */
 .cabinet{position:relative;padding:12px 12px 14px;border-radius:24px;border:1px solid var(--red-d);
   background:repeating-linear-gradient(90deg,var(--red) 0 22px,#fbf3e6 22px 44px);box-shadow:inset 0 0 0 6px #fbf3e6,var(--shadow)}
 .marquee{position:relative;height:46px;margin:0 6px;border-radius:12px;background:var(--red-d);box-shadow:inset 0 0 0 2px #fbf3e6;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.marquee::before{content:"";position:absolute;left:8px;right:8px;top:4px;height:7px;background:radial-gradient(circle,var(--gold) 0 2.2px,transparent 2.8px) 0 50%/16px 7px repeat-x;animation:chase .6s steps(2) infinite}
-.marquee::after{content:"";position:absolute;left:8px;right:8px;bottom:4px;height:7px;background:radial-gradient(circle,#fff1c4 0 2.2px,transparent 2.8px) 8px 50%/16px 7px repeat-x;animation:chase .6s steps(2) infinite reverse}
-@keyframes chase{to{background-position-x:16px}}
 .mq-text{font:400 22px var(--marquee-face,var(--display));color:#fffaf0;letter-spacing:.06em;text-shadow:0 1px 0 #0005}
 .reels{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px;padding:8px;border-radius:16px;background:#2c241f}
 .reels::before,.reels::after{content:"";position:absolute;top:50%;width:0;height:0;border:9px solid transparent;transform:translateY(-50%);z-index:3}
-.reels::before{left:-3px;border-left-color:var(--gold)}
-.reels::after{right:-3px;border-right-color:var(--gold)}
 .reel{position:relative;height:calc(var(--cell)*1.55);overflow:hidden;border-radius:10px;background:var(--reel);transition:box-shadow .2s}
 .reel::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,var(--reel-shade) 0%,transparent 30%,transparent 70%,var(--reel-shade) 100%)}
 .strip{will-change:transform}
@@ -150,24 +111,6 @@ h3{font-size:16px;font-weight:700}
 .result{margin-top:11px;min-height:22px;padding:6px 12px;border-radius:12px;background:#fbf3e6;color:#2c241f;text-align:center;font:600 15px var(--body);text-wrap:balance;box-shadow:inset 0 0 0 1px #e7cfbf}
 .result b{color:var(--red-d)}
 
-.controls{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:10px;margin-top:4px}
-.bet{justify-self:start;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;width:84px;height:66px;padding-bottom:7px;box-sizing:border-box;border:0;background:var(--tag);color:var(--tag-ink);
-  clip-path:polygon(0 12px,50% 0,100% 12px,100% 100%,0 100%);border-radius:0 0 10px 10px;filter:drop-shadow(0 3px 4px #0004);transform:rotate(-3deg)}
-.bet::before{content:"";position:absolute;top:10px;left:50%;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;background:#00000038}
-.bet small{font:700 10px var(--body);letter-spacing:.12em;text-transform:uppercase;opacity:.75}
-.bet b{font:400 23px/1 var(--display);color:var(--red-d)}
-.bet:active{transform:rotate(-3deg) translateY(2px)}
-.spin-btn{width:120px;height:120px;border-radius:50%;border:7px solid #fbf3e6;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:radial-gradient(circle at 50% 34%,var(--ring1) 0 16%,var(--ring2) 58%,var(--red-d) 100%);color:#fffaf0;box-shadow:0 0 0 1px var(--red-d),0 8px 0 var(--red-d),0 14px 22px -8px #0008;transition:transform .08s,box-shadow .08s;touch-action:manipulation}
-.spin-btn span{font:400 28px/1 var(--display);letter-spacing:.02em;text-shadow:0 1px 0 #0006}
-.spin-btn small{font:700 9px var(--body);letter-spacing:.12em;text-transform:uppercase;color:#ffe3dc}
-.spin-btn.pressed,.spin-btn:active{transform:translateY(6px);box-shadow:0 0 0 1px var(--red-d),0 2px 0 var(--red-d),0 6px 12px -6px #0008}
-.spin-btn.auto{animation:autoglow 1s ease-in-out infinite}
-@keyframes autoglow{50%{box-shadow:0 0 0 1px var(--red-d),0 8px 0 var(--red-d),0 0 30px 8px var(--gold)}}
-.spin-btn.empty{filter:saturate(.3) brightness(.85)}
-.spins-box{justify-self:end;display:flex;flex-direction:column;align-items:flex-end;gap:1px;min-width:0}
-.spins-box .n{display:flex;align-items:center;gap:4px;font:400 28px/1 var(--display);color:var(--moss);font-variant-numeric:tabular-nums}
-.spins-box .n svg{width:26px;height:26px;filter:var(--stk-sm)}
-.spins-box small{font:600 12px var(--body);color:var(--muted);white-space:nowrap}
 .paused-note{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:14px;background:var(--fjord-soft);font-size:13px;color:var(--ink)}
 .paused-note svg{width:26px;height:26px;flex:none}
 
@@ -439,34 +382,6 @@ select.field{padding:0 8px}
 .toast.out{opacity:0;transform:translateY(-8px);transition:all .25s}
 @keyframes tin{from{opacity:0;transform:translateY(-12px) scale(.95)}}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-@media (max-width:360px){:root{--cell:60px}.spin-btn{width:104px;height:104px}.bet{width:74px}}
-/* Short screens (the app inside Home Base on a phone): the whole Spin button stays above the tab bar.
-   Same booth, just tighter: a shorter park strip, marquee and reels, and a smaller Spin. */
-@media (max-height:720px){
-  #pausedSpin:empty{display:none}
-  .village-strip .scene{aspect-ratio:532/180}
-  .marquee{height:40px}
-  .reels{margin-top:10px}
-}
-@media (max-height:660px){
-  :root{--cell:54px}
-  #v-spin{gap:10px}
-  .hud-in{padding-block:6px 8px}
-  .village-strip .scene{aspect-ratio:532/86}
-  .village-strip .vs-label{top:8px}
-  .village-strip .ready-chip{top:8px}
-  .cabinet{padding:8px 9px 10px}
-  .marquee{height:32px}
-  .marquee::before{top:3px;height:5px;background-size:14px 5px}
-  .marquee::after{bottom:3px;height:5px;background-size:14px 5px}
-  .mq-text{font-size:18px}
-  .reels{margin-top:8px;padding:6px;gap:6px}
-  .result{margin-top:7px;min-height:0;padding:4px 10px;font-size:13.5px}
-  .controls{margin-top:0}
-  .spin-btn{width:96px;height:96px;border-width:6px}
-  .spin-btn span{font-size:24px}
-  .bet{height:58px}
-}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 /* ---- standalone app (Nov 5): status-bar band, sign-in, loading, phone comfort ---- */
 /* the home-screen app draws under a see-through status bar with a white clock: paint that band as the red awning */
@@ -474,7 +389,6 @@ select.field{padding:0 8px}
 /* iOS zooms into any field under 16px, and a home-screen app has no easy way back out */
 input,select,textarea{font-size:16px!important}
 button,a,[data-act]{touch-action:manipulation}
-.hud .pill,#btnGear,.mini-btn{min-height:44px;min-width:44px}
 html.hb-gated body{overflow:hidden}
 #hb-gate{position:fixed;inset:0;z-index:100;background:radial-gradient(120% 70% at 50% -10%,#fff6e6 0%,#f8efe1 55%,#f0e3cf 100%);color:#2b1f19;display:grid;place-items:center;padding:max(24px,env(safe-area-inset-top,0px)) 20px max(24px,env(safe-area-inset-bottom,0px));overflow:auto}
 #hb-gate .card{width:min(400px,100%);display:flex;flex-direction:column;gap:14px;background:transparent;box-shadow:none;border:0;padding:0}
@@ -664,6 +578,7 @@ html.mg-open,html.mg-open body{overflow:hidden}
 @media (max-height:640px){:root{--mg-cell:46px;--mg-it:41px}.mg-marquee{height:30px}.mg-get{height:58px}}
 @media (prefers-reduced-motion: reduce){.mg-it{transition:none}}
 </style>
+<link rel="stylesheet" href="midway.css">
 </head><body>
 <div id="hb-gate" hidden><div class="card" data-state="form" role="dialog" aria-modal="true" aria-labelledby="hb-title">
   <p class="logo" aria-hidden="true">Daily Spin</p>
@@ -690,28 +605,36 @@ html.mg-open,html.mg-open body{overflow:hidden}
 <div class="bg" aria-hidden="true"></div>
 <div class="app">
   <header class="hud"><div class="hud-in">
-    <button class="pill coins" id="hudCoins" aria-label="Coins"><span id="hudCoinIcon"></span><b id="coinTxt">0</b></button>
-    <button class="pill shields" id="hudShields" aria-label="Rain checks"></button>
-    <button class="pill streak" id="hudStreak" aria-label="Streak"><span id="flameIcon"></span><b id="streakTxt">0</b></button>
-    <button class="icon-btn" id="btnSettings" aria-label="Settings"></button>
+    <button class="hp coins" id="hudCoins" aria-label="Coins"><span class="i" id="hudCoinIcon"></span><b class="n" id="coinTxt">0</b></button>
+    <button class="hp spins" id="spinsBox" aria-label="Spins"><span class="i" id="boltIcon"></span><b class="n" id="spinTxt">0</b></button>
+    <button class="hp streak" id="hudStreak" aria-label="Streak"><span class="i" id="flameIcon"></span><b class="n" id="streakTxt">0</b><span class="u" id="streakUnit">days</span><span class="rc" id="hudShields"></span></button>
+    <button class="menu" id="btnSettings" aria-label="Menu"></button>
   </div><p class="syncnote" id="syncNote" role="status" hidden></p></header>
 
   <main class="stage" id="stage">
     <section class="view" id="v-spin" data-view="spin">
-      <div id="pausedSpin"></div>
-      <button class="village-strip" id="villageStrip" data-act="goto" data-tab="village" aria-label="Open the park"></button>
+      <div class="parkband" id="parkBand">
+        <button class="village-strip" id="villageStrip" data-act="goto" data-tab="village" aria-label="Open the park"></button>
+        <div class="pb-phase" id="pbPhase"></div>
+        <button class="pb-obj pb-chests" id="pbChests" data-act="open-chest" data-i="0" hidden></button>
+        <button class="pb-obj pb-fix" id="pbFix" data-act="goto" data-tab="village"></button>
+        <div id="pausedSpin"></div>
+      </div>
       <div class="cabinet">
-        <div class="marquee"><span class="mq-text">Daily Spin</span></div>
-        <div class="reels" id="reels"></div>
+        <span class="cab-post l"></span><span class="cab-post r"></span>
+        <div class="cab-awning" id="cabAwning" aria-hidden="true"></div>
+        <div class="marquee" id="marquee"><span class="mq-text">Daily Spin</span></div>
+        <div class="reelwin"><div class="reels" id="reels"></div><div class="payout" id="payout" aria-hidden="true"></div></div>
         <p class="result" id="result" aria-live="polite">Finish goals, earn spins, fix up the rides.</p>
       </div>
       <div class="controls">
         <button class="bet" id="btnBet" aria-label="Change bet"><small>Bet</small><b id="betTxt">×1</b></button>
-        <button class="spin-btn" id="btnSpin" aria-label="Spin"><span>Spin</span><small id="autoLbl">Hold: auto</small></button>
-        <div class="spins-box" id="spinsBox"><span class="n"><span id="boltIcon"></span><span id="spinTxt">0</span></span><small>spins</small><small id="regenTxt"></small></div>
+        <button class="spin-btn" id="btnSpin" aria-label="Spin"><span class="dome"><span class="t" id="spinLbl">Spin</span><small id="autoLbl">Hold for auto</small></span></button>
+        <button class="auto-btn" id="btnAuto" aria-pressed="false" aria-label="Auto-spin"><span id="autoIcon"></span><span>AUTO</span></button>
       </div>
       <div id="mgDone"></div>
-      <div class="card" id="earn"></div>
+      <div class="tray" id="earn"></div>
+      <span id="regenTxt" hidden></span>
     </section>
     <section class="view" id="v-goals" data-view="goals" hidden></section>
     <section class="view" id="v-village" data-view="village" hidden></section>
@@ -731,6 +654,7 @@ html.mg-open,html.mg-open body{overflow:hidden}
 <script src="gb.js"></script>
 <script src="rewards.js"></script>
 <script src="merge-art.js"></script>
+<script src="kit.js"></script>
 <script>
 (function(){
 "use strict";
@@ -2086,7 +2010,7 @@ function takeRemote(r){
   if(base||own){const anc=own||ancestorFor(r,base);if(uns||anc!==base)next=merge3(anc,S,r);}
   remember(r);setBase(clone(r));if(own&&!writing)lsSet(INFL,null);adopt(next,next!==r);
 }
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){clearTimeout(saveTimer);flush();}else if(booted){if(Date.now()-healthAt>5*60000)healthPull();if(window.SpinRewards)window.SpinRewards.scan().catch(()=>{});}});   // an iPhone app comes back rather than reopening
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){clearTimeout(saveTimer);flush();}else if(booted){refoldGoals();if(current==='goals'&&!overlayOpen)renderGoals();if(Date.now()-healthAt>5*60000)healthPull();if(window.SpinRewards)window.SpinRewards.scan().catch(()=>{});}});   // an iPhone app comes back rather than reopening
 
 /* ============ Sound ============ */
 let AC=null;
@@ -2136,7 +2060,7 @@ function toast(msg){if(hush)return;const t=document.createElement('div');t.class
 let shownCoins=null,coinRAF=0,coinHold=0;
 function animateCoins(){const el=$('#coinTxt');if(shownCoins===null){shownCoins=S.coins;el.textContent=fmt(S.coins);return;}const from=shownCoins,to=S.coins,t0=performance.now(),dur=reduced?1:700;cancelAnimationFrame(coinRAF);const step=t=>{const k=Math.min(1,(t-t0)/dur);shownCoins=Math.round(from+(to-from)*(1-Math.pow(1-k,3)));el.textContent=fmt(shownCoins);if(k<1)coinRAF=requestAnimationFrame(step);else coinRAF=0;};coinRAF=requestAnimationFrame(step);}
 function gainCoins(a,fromEl,n=8){S.coins+=a;fly(fromEl,$('#hudCoins'),'coin',n);SFX.coin();coinHold=Date.now()+(reduced?0:650);setTimeout(animateCoins,reduced?0:650);}
-function spinTarget(){return current==='spin'?$('#spinsBox'):document.querySelector('.tab[data-tab="spin"]');}
+function spinTarget(){return $('#spinsBox');}
 function gainSpins(n,fromEl){S.spins+=n;fly(fromEl,spinTarget(),'bolt',Math.min(8,Math.max(3,Math.round(n/3))));}
 
 /* ============ Overlay ============ */
@@ -2159,6 +2083,36 @@ ov.addEventListener('click',e=>{if(e.target.closest('[data-close]')){closeOverla
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlayOpen&&ovDismiss)closeOverlay();});
 function celebrate({eyebrow,title,body,reward,btn}){
   openOverlay(sh=>{sh.innerHTML=`<div class="center"><p class="eyebrow">${eyebrow}</p><h2 style="margin:6px 0 8px">${title}</h2><p class="sub">${body}</p></div>${reward?`<p class="gain">${reward}</p>`:''}<button class="btn gold wide" data-close>${btn||'Nice'}</button>`;confetti();SFX.jackpot();buzz([20,40,20]);});
+}
+
+/* ============ Lakeshore Midway moments (Nov 10) ============ */
+function awningSVG(){
+  const N=14,W=400,x0=56,x1=344,by=24,w=W/N;let st='',sc='';
+  for(let i=0;i<N;i+=2){const a=x0+(x1-x0)*i/N,b=x0+(x1-x0)*(i+1)/N;st+=`<path d="M${a.toFixed(1)} 2H${b.toFixed(1)}L${(w*(i+1)).toFixed(1)} ${by}H${(w*i).toFixed(1)}Z" fill="#f0443a"/>`;}
+  for(let i=0;i<N;i++)sc+=`<path d="M${(i*w).toFixed(1)} ${by}a${(w/2).toFixed(1)} 9 0 0 0 ${w.toFixed(1)} 0Z" fill="${i%2?'#fff7e3':'#f0443a'}" stroke="#2b1a10" stroke-width="2.4" vector-effect="non-scaling-stroke"/>`;
+  return `<svg viewBox="-2 -2 404 40" preserveAspectRatio="none"><path d="M${x0} 2H${x1}L${W} ${by}H0Z" fill="#fff7e3"/>${st}<path d="M${x0} 2H${x1}L${W} ${by}H0Z" fill="none" stroke="#2b1a10" stroke-width="2.6" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>${sc}</svg>`;
+}
+/* Lights on: the goal that keeps the day lights the park. A full-screen layer of its own (like the Booth's, not a sheet),
+   so saves and any queued celebration carry on underneath. No button: it ends by itself after 2.5 s or at any tap.
+   Once a day; with Reduced Motion it is a plain fade. */
+let lightsDay=null;
+function lightsOn(n){
+  const day=today();if(lightsDay===day)return;lightsDay=day;
+  if(hush||!booted||document.visibilityState==='hidden')return;
+  const el=document.createElement('div');el.className='lights';el.id='lightsOn';el.setAttribute('role','status');el.setAttribute('aria-label',`Lights on. Day ${n}, streak kept.`);
+  let scene='';try{const v=S.village,m=moodOf(v.n),r=LAKE_ART.drawParkScene({n:v.n,levels:v.levels,damaged:v.damaged},{mood:'dusk',season:m.season,turning:false,lights:true,reduce:true,fireworks:false,crop:'full',id:'pkl'});scene=`<svg viewBox="${r.viewBox}" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${r.svg}</svg>`;}catch(e){}
+  const nb=Math.min(12,Math.max(3,dailyCore().length));
+  el.innerHTML=`<div class="lo-scene">${scene}</div><div class="lo-bulbs" aria-hidden="true">${Array.from({length:nb},(_,k)=>`<i style="--k:${k}"></i>`).join('')}</div><div class="lo-rib"><b>LIGHTS ON</b><span>DAY ${n} · STREAK KEPT</span></div>`;
+  document.body.appendChild(el);
+  let ended=false;const T=[];
+  const end=()=>{if(ended)return;ended=true;T.forEach(clearTimeout);el.classList.add('out');setTimeout(()=>el.remove(),reduced?0:260);};
+  el.addEventListener('pointerdown',e=>{e.preventDefault();end();});el.addEventListener('click',end);
+  requestAnimationFrame(()=>el.classList.add('in'));
+  if(reduced)el.classList.add('lit','rib');
+  else{tone(220,.5,'sine',.08,0,880);
+    T.push(setTimeout(()=>{el.classList.add('lit');noise(.06,400);tone(110,.08,'square',.05);},500));
+    T.push(setTimeout(()=>{el.classList.add('rib');SFX.win();},800));}
+  T.push(setTimeout(end,2500));
 }
 
 /* ============ Day and week bookkeeping ============ */
@@ -2211,7 +2165,7 @@ function evalWeek(wk){
 function damageRandom(day){const v=S.village;const ok=v.levels.map((l,i)=>l>0&&!v.damaged[i]?i:-1).filter(i=>i>=0);if(!ok.length)return -1;let h=0;String(day||today()).split('').forEach(c=>{h=(h*31+c.charCodeAt(0))>>>0;});const i=ok[h%ok.length];v.damaged[i]=true;return i;}
 function reconcileToday(){
   const L=logFor(today());const now=coreDoneIds(today()).length>=need();
-  if(now&&!L.kept){L.kept=true;repairOnKept();S.streak++;S.best=Math.max(S.best,S.streak);const st=$('#hudStreak');st.classList.remove('bump');void st.offsetWidth;st.classList.add('bump');toast(S.streak===1?'Park lights on: day 1':`Streak kept: ${S.streak} days`);checkStreakAwards();}
+  if(now&&!L.kept){L.kept=true;repairOnKept();S.streak++;S.best=Math.max(S.best,S.streak);const st=$('#hudStreak');st.classList.remove('bump');void st.offsetWidth;st.classList.add('bump');lightsOn(S.streak);checkStreakAwards();}
   else if(!now&&L.kept){L.kept=false;S.streak=Math.max(0,S.streak-1);}
 }
 // a kept day repairs the most recent missed day's storm damage for free (the psychologist's review, Nov 5)
@@ -2242,7 +2196,7 @@ function toggleDay(id,fromEl,day){
   if(L.done.includes(id)){L.done=L.done.filter(x=>x!==id);SFX.click();}
   else{
     L.done.push(id);SFX.check();buzz(12);
-    if(!L.paid.includes(id)){L.paid.push(id);addTrail();{const rw=rewardOf(g);gainSpins(rw,fromEl);note('pd:'+day+':'+id,{sp:rw,tr:1});const dr=mgDrop('pd:'+day+':'+id,'bear',1,day);if(dr)mgFly(fromEl,dr);toast(dr?`+${rw} spins · ${mgName('bear',1)} → Prize Booth`:`+${rw} spins: ${g.name}`);}firstGoalBonus(day,fromEl);}
+    if(!L.paid.includes(id)){L.paid.push(id);addTrail();{const rw=rewardOf(g);gainSpins(rw,fromEl);note('pd:'+day+':'+id,{sp:rw,tr:1});const dr=mgDrop('pd:'+day+':'+id,'bear',1,day);if(dr)mgFly(fromEl,dr);}firstGoalBonus(day,fromEl);}
   }
   if(day===today())reconcileToday();else reconcilePast(day);
   checkPerfect(L,day);
@@ -2256,7 +2210,7 @@ function tapDay(id,delta,fromEl,day){
   const t=g.target||1,c=Math.max(0,(L.c[id]||0)+delta);
   if(c)L.c[id]=c;else delete L.c[id];
   if(delta>0){SFX.check();buzz(12);}else SFX.click();
-  if(c>=t&&!L.done.includes(id)){L.done.push(id);if(!L.paid.includes(id)){L.paid.push(id);addTrail();{const rw=rewardOf(g);gainSpins(rw,fromEl);note('pd:'+day+':'+id,{sp:rw,tr:1});const dr=mgDrop('pd:'+day+':'+id,'bear',1,day);if(dr)mgFly(fromEl,dr);toast(dr?`+${rw} spins · ${mgName('bear',1)} → Prize Booth`:`+${rw} spins: ${g.name}`);}firstGoalBonus(day,fromEl);}else toast(`${g.name}: done`);}
+  if(c>=t&&!L.done.includes(id)){L.done.push(id);if(!L.paid.includes(id)){L.paid.push(id);addTrail();{const rw=rewardOf(g);gainSpins(rw,fromEl);note('pd:'+day+':'+id,{sp:rw,tr:1});const dr=mgDrop('pd:'+day+':'+id,'bear',1,day);if(dr)mgFly(fromEl,dr);}firstGoalBonus(day,fromEl);}else toast(`${g.name}: done`);}
   else if(c<t&&L.done.includes(id))L.done=L.done.filter(x=>x!==id);
   else if(delta>0)toast(`${g.name}: ${c} of ${t}`);
   if(day===today())reconcileToday();else reconcilePast(day);
@@ -2309,17 +2263,21 @@ function spinReel(i,target,dur,long){
 function pickOutcome(){const tot=OUTCOMES.reduce((a,o)=>a+o[1],0);let r=Math.random()*tot;for(const [k,p] of OUTCOMES){if((r-=p)<0)return k;}return 'none';}
 function symbolsFor(o){
   if(o.endsWith('3')){const s=o.slice(0,-1);return[s,s,s];}
-  if(o==='coin2'){const r=pick(NONCOIN);return Math.random()<.6?['coin','coin',r]:shuffle(['coin','coin',r]);}
-  if(o==='coin1'){const a=pick(NONCOIN),b=pick(NONCOIN);return Math.random()<.4?[a,a,'coin']:shuffle(['coin',a,b]);}
-  if(Math.random()<.45){const a=pick(NONCOIN);let b;do{b=pick(NONCOIN);}while(b===a);return[a,a,b];}
-  const a=pick(NONCOIN);let b,c;do{b=pick(NONCOIN);}while(b===a);do{c=pick(NONCOIN);}while(c===a||c===b);return shuffle([a,b,c]);
+  // honest reels (Nov 10): a spin that pays nothing shows three fair symbols; nothing is arranged to look like a near miss
+  if(o==='coin2')return shuffle(['coin','coin',pick(NONCOIN)]);
+  if(o==='coin1')return shuffle(['coin',pick(NONCOIN),pick(NONCOIN)]);
+  let a,b,c;do{a=pick(NONCOIN);b=pick(NONCOIN);c=pick(NONCOIN);}while(a===b&&b===c);return[a,b,c];
 }
 
 /* ============ Spinning ============ */
 let busy=false,auto=false;
 function setResult(html){$('#result').innerHTML=html;}
 function applyRegen(){const now=Date.now();if(S.spins>=REGEN_CAP){S.regenAt=now;return false;}const n=Math.floor((now-S.regenAt)/REGEN_MS);if(n>0){const k=Math.min(n,Math.max(0,REGEN_CAP-S.spins));for(let i=1;i<=k;i++)note('rg:'+(S.regenAt+i*REGEN_MS),{sp:1});S.spins=Math.min(REGEN_CAP,S.spins+n);S.regenAt+=n*REGEN_MS;if(S.spins>=REGEN_CAP)S.regenAt=now;return true;}return false;}
-function outOfSpins(){setResult('<span class="done-today">Done for today. The park will be here tomorrow, and every goal you finish brings more spins.</span>');SFX.sad();const e=$('#earn');e.classList.remove('pulse');void e.offsetWidth;e.classList.add('pulse');if(current==='spin')e.scrollIntoView({behavior:reduced?'auto':'smooth',block:'center'});}
+// out of spins: 'earn' while a daily goal is still open (the Spin button turns into a green "Earn spins"), 'off' once they're all done
+function spinState(){if(S.spins>=1)return 'spin';const L=S.log[today()]||{};return dailyCore().some(g=>!(L.done||[]).includes(g.id))?'earn':'off';}
+function outOfSpins(){setResult(spinState()==='off'?'<span class="done-today">Done for today. See you tomorrow.</span>':'Out of spins. Each goal you finish earns more.');const e=$('#earn');e.classList.remove('pulse');void e.offsetWidth;e.classList.add('pulse');setTimeout(()=>e.classList.remove('pulse'),1400);}
+function earnTap(){outOfSpins();const b=document.querySelector('#earn .gbtn:not(.done)');if(b){if(b.scrollIntoView)b.scrollIntoView({block:'nearest',behavior:reduced?'auto':'smooth'});setTimeout(()=>b.focus({preventScroll:true}),80);}}   // after the tap's own focus has landed on the Spin button
+function payout(a){const el=$('#payout');if(!el)return;el.classList.remove('show');void el.offsetWidth;const t0=performance.now(),dur=reduced?1:600;const step=t=>{const k=Math.min(1,(t-t0)/dur);el.textContent='+'+fmt(Math.round(a*(1-Math.pow(1-k,3))));if(k<1)requestAnimationFrame(step);};el.textContent='+'+fmt(reduced?a:0);requestAnimationFrame(step);el.classList.add('show');clearTimeout(payout.t);payout.t=setTimeout(()=>el.classList.remove('show'),reduced?1400:1950);}
 async function spin(){
   if(busy||overlayOpen)return false;
   applyRegen();
@@ -2327,12 +2285,12 @@ async function spin(){
   if(!betOk(S.bet))S.bet=BETS.filter(betOk).pop()||1;
   busy=true;const b=S.bet;const wasFull=S.spins>=REGEN_CAP;
   S.spins-=b;if(wasFull&&S.spins<REGEN_CAP)S.regenAt=Date.now();
-  S.stats.spins=(S.stats.spins||0)+1;renderSpinBits();setResult('&nbsp;');reelsEl.classList.remove('win');
-  const o=pickOutcome(),syms=symbolsFor(o),tease=syms[0]===syms[1];
+  S.stats.spins=(S.stats.spins||0)+1;renderSpinBits();setResult('&nbsp;');reelsEl.classList.remove('win');$('#payout').classList.remove('show');const mq=$('#marquee');
+  const o=pickOutcome(),syms=symbolsFor(o),tease=syms[0]==='bag'&&syms[1]==='bag';   // the slow last reel and the fast lights only when two jackpot bags really show
   const D=reduced?[300,420,540]:[900,1250,tease?2500:1600];
   const tick=setInterval(SFX.tick,85);
-  await Promise.all(syms.map((s,i)=>spinReel(i,s,D[i],tease&&i===2).then(()=>{SFX.stop();buzz(8);if(i===1&&tease)reels[2].el.classList.add('tease');})));
-  clearInterval(tick);reels[2].el.classList.remove('tease');
+  await Promise.all(syms.map((s,i)=>spinReel(i,s,D[i],tease&&i===2).then(()=>{SFX.stop();buzz(8);if(i===1&&tease){reels[2].el.classList.add('tease');mq.classList.add('fast');}})));
+  clearInterval(tick);reels[2].el.classList.remove('tease');mq.classList.remove('fast');
   await resolveSpin(o,syms,b);
   busy=false;persist();
   if(pendingRemote&&!overlayOpen){const d=pendingRemote;pendingRemote=null;takeRemote(d);}else renderAll();
@@ -2340,17 +2298,17 @@ async function spin(){
 }
 async function resolveSpin(o,syms,b){
   const U=unit();
-  if(o==='none'){setResult(syms[0]===syms[1]?'So close. Spin again.':'No match this time.');return;}
+  if(o==='none'){setResult('No match.');return;}
   reelsEl.classList.add('win');
-  if(o==='coin1'){const a=Math.round(.5*U*b);gainCoins(a,reelsEl,4);setResult(`<b>+${fmt(a)}</b> coins`);}
-  else if(o==='coin2'){const a=Math.round(1.5*U*b);gainCoins(a,reelsEl,7);SFX.win();setResult(`Two coins · <b>+${fmt(a)}</b>`);}
-  else if(o==='coin3'){const a=Math.round(6*U*b);gainCoins(a,reelsEl,12);SFX.win();if(b>=3)banner('Big win','');setResult(`Coin trio · <b>+${fmt(a)}</b>`);}
-  else if(o==='bag3'){const a=Math.round(20*U*b);S.chests.push(b>1?'wood*'+(2*b):'wood');gainCoins(a,reelsEl,18);banner('Jackpot','');coinRain();SFX.jackpot();buzz([30,40,30]);setResult(`Jackpot · <b>+${fmt(a)}</b> and a wood chest${b>1?` with ${2*b} stickers`:''}`);}
+  if(o==='coin1'){const a=Math.round(.5*U*b);gainCoins(a,reelsEl,4);payout(a);setResult(`<b>+${fmt(a)}</b> coins`);}
+  else if(o==='coin2'){const a=Math.round(1.5*U*b);gainCoins(a,reelsEl,7);payout(a);SFX.win();setResult(`Two coins · <b>+${fmt(a)}</b>`);}
+  else if(o==='coin3'){const a=Math.round(6*U*b);gainCoins(a,reelsEl,12);payout(a);SFX.win();if(b>=3)banner('Big win','');setResult(`Coin trio · <b>+${fmt(a)}</b>`);}
+  else if(o==='bag3'){const a=Math.round(20*U*b);S.chests.push(b>1?'wood*'+(2*b):'wood');gainCoins(a,reelsEl,18);payout(a);banner('Jackpot','');coinRain();SFX.jackpot();buzz([30,40,30]);setResult(`Jackpot · <b>+${fmt(a)}</b> and a wood chest${b>1?` with ${2*b} stickers`:''}`);}
   else if(o==='bolt3'){const n=10*b;gainSpins(n,reelsEl);SFX.win();setResult(`Ticket roll · <b>+${n}</b> spins`);}
   else if(o==='shield3'){
     // at ×b the landing is worth b life rings (Joey, Nov 5): they fill the rain checks, and the rest of the bet comes back as
     // spins. Rings wash up only on a day that's already kept (5 of 9 done); before that the whole bet comes back
-    if(!(logFor(today()).kept)){gainSpins(b,reelsEl);SFX.win();setResult(`Life rings wash up once today's ${need()} goals are done · <b>+${b}</b> spin${b===1?'':'s'} back`);return;}
+    if(!(logFor(today()).kept)){gainSpins(b,reelsEl);SFX.win();setResult(`Life rings! They wash up once the lights are on · <b>+${b}</b> spin${b===1?'':'s'} back`);return;}
     const add=Math.min(b,Math.max(0,MAXSH-S.shields)),back=b-add;
     if(add){S.shields+=add;const hs=$('#hudShields');hs.classList.remove('bump');void hs.offsetWidth;hs.classList.add('bump');}
     if(back)gainSpins(back,reelsEl);
@@ -2360,7 +2318,7 @@ async function resolveSpin(o,syms,b){
   else if(o==='dig3'){S.stats.raids=(S.stats.raids||0)+1;setResult('<b>Dig!</b>');banner('Dig!','fern');SFX.win();await wait(reduced?150:800);openRaid(b);}
 }
 async function autoLoop(){while(auto){if(overlayOpen||busy){await wait(250);continue;}if(S.spins<1){auto=false;renderAuto();outOfSpins();break;}await spin();await wait(reduced?120:380);}}
-function renderAuto(){$('#btnSpin').classList.toggle('auto',auto);$('#autoLbl').textContent=auto?'Tap: stop':'Hold: auto';}
+function renderAuto(){$('#btnSpin').classList.toggle('auto',auto);$('#autoLbl').textContent=auto?'Tap to stop':'Hold for auto';const a=$('#btnAuto');if(a)a.setAttribute('aria-pressed',auto?'true':'false');}
 
 /* ============ Attack & raid ============ */
 function hammerDrop(target){return new Promise(res=>{if(reduced||!fx.animate){res();return;}const r=target.getBoundingClientRect();const h=document.createElement('div');h.className='flyer hammer';h.innerHTML=SYM.hammer;const x=r.left+r.width/2-32,y=r.top+r.height*.3-32;fx.appendChild(h);
@@ -2369,7 +2327,7 @@ function openAttack(b){
   const U=unit(),bc=blockChance(S.village.n);
   const lairs=shuffle(CRAVINGS.slice()).slice(0,4).map((cv,i)=>({v:cv.v,name:GOBLINS[cv.v]||'Goblin',i}));
   openOverlay((sh,close)=>{
-    sh.innerHTML=`<div class="center"><p class="eyebrow">High striker</p><h2>Bonk a goblin</h2><p class="sub">Pick a craving goblin to bonk. Nobody gets hurt: he gets squished and a little dizzy. About ${Math.round(bc*100)}% duck under a pot lid in time at this phase.</p></div><div class="lairs" id="lairs">${lairs.map((l,i)=>`<button class="lair" data-i="${i}" aria-label="Bonk the ${l.name}"><span class="art">${gobSVG(l.v,i)}</span><span class="ln">${l.name}</span></button>`).join('')}</div><div id="gRes"></div>`;
+    sh.innerHTML=`<div class="center"><p class="eyebrow">High striker</p><h2>Bonk a goblin</h2><p class="sub">Pick a craving goblin to bonk. Nobody gets hurt: he gets squished and a little dizzy.</p></div><div class="lairs" id="lairs">${lairs.map((l,i)=>`<button class="lair" data-i="${i}" aria-label="Bonk the ${l.name}"><span class="art">${gobSVG(l.v,i)}</span><span class="ln">${l.name}</span></button>`).join('')}</div><div id="gRes"></div>`;
     let done=false;
     sh.querySelectorAll('.lair').forEach(btn=>btn.addEventListener('click',async()=>{
       if(done)return;done=true;unlockAudio();const l=lairs[+btn.dataset.i];
@@ -2451,12 +2409,12 @@ function checkVillageComplete(fromBuild){
 function upgrade(i){
   const v=S.village,l=v.levels[i];if(l>=4||v.damaged[i])return;
   const c=cost(v.n,i,l+1);
-  if(S.coins<c){toast(`You need ${fmt(c-S.coins)} more coins. Spin to earn them.`);SFX.sad();return;}
+  if(S.coins<c){toast(`Needs ${fmt(c-S.coins)} more coins.`);return;}
   S.coins-=c;v.levels[i]=l+1;animateCoins();SFX.build();buzz(20);
-  if(v.levels[i]===4){S.chests.push('wood');toast(`${villageDef(v.n).b[i]} is open: wood chest added`);}
+  if(v.levels[i]===4){S.chests.push('wood');celebrate({eyebrow:'Ride reopened',title:`${villageDef(v.n).b[i]} is open again`,body:'Lights on, music playing, first riders in line.',reward:'Wood chest'});}
   persist();renderAll();popBuilding(i);checkVillageComplete(true);
 }
-function repair(i){const v=S.village;if(!v.damaged[i])return;const c=repairCost(i);if(S.coins<c){toast(`Repairs cost ${fmt(c)} coins. You need ${fmt(c-S.coins)} more.`);SFX.sad();return;}S.coins-=c;v.damaged[i]=false;animateCoins();SFX.build();persist();renderAll();popBuilding(i);toast(`${villageDef(v.n).b[i]} fixed`);checkVillageComplete(true);}
+function repair(i){const v=S.village;if(!v.damaged[i])return;const c=repairCost(i);if(S.coins<c){toast(`Needs ${fmt(c-S.coins)} more coins.`);return;}S.coins-=c;v.damaged[i]=false;animateCoins();SFX.build();persist();renderAll();popBuilding(i);toast(`${villageDef(v.n).b[i]} fixed`);checkVillageComplete(true);}
 function popBuilding(i){document.querySelectorAll(`.bld[data-i="${i}"],.scene`).forEach(b=>{b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');});}
 function completeVillage(){
   const v=S.village,V=villageDef(v.n),nx=villageDef(v.n+1);
@@ -2880,7 +2838,9 @@ function sceneHTML(cls){
   const v=S.village,V=villageDef(v.n);
   if(window.LAKE_ART&&LAKE_ART.drawParkScene){
     const m=moodOf(v.n),L=S.log[today()],kept=!!(L&&L.kept);
-    const r=LAKE_ART.drawParkScene({n:v.n,levels:v.levels,damaged:v.damaged},{mood:m.mood,season:m.season,turning:kept,lights:kept,reduce:reduced,fireworks:!!V.fireworks,crop:cls==='mini-scene'?'strip':'full',id:cls==='mini-scene'?'pkm':'pkf'});
+    const mood=kept&&(m.mood==='dawn'||m.mood==='day')?'golden':m.mood;   // daylight until the day is kept, then golden hour with the lights on
+    const r=LAKE_ART.drawParkScene({n:v.n,levels:v.levels,damaged:v.damaged},{mood,season:m.season,turning:kept,lights:kept,reduce:reduced,fireworks:!!V.fireworks,crop:'full',id:cls==='mini-scene'?'pkm':'pkf'});
+    const sk=/stop offset="0" stop-color="([^"]+)"/.exec(r.svg);sceneHTML.sky=sk?sk[1]:'#8fd0f5';sceneHTML.kept=kept;
     return `<div class="scene ${cls||''}"><svg class="land" viewBox="${r.viewBox}" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${esc(V.name)}: ${v.levels.filter(x=>x>=4).length} of 5 rides running">${r.svg}</svg>${particles(V,v.n)}</div>`;
   }
   const blds=slotsOf(V).map((p,i)=>`<div class="bld${v.levels[i]===0?' plot':''}${v.damaged[i]?' damaged':''}" data-i="${i}" style="left:${p.x}%;bottom:${p.y}%;width:${p.w}%;z-index:${p.z}">${bSVG(rideOf(V,i).a,v.levels[i],colorsFor(V,i))}</div>`).join('');
@@ -2889,43 +2849,89 @@ function sceneHTML(cls){
 const canUpgrade=()=>{const v=S.village;return v.levels.some((l,i)=>v.damaged[i]?S.coins>=repairCost(i):l<4&&S.coins>=cost(v.n,i,l+1));};
 function renderHUD(){
   if(shownCoins===null){shownCoins=S.coins;$('#coinTxt').textContent=fmt(S.coins);}else if(shownCoins!==S.coins&&!coinRAF&&Date.now()>=coinHold)animateCoins();
-  let sh='';for(let i=0;i<MAXSH;i++)sh+=`<span class="${i<S.shields?'':'off'}">${SYM.shield}</span>`;$('#hudShields').innerHTML=sh;
-  $('#hudShields').setAttribute('aria-label',`${S.shields} of ${MAXSH} rain checks`);
-  $('#streakTxt').textContent=S.streak;$('#hudStreak').setAttribute('aria-label',`${S.streak}-day streak`);
+  let sh='';for(let i=0;i<MAXSH;i++)sh+=`<span class="${i<S.shields?'':'off'}">${SYM.shield}</span>`;const hs=$('#hudShields');if(hs._h!==sh){hs._h=sh;hs.innerHTML=sh;}
+  $('#streakTxt').textContent=S.streak;$('#streakUnit').textContent=S.streak===1?'day':'days';
+  $('#hudStreak').setAttribute('aria-label',`${S.streak}-day streak, ${S.shields} of ${MAXSH} rain checks`);
+  $('#hudCoins').setAttribute('aria-label',`${fmt(S.coins)} coins`);
 }
 function renderSpinBits(){
-  $('#spinTxt').textContent=fmt(S.spins);$('#betTxt').textContent='×'+S.bet;
+  $('#spinTxt').textContent=fmt(S.spins);$('#betTxt').textContent='×'+S.bet;$('#spinsBox').setAttribute('aria-label',plural(S.spins,'spin'));
   let rt='';if(S.spins<REGEN_CAP){const ms=Math.max(0,REGEN_MS-(Date.now()-S.regenAt));rt=`+1 in ${Math.floor(ms/60000)}:${pad2(Math.floor(ms%60000/1000))}`;}
-  $('#regenTxt').textContent=rt;$('#btnSpin').classList.toggle('empty',S.spins<1);
+  $('#regenTxt').textContent=rt;
+  // out of spins: a green "Earn spins" that never pulses while a goal is open; a matte "Done for today" after that
+  const sb=$('#btnSpin'),st=spinState(),lbl=st==='earn'?'Earn spins ↓':st==='off'?'Done for today':'Spin',tl=$('#spinLbl');
+  sb.classList.toggle('earn',st==='earn');sb.classList.toggle('off',st==='off');if(tl.textContent!==lbl)tl.textContent=lbl;
+  sb.setAttribute('aria-label',st==='earn'?'Earn spins: go to today’s goals':lbl);
 }
 const pausedNote=()=>isPaused(today())?`<div class="paused-note">${IC.pause}<span>Streaks are paused, so missed days and weeks won’t count against you. Turn this off in Settings.</span></div>`:'';
 function dayRow(g,L,sub,past){
   const yest=!!past,dd=past?` data-day="${past}"`:'',when=past?(past===addDays(today(),-1)?'yesterday':'on '+shortDay(past)):'today',W='Done '+when;
   if((g.target||1)>1){const c=(L.c&&L.c[g.id])||0,d=(L.done||[]).includes(g.id),paid=(L.paid||[]).includes(g.id);return `<div class="row wk${d?' done':''}"><span class="wkp"><span><b>${c}</b>/${g.target}</span></span><span class="nm">${esc(g.name)}${g.kind==='flex'?'<span class="tag">Flex</span>':''}<small>${sub?sub+' · ':''}${d?(paid?W+' · earned':W):`${g.target-c} to go · +${rewardOf(g)}`}</small></span><span class="wk-btns">${c>0?`<button class="mini-btn" data-act="duntap" data-id="${g.id}"${dd} aria-label="Undo one ${when} for ${esc(g.name)}">−</button>`:''}<button class="mini-btn plus" data-act="dtap" data-id="${g.id}"${dd} aria-label="Log one ${when} for ${esc(g.name)}">+1</button></span></div>`;}
-  const d=(L.done||[]).includes(g.id),paid=(L.paid||[]).includes(g.id);if(d&&(L.hc||[]).includes(g.id))sub=(sub?sub+' · ':'')+'From the Health brief';return `<button class="row${d?' done':''}" data-act="day" data-id="${g.id}"${dd} aria-pressed="${d}"${yest?` aria-label="${esc(g.name)}, ${d?'done':'not done'} ${when}"`:''}><span class="check">${IC.check}</span><span class="nm">${esc(g.name)}${g.kind==='flex'?'<span class="tag">Flex</span>':''}${sub?`<small>${sub}</small>`:''}</span><span class="reward">${paid?'Earned':`${SYM.bolt}+${rewardOf(g)}${mgOn()?`<span class="mg-dot"></span>${mgUse('bear-1','mg-mini')}`:''}`}</span></button>`;}
+  const d=(L.done||[]).includes(g.id),paid=(L.paid||[]).includes(g.id),hb=!past&&isHB(g);if(d&&(L.hc||[]).includes(g.id))sub=(sub?sub+' · ':'')+'From the Health brief';else if(hb&&!d)sub='Health brief checks it ~9:30 PM';return `<button class="row${d?' done':''}" data-act="day" data-id="${g.id}"${dd} aria-pressed="${d}" aria-label="${esc(g.name)}, ${d?'done':'not done'} ${when}${paid?'':`, plus ${rewardOf(g)} spins`}"><span class="check${hb?' hb':''}">${hb&&!d?HEART:IC.check}</span><span class="nm">${esc(g.name)}${g.kind==='flex'?'<span class="tag">Flex</span>':''}${sub?`<small${hb&&!d?' class="h"':''}>${sub}</small>`:''}</span><span class="reward">${paid?'Earned':`${SYM.bolt}+${rewardOf(g)}${mgOn()?`<span class="mg-dot"></span>${mgUse('bear-1','mg-mini')}`:''}`}</span></button>`;}
 function weekRow(g,wk,minus){
   if(g.limit){const c=weekCount(g.id,wk),over=c>g.target;const sub=over?`${c} logged this week · thanks for logging it`:`${g.target-c} left this week · +${rewardOf(g)} and a gold chest if you stay under, on a week with 4+ kept days`;return `<div class="row wk${over?'':' done'}"><span class="wkp"><span><b>${c}</b>/${g.target}</span></span><span class="nm">${esc(g.name)}<span class="tag">Limit</span><small>${sub}</small></span><span class="wk-btns">${minus&&c>0?`<button class="mini-btn" data-act="wuntap" data-id="${g.id}" aria-label="Undo one for ${esc(g.name)}">−</button>`:''}<button class="mini-btn plus" data-act="wtap" data-id="${g.id}" aria-label="Log one for ${esc(g.name)}">+1</button></span></div>`;}
   const c=weekCount(g.id,wk),done=c>=g.target;const sub=done?(c>g.target?`Done · ${c} this week`:'Done this week'):`${g.target-c} to go · +${rewardOf(g)} and a ${g.kind==='flex'?'gold':'silver'} chest`;return `<div class="row wk${done?' done':''}"><span class="wkp"><span><b>${c}</b>/${g.target}</span></span><span class="nm">${esc(g.name)}${g.kind==='flex'?'<span class="tag">Flex</span>':''}<small>${sub}</small></span><span class="wk-btns">${minus?`<button class="mini-btn" data-act="wuntap" data-id="${g.id}" aria-label="Undo one for ${esc(g.name)}">−</button>`:''}<button class="mini-btn plus" data-act="wtap" data-id="${g.id}" aria-label="Log one for ${esc(g.name)}">+1</button></span></div>`;}
+const HEART='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20S4 14.6 4 9.3A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 8 2.3C20 14.6 12 20 12 20z" fill="#f0443a" stroke="#2b1a10" stroke-width="2" stroke-linejoin="round"/></svg>';
+const KI=(k,fb)=>(window.KIT&&KIT.ICON&&KIT.ICON[k])||fb;
+const STAR_IC=()=>(window.KIT&&KIT.STAR)||IC.star;
+const isHB=g=>!!healthRule(g);   // goals Muse's Health brief checks off by itself
+// open daily goals in the user's order, Health-brief ones last
+function openDaily(L){const o=dailyCore().filter(g=>!(L.done||[]).includes(g.id));return o.filter(g=>!isHB(g)).concat(o.filter(isHB));}
+function bulbsHTML(a,b,done){let h='';for(let i=a;i<b;i++)h+=`<i class="${i<done?'on':''}"></i>`;return h;}
+function todayLine(){
+  const t=today(),L=S.log[t]||{},core=dailyCore(),nd=need(),done=coreDoneIds(t).length;
+  if(!core.length)return 'Add a daily goal to get started.';
+  if(done>=core.length)return '<b>Perfect day.</b> Every daily goal is done.';
+  if(L.kept||done>=nd)return `<b>Streak kept ✓</b> · ${core.length-done} more for a perfect day`;
+  return S.streak>0?`<b>${nd-done} more</b> keeps your ${S.streak}-day streak`:`<b>${nd-done} more</b> turns the park lights on`;
+}
+/* The Today tray: one bulb per daily goal (the ones that keep the streak, a divider, then the rest), one line, and the next
+   two open goals by name, one tap each. A goal checked here shows done for a moment before the next one takes its place;
+   a tap in that moment undoes it. */
+let traySlots=[null,null],trayHold=null,trayT=0;
+function trayTap(id){
+  const g=goalById(id);if(!g)return;const L=S.log[today()]||{},was=(L.done||[]).includes(id),c=(L.c&&L.c[id])||0;
+  const will=!was&&((g.target||1)<=1||c+1>=g.target);clearTimeout(trayT);
+  if(will){trayHold={id,until:Date.now()+(reduced?350:650)};trayT=setTimeout(()=>{trayHold=null;if(current==='spin')renderTray();},reduced?360:670);}else trayHold=null;
+}
+function renderTray(){
+  const t=today(),L=S.log[t]||{done:[],paid:[]},core=dailyCore(),nd=need(),done=coreDoneIds(t).length;
+  const open=openDaily(L),held=trayHold&&trayHold.until>Date.now()?trayHold.id:null;
+  const ok=id=>!!id&&(id===held||open.some(g=>g.id===id));
+  const slots=[traySlots[0],traySlots[1]].map(id=>ok(id)?id:null);
+  for(let i=0;i<2;i++)if(!slots[i]){const g=open.find(x=>!slots.includes(x.id));slots[i]=g?g.id:null;}
+  traySlots=slots;
+  const btn=id=>{const g=goalById(id);if(!g)return '';const d=(L.done||[]).includes(id),rw=rewardOf(g),paid=(L.paid||[]).includes(id),many=(g.target||1)>1,c=(L.c&&L.c[id])||0;
+    return `<button class="gbtn${d?' done':''}" data-act="${many?'dtap':'day'}" data-id="${g.id}" aria-pressed="${d}" aria-label="${esc(g.name)}, ${d?'done':many?`${c} of ${g.target}`:'not done'}${paid?'':`, plus ${rw} spins`}"><span class="ck${many&&!d?' n':''}">${many&&!d?c+'/'+g.target:IC.check}</span><span class="nm">${esc(g.name)}</span>${paid?'':`<span class="chip">${SYM.bolt}<span>+${rw}</span></span>`}</button>`;};
+  const gs=slots.filter(Boolean).map(btn).join('');
+  const wdone=L.weighPaid;
+  const rest=gs?`<div class="gs">${gs}</div>`:`<p class="alldone">${core.length?(wdone?'Flex and weekly goals are waiting in Goals.':`Daily goals done. A weigh-in is worth +${WEIGH_REWARD} spins.`):'Set up your goals in the Goals tab.'}</p>`;
+  $('#earn').innerHTML=`<div class="top"><span class="lbl">TODAY</span><span class="bulbs${core.length>10?' many':''}" role="img" aria-label="${done} of ${core.length} daily goals done; ${nd} keep the streak">${bulbsHTML(0,nd,done)}${core.length>nd?'<b></b>':''}${bulbsHTML(nd,core.length,done)}</span><button class="all" data-act="goto" data-tab="goals">All ${core.length} ›</button></div><p class="line">${todayLine()}</p>${rest}`;
+}
+function fixRingSVG(pct,afford){const R=31,c=2*Math.PI*R,d=(c*Math.min(1,Math.max(0,pct))).toFixed(1);
+  return `<svg viewBox="-2 -2 74 76" aria-hidden="true"><circle cx="35" cy="38" r="${R}" fill="#2b1a10"/><circle cx="35" cy="35" r="${R}" fill="#173a72" stroke="#2b1a10" stroke-width="2.6"/><circle cx="35" cy="35" r="${R}" fill="none" stroke="${afford?'#62d23c':'#ffcb2e'}" stroke-width="6" stroke-dasharray="${d} ${c.toFixed(1)}" transform="rotate(-90 35 35)"/><circle cx="35" cy="35" r="24" fill="${afford?'#8fe35c':'#fff7e3'}" stroke="#2b1a10" stroke-width="2.6"/>${afford?'<ellipse cx="33" cy="24" rx="15" ry="7" fill="#fff" opacity=".4"/>':''}${SYM.hammer.replace('<svg ','<svg x="17" y="17" width="36" height="36" ')}</svg>`;}
+// the cheapest thing to do next in the park: a repair or the next fix-up
+function nextFix(){const v=S.village,V=villageDef(v.n);let best=null;v.levels.forEach((l,i)=>{const c=v.damaged[i]?repairCost(i):l<4?cost(v.n,i,l+1):null;if(c!=null&&(!best||c<best.c))best={i,c,name:V.b[i],repair:!!v.damaged[i],start:l===0};});return best;}
 function renderSpin(){
   const v=S.village,V=villageDef(v.n),ups=v.levels.reduce((a,b)=>a+b,0),tn=trailNeed(v.n);
   $('#pausedSpin').innerHTML=pausedNote();
-  const chip=villageBuilt()?`<span class="ready-chip">Boardwalk ${Math.min(v.trail,tn)}/${tn}</span>`:canUpgrade()?'<span class="ready-chip">Fix-up ready</span>':'';
-  $('#villageStrip').innerHTML=sceneHTML('mini-scene')+`<span class="vs-label">${esc(V.name)} <small>${ups}/20</small></span>${chip}`;
+  $('#villageStrip').innerHTML=sceneHTML('mini-scene');
+  const band=$('#parkBand');band.style.setProperty('--sky',sceneHTML.sky||'#8fd0f5');band.classList.toggle('kept',!!sceneHTML.kept);
+  $('#pbPhase').innerHTML=`${STAR_IC()}<span class="nm">${esc(V.name)}</span><span class="track"><i style="width:${ups/20*100}%"></i></span><span class="ct">${ups}/20</span>`;
+  // chests waiting: a small stack on the lawn, no count; a tap opens the next one
+  const pc=$('#pbChests');pc.hidden=!S.chests.length;
+  if(S.chests.length){let art='';try{art=(/<svg[\s\S]*<\/svg>/.exec(KIT.chestStack({pos:{}}))||[''])[0];}catch(e){}pc.innerHTML=(art||chestSVG(S.chests[0]))+'<span class="lbl-chip">Chests</span>';pc.setAttribute('aria-label',`Open a chest. ${plural(S.chests.length,'chest')} waiting.`);}
+  // the Fix-up button: its ring fills as coins come in and turns green when the next fix-up is affordable
+  const pf=$('#pbFix'),nf=nextFix();
+  if(nf){const af=S.coins>=nf.c;pf.className='pb-obj pb-fix'+(af?' ready':'');pf.innerHTML=`<span class="rg">${fixRingSVG(S.coins/nf.c,af)}</span><span class="lbl-chip">${nf.repair?'Repair':'Fix up'} · ${fmt(nf.c)}</span>`;pf.setAttribute('aria-label',`${nf.repair?'Repair':'Fix up'} the ${nf.name}: ${fmt(nf.c)} coins${af?', ready':`, ${fmt(nf.c-S.coins)} to go`}`);}
+  else{const tr=Math.min(v.trail||0,tn);pf.className='pb-obj pb-fix';pf.innerHTML=`<span class="rg">${fixRingSVG(tr/tn,false)}</span><span class="lbl-chip">Boardwalk ${tr}/${tn}</span>`;pf.setAttribute('aria-label',`Boardwalk: ${tr} of ${tn} goals`);}
   renderSpinBits();
-  const t=today(),wk=weekOf(t),L=S.log[t]||{done:[],paid:[]};
-  const core=dailyCore(),flex=activeGoals('day','flex'),weekly=activeGoals('week','core').concat(activeGoals('week','flex'));
-  const left=core.filter(g=>!(L.done||[]).includes(g.id)).length;
-  const lw=latestWeight(),w=L.weighPaid&&lw;
-  let rows=`<p class="subhead">Today</p><div class="rows">${core.map(g=>dayRow(g,L)).join('')}<button class="row${w?' done':''}" data-act="goto" data-tab="progress"><span class="check icon-check">${IC.check}</span><span class="nm">Weigh in<small>${w?`Logged ${fmtW(lw.w)} ${S.weight.unit}`:'Any number counts'}</small></span><span class="reward">${w?'Earned':`${SYM.bolt}+${WEIGH_REWARD}`}</span></button></div>`;
-  if(flex.length)rows+=`<p class="subhead">Flex today · optional</p><div class="rows">${flex.map(g=>dayRow(g,L)).join('')}</div>`;
-  if(weekly.length)rows+=`<p class="subhead">This week</p><div class="rows">${weekly.map(g=>weekRow(g,wk,false)).join('')}</div>`;
-  const foot=L.perfectPaid?'Perfect day. Bonus collected.':`Finish all ${core.length} daily goals for a <b>+${PERFECT_REWARD} spin</b> perfect-day bonus and a chest.`;
   $('#mgDone').innerHTML=mgDoneHTML();
-  $('#earn').innerHTML=`<div class="card-head"><h3>Earn spins</h3><span>${left?`${plural(left,'daily goal')} left`:'Daily goals done'}</span></div>${rows}<p class="earn-foot">${foot}</p>`;
+  renderTray();
 }
 // a one-tap monthly check on how the game feels (the psychologist's review, Nov 5)
 function feelCard(){const m=today().slice(0,7);S.feel=S.feel&&typeof S.feel==='object'?S.feel:{};if(S.feel[m])return S.feel[m]==='pressure'&&mgOn()?`<p class="sub mg-pressure">If the Prize Booth adds to it, you can turn it off (your board is kept). <button class="link-btn" data-act="booth-off">Turn off the Prize Booth</button></p>`:'';
-  return `<div class="feel-wrap"><p class="sub" style="margin-top:10px">This month, how does Daily Spin feel?</p><div class="feel">${[['fun','Fun'],['fine','Fine'],['pressure','Pressure']].map(([k,l])=>`<button class="btn plain sm" data-act="feel" data-v="${k}">${l}</button>`).join('')}</div></div>`;}
+  return `<div class="feel-wrap"><p class="sub">This month, how does Daily Spin feel?</p><div class="feel">${[['fun','Fun'],['fine','Fine'],['pressure','Pressure']].map(([k,l])=>`<button class="btn plain sm" data-act="feel" data-v="${k}">${l}</button>`).join('')}</div></div>`;}
 let goalDay=null;   // a past day being edited from the date strip (a date key), or null for today
 // any of the strip's last 13 days since the game started, unless it was paused
 function canFixDay(d){const t=today();return !!d&&d<t&&d>=S.startDay&&d>=addDays(t,-13)&&!isPaused(d);}
@@ -2952,33 +2958,42 @@ function pickDay(d,el){
   const b=document.querySelector('#v-goals .cal [aria-current="date"]');if(b)b.focus({preventScroll:true});
   if(goalDay){const v=$('#v-goals');if(v&&v.scrollIntoView)v.scrollIntoView({block:'start'});}
 }
+function meterHTML(day){
+  const core=dailyCore(),nd=need(),done=coreDoneIds(day).length,many=core.length>10?' many':'';
+  return `<div class="bulbrow" role="img" aria-label="${done} of ${core.length} daily goals done; ${nd} keep the streak"><div class="grp"><span class="bulbs${many}">${bulbsHTML(0,nd,done)}</span><small>Keeps the streak</small></div>${core.length>nd?`<span class="vs"></span><div class="grp p"><span class="bulbs${many}">${bulbsHTML(nd,core.length,done)}</span><small>Perfect day +${PERFECT_REWARD}</small></div>`:''}</div>`;
+}
 function renderPastDay(d){
   const L=S.log[d]||{done:[],paid:[]},nm=dayName(d),It=d===addDays(today(),-1)?'Yesterday':'This day';
-  const core=dailyCore(),flex=activeGoals('day','flex'),ids=coreDoneIds(d),nd=need(),pct=core.length?Math.round(ids.length/core.length*100):0;
+  const core=dailyCore(),flex=activeGoals('day','flex'),ids=coreDoneIds(d),nd=need();
   const closed=(S.lastProcessed||'')>=d;
   let st;
   if(L.kept||ids.length>=nd)st=`${It} counts toward your streak (${ids.length} of ${core.length}). Your streak is <b>${plural(S.streak,'day')}</b>.`;
   else if(L.shielded)st=`${It} used a rain check (${ids.length} of ${core.length}). Log <b>${nd-ids.length} more</b> you did and the rain check comes back.`;
   else if(L.missed&&closed)st=`${It} was missed (${ids.length} of ${core.length})${L.dmg!=null?', and a storm damaged a ride':''}. Log <b>${nd-ids.length} more</b> you did to ${L.dmg!=null&&numv(L.dmgN)===S.village.n?'repair it and ':''}make it count.`;
   else st=`${ids.length} of ${core.length} logged. ${nd-ids.length} more makes ${It.toLowerCase()} count.`;
-  const top=`<div class="card"><div class="today"><div><p class="eyebrow">${d===addDays(today(),-1)?'Yesterday':'Editing an earlier day'}</p><h2>${fromKey(d).toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'})}</h2></div><div class="ring" style="--p:${pct}"><b>${ids.length}/${core.length}</b></div></div>
-   <p class="note">${st}</p>${calStrip(d)}<button class="btn plain sm back-today" data-act="pickday" data-d="${today()}">Back to today</button></div>`;
-  const body=`<div class="card"><div class="card-head"><h3>Daily goals · ${esc(shortDay(d))}</h3></div><div class="rows">${core.map(g=>dayRow(g,L,'',d)).join('')}</div><p class="earn-foot">Goals you log here earn their usual spins, once. Weekly goals count for the whole week, so log those on today.</p></div>
-    ${flex.length?`<div class="card"><div class="card-head"><h3>Daily flex · ${esc(shortDay(d))}</h3><span>Optional</span></div><div class="rows">${flex.map(g=>dayRow(g,L,'',d)).join('')}</div></div>`:''}`;
+  const top=`<div class="g-head"><div><span class="eyebrow sm">${d===addDays(today(),-1)?'Yesterday':'Editing an earlier day'}</span></div><button class="qbtn back-today" data-act="pickday" data-d="${today()}">Back to today</button></div>
+   <div class="card meter"><h2 style="margin-bottom:10px">${fromKey(d).toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'})}</h2>${meterHTML(d)}<p class="note">${st}</p>${calStrip(d)}</div>`;
+  const body=`<div class="capline"><b>Daily · ${esc(shortDay(d))}</b><span>tap what you did</span></div><div class="rows">${core.map(g=>dayRow(g,L,'',d)).join('')}</div><p class="earn-foot">Goals you log here earn their usual spins, once. Weekly goals count for the whole week, so log those on today.</p>
+    ${flex.length?`<div class="capline"><b>Daily flex · ${esc(shortDay(d))}</b><span>Optional</span></div><div class="rows">${flex.map(g=>dayRow(g,L,'',d)).join('')}</div>`:''}`;
   $('#v-goals').innerHTML=top+body;
 }
+/* Goals: open goals first (Health-brief ones after the ones you tap), goals already done folded into one row. The fold is
+   worked out only when the tab opens, the app comes back or the day changes: a goal checked now stays where it is. */
+let goalFold=null,foldOpen=false;
+function refoldGoals(){goalFold=null;foldOpen=false;}
 function renderGoals(){
   if(goalDay&&!editMode&&canFixDay(goalDay)){renderPastDay(goalDay);return;}
   goalDay=null;
   const t=today(),wk=weekOf(t),L=S.log[t]||{done:[],paid:[]};
   const core=dailyCore(),flex=activeGoals('day','flex'),wcore=activeGoals('week','core'),wflex=activeGoals('week','flex');
-  const ids=coreDoneIds(t),nd=need(),pct=core.length?Math.round(ids.length/core.length*100):0;
-  let note;
-  if(L.kept)note=ids.length===core.length?`Perfect day. Your streak is <b>${plural(S.streak,'day')}</b>.`:`Streak kept: <b>${plural(S.streak,'day')}</b>. Finish all ${core.length} for the perfect-day bonus.`;
-  else{const lf=nd-ids.length;note=S.streak>0?`Finish <b>${lf} more</b> to keep your ${S.streak}-day streak.`:`Finish <b>${lf} more</b> to turn the park lights on.`;}
+  const ids=coreDoneIds(t),nd=need();
+  if(!goalFold||goalFold.day!==t)goalFold={day:t,ids:new Set(ids)};
+  let note=todayLine();
+  if(L.kept&&ids.length<core.length)note=`<b>Streak kept ✓</b> ${plural(S.streak,'day')} · ${core.length-ids.length} more for a perfect day`;
+  else if(L.kept)note=`<b>Perfect day.</b> Your streak is ${plural(S.streak,'day')}.`;
   const last7=id=>{let n=0;for(let i=0;i<7;i++){const lg=S.log[addDays(t,-i)];if(lg&&(lg.done||[]).includes(id))n++;}return n;};
-  const top=`${pausedNote()}<div class="card"><div class="today"><div><p class="eyebrow">Today</p><h2>${fromKey(t).toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'})}</h2></div><div class="ring" style="--p:${pct}"><b>${ids.length}/${core.length}</b></div></div>
-   <p class="note">${note}${(()=>{const kk=kept30();return kk.n>=3?`<span class="kept30">Kept ${kk.k} of the last ${kk.n} days</span>`:'';})()}</p>${feelCard()}${calStrip(null)}</div>`;
+  const top=`${pausedNote()}<div class="g-head"><div><span class="eyebrow">Today</span><span class="date">${fromKey(t).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}</span></div><button class="qbtn" data-act="edit-goals">${editMode?'Done':'Edit'}</button></div>
+   <div class="card meter">${meterHTML(t)}<p class="note">${note}${(()=>{const kk=kept30();return kk.n>=3?`<span class="kept30">Kept ${kk.k} of the last ${kk.n} days</span>`:'';})()}</p>${calStrip(null)}</div>`;
   let body;
   if(editMode){
     const all=S.goals.filter(g=>!g.archived),arch=S.goals.filter(g=>g.archived);
@@ -2992,11 +3007,18 @@ function renderGoals(){
      <div class="edit-goal"><input class="field name" id="ngName" placeholder="Like: 20 minutes of stretching" maxlength="60" aria-label="New goal name"><select class="field" id="ngType" aria-label="New goal type">${Object.keys(TYPE_LABEL).map(k=>`<option value="${k}">${TYPE_LABEL[k]}</option>`).join('')}</select><select class="field" id="ngTarget" aria-label="How many times">${[0,1,2,3,4,5,6,7,8,9,10,12].map(n=>`<option value="${n}"${n===1?' selected':''}>${n}×</option>`).join('')}</select><div class="act"><span class="sub" style="font-size:12px">Times a day, a week, or the most allowed for a weekly limit.</span><button class="btn fern sm" data-act="add-goal">Add goal</button></div></div>
      ${arch.length?`<p class="subhead" style="margin-top:16px">Archived</p><div class="archived">${arch.map(g=>`<div><span>${esc(g.name)} · ${TYPE_LABEL[typeKey(g)]}</span><button class="link-btn" data-act="restore" data-id="${g.id}">Restore</button></div>`).join('')}</div>`:''}</div>`;
   }else{
-    const wkEnd=addDays(wk,6);
-    body=`<div class="card"><div class="card-head"><h3>Daily goals</h3><button class="link-btn" data-act="edit-goals">Edit goals</button></div><div class="rows">${core.map(g=>dayRow(g,L,`${last7(g.id)} of the last 7 days`)).join('')}</div><p class="earn-foot">A day counts toward your streak when you finish at least ${nd} of ${core.length}.</p></div>
-     <div class="card"><div class="card-head"><h3>Daily flex</h3><span>Optional</span></div>${flex.length?`<div class="rows">${flex.map(g=>dayRow(g,L,`${last7(g.id)} of the last 7 days`)).join('')}</div><p class="earn-foot">Stretch goals for good days. Extra spins, no penalty for skipping.</p>`:'<p class="sub">No daily flex goals yet. Add one with Edit goals.</p>'}</div>
-     <div class="card"><div class="card-head"><h3>This week</h3><span>${shortDay(wk)} – ${shortDay(wkEnd)}</span></div>${wcore.length?`<div class="rows">${wcore.map(g=>weekRow(g,wk,true)).join('')}</div><p class="earn-foot">Hit every weekly goal to earn a rain check. Week streak: <b>${plural(S.weekStreak,'week')}</b>, best ${S.weekBest}.</p>`:'<p class="sub">No weekly goals yet. Add one with Edit goals.</p>'}</div>
-     <div class="card"><div class="card-head"><h3>Weekly flex</h3><span>Optional</span></div>${wflex.length?`<div class="rows">${wflex.map(g=>weekRow(g,wk,true)).join('')}</div><p class="earn-foot">Hit one, or stay under a limit through Sunday, for a gold chest. Miss it and nothing happens.</p>`:'<p class="sub">No weekly flex goals yet. Add one with Edit goals.</p>'}</div>`;
+    const wkEnd=addDays(wk,6),row=g=>dayRow(g,L,`${last7(g.id)} of the last 7 days`);
+    const here=core.filter(g=>!goalFold.ids.has(g.id)),folded=core.filter(g=>goalFold.ids.has(g.id)),fdone=folded.filter(g=>ids.includes(g.id));
+    const fold=folded.length?`<button class="row fold" data-act="fold" aria-expanded="${foldOpen}"><span class="check" style="border:2.5px solid #2b1a10;background:radial-gradient(circle at 38% 30%,#a6f07c,#62d23c 55%,#2fa52a)">${IC.check.replace('<svg ','<svg style="opacity:1;transform:none" ')}</span><span class="nm">${fdone.length} done · ${esc(folded.map(g=>g.name).join(', '))}</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>${foldOpen?folded.map(row).join(''):''}`:'';
+    const lw=latestWeight(),w=L.weighPaid&&lw;
+    const weigh=`<button class="row${w?' done':''}" data-act="goto" data-tab="progress"><span class="check icon-check">${IC.check}</span><span class="nm">Weigh in<small>${w?`Logged ${fmtW(lw.w)} ${S.weight.unit}`:'Any number counts'}</small></span><span class="reward">${w?'Earned':`${SYM.bolt}+${WEIGH_REWARD}`}</span></button>`;
+    body=`<div class="capline"><b>Daily · ${ids.length} of ${core.length}</b><span>tap to check</span></div>
+     <div class="rows" id="dailyRows">${here.filter(g=>!isHB(g)).map(row).join('')}${here.filter(isHB).map(row).join('')}${fold}${weigh}</div>
+     <p class="earn-foot">A day counts toward your streak when you finish at least ${nd} of ${core.length}.</p>
+     ${flex.length?`<div class="card"><div class="card-head"><h3>Bonus</h3><span>Optional</span></div><div class="rows">${flex.map(row).join('')}</div><p class="earn-foot">Stretch goals for good days. Extra spins, no penalty for skipping.</p></div>`:''}
+     <div class="card"><div class="card-head"><h3>This week</h3><span>${shortDay(wk)} – ${shortDay(wkEnd)}</span></div>${wcore.length?`<div class="rows">${wcore.map(g=>weekRow(g,wk,true)).join('')}</div><p class="earn-foot">Hit every weekly goal to earn a rain check. Week streak: <b>${plural(S.weekStreak,'week')}</b>, best ${S.weekBest}.</p>`:'<p class="sub">No weekly goals yet. Add one with Edit.</p>'}</div>
+     ${wflex.length?`<div class="card"><div class="card-head"><h3>Weekly bonus</h3><span>Optional</span></div><div class="rows">${wflex.map(g=>weekRow(g,wk,true)).join('')}</div><p class="earn-foot">Hit one, or stay under a limit through Sunday, for a gold chest. Miss it and nothing happens.</p></div>`:''}
+     ${(()=>{const f=feelCard();return f?`<div class="card">${f}</div>`:'';})()}`;
   }
   $('#v-goals').innerHTML=top+body;
 }
@@ -3004,9 +3026,9 @@ function renderVillage(){
   const v=S.village,V=villageDef(v.n),ups=v.levels.reduce((a,b)=>a+b,0),tn=trailNeed(v.n),tr=Math.min(v.trail||0,tn),nx=villageDef(v.n+1);
   const rows=V.b.map((name,i)=>{
     const l=v.levels[i],dmg=v.damaged[i];let btn;
-    if(dmg){const rc=repairCost(i);btn=`<button class="btn rust sm${S.coins<rc?' short':''}" data-act="repair" data-i="${i}">Repair <span class="cost">${SYM.coin}${fmt(rc)}</span></button>`;}
+    if(dmg){const rc=repairCost(i);btn=`<button class="btn ${S.coins<rc?'short':'fern'} sm" data-act="repair" data-i="${i}">Repair <span class="cost">${SYM.coin}${fmt(rc)}</span></button>`;}
     else if(l>=4)btn='<span class="maxed">Running</span>';
-    else{const c=cost(v.n,i,l+1);btn=`<button class="btn gold sm${S.coins<c?' short':''}" data-act="upgrade" data-i="${i}">${l===0?'Start':'Fix up'} <span class="cost">${SYM.coin}${fmt(c)}</span></button>`;}
+    else{const c=cost(v.n,i,l+1);btn=`<button class="btn ${S.coins<c?'short':'fern'} sm" data-act="upgrade" data-i="${i}">${l===0?'Start':'Fix up'} <span class="cost">${SYM.coin}${fmt(c)}</span></button>`;}
     const rd=rideOf(V,i),nextNote=dmg?'<span style="color:var(--rust)">Knocked out by a storm off the bay</span>':l>=4?'Open and running':`Next: ${rd.s[l]}`;
     const card=window.LAKE_ART&&LAKE_ART.drawRideCard?LAKE_ART.drawRideCard(rd.a,rd.v,l,{colors:rd.c,damaged:dmg,lit:!!V.night&&l>=4,snowy:!!V.snow}):null;
     const art=card?`<svg viewBox="${card.viewBox}" aria-hidden="true">${card.svg}</svg>`:bSVG(rd.a,l,colorsFor(V,i));
@@ -3014,11 +3036,13 @@ function renderVillage(){
   }).join('');
   const pines=tn<=40?`<div class="boardwalk" aria-hidden="true">${Array.from({length:tn},(_,k)=>PLANK_ICON(k<tr)).join('')}</div>`:`<div class="bar fern" style="margin:6px 0 10px"><span style="width:${tr/tn*100}%"></span></div>`;
   const prevSpins=v.n>1?Math.round(spinsFor(v.n-1)/10)*10:null;
-  $('#v-village').innerHTML=mgCardHTML()+`<div class="v-head"><div><p class="eyebrow">Bay Beach · Phase ${v.n}</p><h2>${esc(V.name)}</h2><p class="sub">${V.blurb}</p></div><div class="v-count"><b>${ups}</b>/20</div></div>
-   ${sceneHTML('')}<div class="bar" aria-hidden="true"><span style="width:${ups/20*100}%"></span></div>
+  const hero=sceneHTML('');
+  $('#v-village').innerHTML=`<div class="pk-hero${sceneHTML.kept?' kept':''}" style="--sky:${sceneHTML.sky||'#8fd0f5'}"><div class="pk-ribbon"><span class="tag">Bay Beach · Phase ${v.n}</span><h2>${esc(V.name)}</h2><div class="sbar" role="img" aria-label="${ups} of 20 fix-ups done">${STAR_IC()}<span class="track"><i style="width:${ups/20*100}%"></i></span><span class="ct">${ups}/20</span></div></div>${hero}</div>
+   <p class="sub pk-blurb">${V.blurb}</p>
+   <div class="blist">${rows}</div>
+   ${mgCardHTML()}
    <div class="card"><div class="card-head"><h3>Boardwalk to ${esc(nx.name)}</h3><span>${tr}/${tn} goals</span></div>${pines}
     <p class="sub">${tr>=tn?'Boardwalk done. Get every ride running to open the next phase.':`Every goal you finish lays a plank: daily, flex, weekly check-ins and weigh-ins. ${tn-tr} more to go.`}</p></div>
-   <div class="blist">${rows}</div>
    <div class="card next"><span class="sign">Next: ${esc(nx.name)}</span><p class="sub">About ${Math.round(spinsFor(v.n+1)/10)*10} spins of fix-ups and a boardwalk of ${trailNeed(v.n+1)} goals. ${prevSpins?`This one is about ${Math.round(spinsFor(v.n)/10)*10} spins; the last was ${prevSpins}.`:'Each phase takes more work than the last.'}</p></div>
    ${S.villagesDone.length?`<div class="card"><h3>Finished phases</h3><ul class="done-list">${S.villagesDone.map(d=>`<li>${d.n}. ${esc(d.name)}</li>`).join('')}</ul></div>`:''}`;
 }
@@ -3103,19 +3127,19 @@ function renderChart(){
   const last=avg[avg.length-1];
   box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Weight trend, ${E.length} weigh-ins">${g}${goalLine}<path d="${area}" style="fill:var(--fern)" opacity=".16"/>${dots}<path d="${path}" fill="none" style="stroke:var(--fern)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="${f1(x(last.t))}" cy="${f1(y(last.w))}" r="5.5" style="fill:var(--fern);stroke:var(--ink)" stroke-width="2.5"/><text x="${pl}" y="${H-6}">${shortDay(pts[0].d)}</text><text x="${W-pr}" y="${H-6}" text-anchor="end">${shortDay(pts[pts.length-1].d)}</text></svg>`;
 }
+function goalsRing(){const n=dailyCore().length,d=coreDoneIds(today()).length;return window.KIT&&KIT.ICON&&KIT.ICON.ring?KIT.ICON.ring(n?d/n:0):IC.goals;}
+// no badges or dots anywhere (Joey, Nov 5): this only keeps the Goals tab's ring up to date
 function renderBadges(){
-  const t=today(),L=S.log[t]||{done:[]};const left=dailyCore().filter(g=>!(L.done||[]).includes(g.id)).length+(L.weighPaid?0:1);
-  const set=(tab,html)=>{const el=document.querySelector(`.tab[data-tab="${tab}"]`);if(!el)return;const b=el.querySelector('.badge');if(b)b.remove();if(html)el.insertAdjacentHTML('beforeend',html);};
-  set('goals',left>0?`<span class="badge">${left}</span>`:'');
-  set('village',canUpgrade()?'<span class="badge dot"></span>':'');
-  set('cards',S.chests.length?`<span class="badge">${S.chests.length}</span>`:'');
+  const tab=document.querySelector('.tab[data-tab="goals"]');if(!tab)return;const el=tab.querySelector('.ti'),h=goalsRing();
+  if(el&&el._h!==h){el._h=h;el.innerHTML=h;const n=dailyCore().length;tab.setAttribute('aria-label',`Goals, ${coreDoneIds(today()).length} of ${n} daily goals done`);}
 }
 const VIEWS={spin:()=>renderSpin(),goals:()=>renderGoals(),village:()=>renderVillage(),cards:()=>renderCards(),progress:()=>renderProgress()};
 function renderAll(){renderHUD();VIEWS[current]();renderBadges();if(current!=='spin')renderSpinBits();if(mgOpen)renderBooth();}
 function setTab(t,instant){
   t={habits:'goals',weight:'progress',park:'village'}[t]||t;
   if(!VIEWS[t])t='spin';
-  current=t;document.querySelectorAll('.view').forEach(v=>v.hidden=v.dataset.view!==t);
+  if(t==='goals')refoldGoals();
+  current=t;document.body.className=document.body.className.replace(/\bon-\w+/g,'').trim();document.body.classList.add('on-'+t);document.querySelectorAll('.view').forEach(v=>v.hidden=v.dataset.view!==t);
   document.querySelectorAll('.tab').forEach(b=>{b.classList.toggle('on',b.dataset.tab===t);b.setAttribute('aria-current',b.dataset.tab===t?'page':'false');});
   try{localStorage.setItem(KEY+'-tab',t);}catch(e){}
   renderAll();if(!instant)window.scrollTo({top:0,behavior:'auto'});
@@ -3189,7 +3213,7 @@ function setPause(on){
 }
 function showSettings(){
   openOverlay(sh=>{
-    const draw=()=>{const paused=isPaused(today());sh.innerHTML=`<div class="center"><p class="eyebrow">Settings</p><h2>Park settings</h2></div>
+    const draw=()=>{const paused=isPaused(today());sh.innerHTML=`<div class="center"><p class="eyebrow">Menu</p><h2>Park settings</h2></div>
      <div class="setting"><p>Sound<small>Reel clicks, coins and wins. Your iPhone's silent switch mutes this too.</small></p><button class="switch" id="swSound" role="switch" aria-checked="${S.settings.sound}" aria-label="Sound"></button></div>
      <div class="setting"><p>Prize Booth<small>Prizes from your goals, merged with sparks. Off hides it and keeps your board.</small></p><button class="switch" id="swBooth" role="switch" aria-checked="${mgOn()}" aria-label="Prize Booth"></button></div>
      <div class="setting"><p>Pause streaks<small>For trips or sick days. Missed days and weeks won’t count until you turn this off.</small></p><button class="switch" id="swPause" role="switch" aria-checked="${paused}" aria-label="Pause streaks"></button></div>
@@ -3202,7 +3226,7 @@ function showSettings(){
       <li><b>Weekly goals</b> pay ${TAP_REWARD} spins per check-in plus a chest when you hit the target. Hit every required one for a rain check.</li>
       <li><b>Missing a day</b> uses a rain check. With no rain check, the streak resets and a storm off the bay knocks out a ride; your next kept day repairs it for free.</li>
       <li><b>Phases</b> need coins for ride fix-ups plus a boardwalk of finished goals. Both grow each phase.</li>
-      <li><b>Spin results</b>: a ticket roll pays spins, the high striker bonks a craving goblin (he only gets dizzy), and a sand dig turns up buried coins.</li></ul></div>
+      <li><b>Spin results</b>: a ticket roll pays spins, the high striker bonks a craving goblin (he only gets dizzy; about ${Math.round(blockChance(S.village.n)*100)}% duck under a pot lid in time at this phase), and a sand dig turns up buried coins.</li></ul></div>
      <div class="setting"><p>Start over<small>A fresh park: spins, coins, rides, stickers, streak and history start again. Your goals and weigh-ins stay. Download a backup first.</small></p><button class="btn rust sm" id="btnReset">Reset</button></div>
      <button class="btn plain wide" data-close>Close</button>`;
       sh.querySelector('#swSound').addEventListener('click',()=>{S.settings.sound=!S.settings.sound;persist();unlockAudio();SFX.click();draw();});
@@ -3217,29 +3241,36 @@ function showSettings(){
 /* ============ Wiring ============ */
 function bind(){
   const tabs=[['spin','Spin'],['goals','Goals'],['village','Park'],['cards','Stickers'],['progress','Progress']];
-  $('#tabs').innerHTML=tabs.map(([k,l])=>`<button class="tab" data-tab="${k}">${IC[k]}<span>${l}</span></button>`).join('');
+  window.SYM=SYM;window.GOB_ART=GOB_ART;   // the kit's art (kit.js) draws with the game's own icons
+  const TI={spin:'slot',village:'wheel',cards:'book',progress:'trophy'};
+  $('#tabs').innerHTML=tabs.map(([k,l])=>`<button class="tab" data-tab="${k}"><span class="ti">${k==='goals'?'':KI(TI[k],IC[k])}</span><span class="tl">${l}</span></button>`).join('');
+  $('#cabAwning').innerHTML=awningSVG();$('#autoIcon').innerHTML=KI('auto',IC.spin);
   $('#tabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(b){SFX.click();setTab(b.dataset.tab);}});
-  $('#hudCoinIcon').innerHTML=SYM.coin;$('#flameIcon').innerHTML=LIGHTS;$('#boltIcon').innerHTML=SYM.bolt;$('#btnSettings').innerHTML=IC.gear;
+  $('#hudCoinIcon').innerHTML=SYM.coin;$('#flameIcon').innerHTML=KI('bulb',LIGHTS);$('#boltIcon').innerHTML=SYM.bolt;$('#btnSettings').innerHTML=KI('menu',IC.gear);
   $('#btnSettings').addEventListener('click',showSettings);
-  $('#hudShields').addEventListener('click',()=>toast(`${S.shields} of ${MAXSH} rain checks. Each one covers a missed day.`));
+  $('#spinsBox').addEventListener('click',()=>setTab('goals'));
+  $('#btnAuto').addEventListener('click',()=>{unlockAudio();SFX.click();if(auto){auto=false;renderAuto();return;}if(S.spins<1){earnTap();return;}auto=true;renderAuto();toast('Auto-spin on. Tap Auto or Spin to stop.');autoLoop();});
   $('#hudStreak').addEventListener('click',()=>setTab('goals'));
   $('#hudCoins').addEventListener('click',()=>setTab('village'));
   document.addEventListener('pointerdown',unlockAudio,{passive:true});document.addEventListener('pointerup',unlockAudio,{passive:true});
   mgSprite();
   $('#btnBet').addEventListener('click',()=>{unlockAudio();const i=BETS.indexOf(S.bet);let nb=BETS[(i+1)%BETS.length];if(!betOk(nb))nb=1;S.bet=nb;SFX.click();renderSpinBits();persist();});
   const sp=$('#btnSpin');let holdT=null,held=false,skipUp=false;
-  sp.addEventListener('pointerdown',e=>{if(e.button>0)return;sp.classList.add('pressed');held=false;if(auto){auto=false;renderAuto();skipUp=true;return;}holdT=setTimeout(()=>{held=true;sp.classList.remove('pressed');if(S.spins<1){outOfSpins();return;}auto=true;renderAuto();toast('Auto-spin on. Tap Spin to stop.');autoLoop();},550);});
+  sp.addEventListener('pointerdown',e=>{if(e.button>0)return;sp.classList.add('pressed');held=false;if(auto){auto=false;renderAuto();skipUp=true;return;}holdT=setTimeout(()=>{held=true;sp.classList.remove('pressed');if(S.spins<1){earnTap();return;}auto=true;renderAuto();toast('Auto-spin on. Tap Spin to stop.');autoLoop();},550);});
   const up=()=>{clearTimeout(holdT);sp.classList.remove('pressed');};
-  sp.addEventListener('pointerup',()=>{up();if(skipUp){skipUp=false;return;}if(!held)spin();});
+  const go=()=>{if(S.spins<1)earnTap();else spin();};   // out of spins, the button never spins: it points at today's goals
+  sp.addEventListener('pointerup',()=>{up();if(skipUp){skipUp=false;return;}if(!held)go();});
   sp.addEventListener('pointerleave',up);sp.addEventListener('pointercancel',()=>{up();held=true;});
-  sp.addEventListener('click',e=>{if(e.detail===0){if(auto){auto=false;renderAuto();}else spin();}});
+  sp.addEventListener('click',e=>{if(e.detail===0){if(auto){auto=false;renderAuto();}else go();}});
   sp.addEventListener('contextmenu',e=>e.preventDefault());
   const stage=$('#stage');
   stage.addEventListener('click',e=>{
     const t=e.target.closest('[data-act]');if(!t)return;const a=t.dataset.act;
     const dd=t.dataset.day,dayOf=()=>dd&&/^\d{4}-\d{2}-\d{2}$/.test(dd)?dd:undefined;
     if((a==='day'||a==='dtap'||a==='duntap')&&dd&&!canFixDay(dayOf())){goalDay=null;renderGoals();toast('That day can\'t be changed any more.');return;}
+    if(t.classList.contains('gbtn'))trayTap(t.dataset.id);
     if(a==='day')toggleDay(t.dataset.id,t,dayOf());
+    else if(a==='fold'){foldOpen=!foldOpen;SFX.click();renderGoals();const f=document.querySelector('#v-goals .row.fold');if(f)f.focus({preventScroll:true});}
     else if(a==='wtap')tapWeek(t.dataset.id,1,t);
     else if(a==='dtap')tapDay(t.dataset.id,1,t,dayOf());
     else if(a==='duntap')tapDay(t.dataset.id,-1,t,dayOf());
@@ -3274,7 +3305,7 @@ let curDay=today(),booted=false;
 function tick(){
   if(!booted)return;
   if(applyRegen()){renderSpinBits();renderBadges();}else renderSpinBits();
-  const d=today();if(d!==curDay){curDay=d;const ev=dailyChecks();renderAll();if(ev.length)showAway(ev);setTimeout(healthPull,1500);}
+  const d=today();if(d!==curDay){curDay=d;refoldGoals();const ev=dailyChecks();renderAll();if(ev.length)showAway(ev);setTimeout(healthPull,1500);}
   else if(Date.now()-healthAt>15*60000)healthPull();   // Muse's Health brief lands about 9:30 PM
 }
 function hideLoading(){const el=document.getElementById('hb-loading');if(el)el.remove();}
