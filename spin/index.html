@@ -1,8 +1,8 @@
-<!doctype html><html lang="en" data-theme="light" data-app="spin" data-app-name="Daily Spin" data-signup="off" data-install-first="on"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#f8efe1;color:#2b1f19}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<!doctype html><html lang="en" data-theme="light" data-app="spin" data-app-name="Daily Spin" data-signup="off" data-install-first="on"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#ecddc7;color:#56453a}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
-<meta name="theme-color" content="#173a72">
+<meta name="theme-color" content="#405981">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -29,31 +29,31 @@
    500px column. Daily Spin's own tokens below (midway red, coin gold, sand by day, the midway at night in dark mode);
    Rye only on the marquee. The park being fixed up is Bay Beach, with its real rides. */
 :root[data-app="spin"]{
-  --bg:#f8efe1; --surface:#fffbf4; --sunk:#f0e3cf; --ink:#2b1f19; --muted:#6d5d50; --line:#eadbc3; --line-strong:#d5c09f;
-  --falu:#b8282f; --falu-soft:#f7dcd8; --accent:#c2303a; --accent-soft:#f7dcd8; --on-accent:#fffaf0;
+  --bg:#ecddc7; --surface:#f7e8cf; --sunk:#e4d4bd; --ink:#56453a; --muted:#827365; --line:#deceb5; --line-strong:#ccba9e;
+  --falu:#b64f4f; --falu-soft:#ebcac1; --accent:#bc5557; --accent-soft:#ebcac1; --on-accent:#f7e8cc;
   --marquee-face:"Rye", "Young Serif", Georgia, serif;
 }
 @media (prefers-color-scheme: dark){:root[data-app="spin"]:not([data-theme="light"]){
-  --bg:#1b1315; --surface:#251a1d; --sunk:#201618; --ink:#f6ece2; --muted:#b5a396; --line:#3c2b2f; --line-strong:#563f43;
-  --falu:#f07a80; --falu-soft:#3d1f22; --accent:#f07a80; --accent-soft:#3d1f22; --on-accent:#1b1315; color-scheme:dark}}
+  --bg:#493b39; --surface:#50403f; --sunk:#4d3d3b; --ink:#e9dac9; --muted:#b5a598; --line:#604d4c; --line-strong:#725d5b;
+  --falu:#df8989; --falu-soft:#634341; --accent:#df8989; --accent-soft:#634341; --on-accent:#493b39; color-scheme:dark}}
 :root[data-app="spin"][data-theme="dark"]{
-  --bg:#1b1315; --surface:#251a1d; --sunk:#201618; --ink:#f6ece2; --muted:#b5a396; --line:#3c2b2f; --line-strong:#563f43;
-  --falu:#f07a80; --falu-soft:#3d1f22; --accent:#f07a80; --accent-soft:#3d1f22; --on-accent:#1b1315; color-scheme:dark}
+  --bg:#493b39; --surface:#50403f; --sunk:#4d3d3b; --ink:#e9dac9; --muted:#b5a598; --line:#604d4c; --line-strong:#725d5b;
+  --falu:#df8989; --falu-soft:#634341; --accent:#df8989; --accent-soft:#634341; --on-accent:#493b39; color-scheme:dark}
 :root{
-  --gold:#f2b33d; --gold-d:#c98a1a; --gold-ink:#3a2a10;
-  --red:#c8323a; --red-d:#9e2229; --red-hi:#e0574f;
-  --fernc:#7fae55; --fernc-d:#56693e;
-  --ring1:#ff8a72; --ring2:#d8383a;
-  --heat0:var(--sunk); --heat1:#d7e4bf; --heat2:#a8c784; --heat3:#6f9a4a;
-  --reel:#fffdf7; --reel-shade:rgba(44,36,31,.22); --scrim:rgba(25,21,18,.55);
+  --gold:#dbaf5e; --gold-d:#c29340; --gold-ink:#645030;
+  --red:#be5a5a; --red-d:#a54849; --red-hi:#cf736a;
+  --fernc:#8fa96d; --fernc-d:#717c57;
+  --ring1:#ea947e; --ring2:#c8605c;
+  --heat0:var(--sunk); --heat1:#cfd6b3; --heat2:#acbd8c; --heat3:#839e62;
+  --reel:#f7ecd1; --reel-shade:rgba(44,36,31,.22); --scrim:rgba(25,21,18,.55);
   --soft:0 1px 0 var(--line),0 6px 16px -12px #0006;
   --stk:drop-shadow(0 2px 2px rgba(0,0,0,.18)); --stk-sm:drop-shadow(0 1px 1px rgba(0,0,0,.16));
   --cell:70px; --nav-h:64px; --col:500px;
   /* names the game's script still uses */
-  --mustard:var(--gold); --rust:var(--red); --fern:var(--fernc); --lake:#8fbfdc; --lake-d:var(--fjord);
+  --mustard:var(--gold); --rust:var(--red); --fern:var(--fernc); --lake:#9bb9c9; --lake-d:var(--fjord);
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--heat1:#2f3d22;--heat2:#4c6634;--heat3:#86ad5c;--reel:#f6f0e4;--fernc:#8fbd63;--lake:#5f8fb0;--scrim:rgba(0,0,0,.6)}}
-:root[data-theme="dark"]{--heat1:#2f3d22;--heat2:#4c6634;--heat3:#86ad5c;--reel:#f6f0e4;--fernc:#8fbd63;--lake:#5f8fb0;--scrim:rgba(0,0,0,.6)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--heat1:#555f41;--heat2:#6a7b4f;--heat3:#94a971;--reel:#e9decb;--fernc:#9ab476;--lake:#7b96a6;--scrim:rgba(0,0,0,.6)}}
+:root[data-theme="dark"]{--heat1:#555f41;--heat2:#6a7b4f;--heat3:#94a971;--reel:#e9decb;--fernc:#9ab476;--lake:#7b96a6;--scrim:rgba(0,0,0,.6)}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.4;-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
@@ -81,22 +81,22 @@ h3{font-size:16px;font-weight:700}
 .bld{position:absolute;aspect-ratio:1;transform-origin:50% 92%}
 .bld svg{width:100%;height:100%;display:block;overflow:visible}
 .bld .ghost *{fill:none!important;stroke:var(--muted)!important;stroke-width:1.6;stroke-dasharray:4 3}
-.bld.damaged::after{content:"!";position:absolute;right:6%;top:8%;width:18px;height:18px;border-radius:50%;background:var(--red);color:#fffaf0;border:2px solid var(--surface);font:800 11px/14px var(--body);text-align:center}
+.bld.damaged::after{content:"!";position:absolute;right:6%;top:8%;width:18px;height:18px;border-radius:50%;background:var(--red);color:#f7e8cc;border:2px solid var(--surface);font:800 11px/14px var(--body);text-align:center}
 .bld.pop svg,.scene.pop svg.land{animation:pop .7s cubic-bezier(.2,1.7,.4,1);transform-origin:50% 92%}
 @keyframes pop{0%{transform:scale(.97)}100%{transform:scale(1)}}
-.flake{position:absolute;top:-8px;width:4px;height:4px;border-radius:50%;background:#ffffff;opacity:.9;z-index:8;animation:fall linear infinite}
+.flake{position:absolute;top:-8px;width:4px;height:4px;border-radius:50%;background:#ebe8e3;opacity:.9;z-index:8;animation:fall linear infinite}
 @keyframes fall{to{transform:translate(14px,260px)}}
-.drop{position:absolute;top:-14px;width:1.5px;height:10px;border-radius:1px;background:#e8f4ff;opacity:.55;z-index:8;animation:rain linear infinite}
+.drop{position:absolute;top:-14px;width:1.5px;height:10px;border-radius:1px;background:#cfe0ee;opacity:.55;z-index:8;animation:rain linear infinite}
 @keyframes rain{to{transform:translate(-30px,260px)}}
-.ffly{position:absolute;width:4px;height:4px;border-radius:50%;background:#ffe98a;box-shadow:0 0 7px 2px rgba(255,233,138,.75);z-index:8;animation:blink 2.6s ease-in-out infinite}
+.ffly{position:absolute;width:4px;height:4px;border-radius:50%;background:#ecd98d;box-shadow:0 0 7px 2px rgba(255,233,138,.75);z-index:8;animation:blink 2.6s ease-in-out infinite}
 @keyframes blink{50%{opacity:.1;transform:translate(5px,-6px)}}
 
 /* The midway booth: Bay Beach red and cream, bulbs chasing */
 .cabinet{position:relative;padding:12px 12px 14px;border-radius:24px;border:1px solid var(--red-d);
-  background:repeating-linear-gradient(90deg,var(--red) 0 22px,#fbf3e6 22px 44px);box-shadow:inset 0 0 0 6px #fbf3e6,var(--shadow)}
-.marquee{position:relative;height:46px;margin:0 6px;border-radius:12px;background:var(--red-d);box-shadow:inset 0 0 0 2px #fbf3e6;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.mq-text{font:400 22px var(--marquee-face,var(--display));color:#fffaf0;letter-spacing:.06em;text-shadow:0 1px 0 #0005}
-.reels{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px;padding:8px;border-radius:16px;background:#2c241f}
+  background:repeating-linear-gradient(90deg,var(--red) 0 22px,#efe1c9 22px 44px);box-shadow:inset 0 0 0 6px #efe1c9,var(--shadow)}
+.marquee{position:relative;height:46px;margin:0 6px;border-radius:12px;background:var(--red-d);box-shadow:inset 0 0 0 2px #efe1c9;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.mq-text{font:400 22px var(--marquee-face,var(--display));color:#f7e8cc;letter-spacing:.06em;text-shadow:0 1px 0 #0005}
+.reels{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px;padding:8px;border-radius:16px;background:#554940}
 .reels::before,.reels::after{content:"";position:absolute;top:50%;width:0;height:0;border:9px solid transparent;transform:translateY(-50%);z-index:3}
 .reel{position:relative;height:calc(var(--cell)*1.55);overflow:hidden;border-radius:10px;background:var(--reel);transition:box-shadow .2s}
 .reel::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,var(--reel-shade) 0%,transparent 30%,transparent 70%,var(--reel-shade) 100%)}
@@ -108,7 +108,7 @@ h3{font-size:16px;font-weight:700}
 .reel.tease{box-shadow:0 0 0 3px var(--gold),0 0 22px var(--gold)}
 .reels.win .reel{animation:winflash .45s ease 3}
 @keyframes winflash{50%{box-shadow:0 0 0 3px var(--gold),0 0 26px var(--gold)}}
-.result{margin-top:11px;min-height:22px;padding:6px 12px;border-radius:12px;background:#fbf3e6;color:#2c241f;text-align:center;font:600 15px var(--body);text-wrap:balance;box-shadow:inset 0 0 0 1px #e7cfbf}
+.result{margin-top:11px;min-height:22px;padding:6px 12px;border-radius:12px;background:#efe1c9;color:#554940;text-align:center;font:600 15px var(--body);text-wrap:balance;box-shadow:inset 0 0 0 1px #dcc5b3}
 .result b{color:var(--red-d)}
 
 .paused-note{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:14px;background:var(--fjord-soft);font-size:13px;color:var(--ink)}
@@ -158,12 +158,12 @@ button.row:active{transform:translateY(1px)}
 .btn svg{width:18px;height:18px}
 .btn.gold{background:var(--gold);color:var(--gold-ink)}
 .btn.fern{background:var(--moss);color:var(--surface)}
-.btn.rust{background:var(--red);color:#fffaf0}
+.btn.rust{background:var(--red);color:#f7e8cc}
 .btn.plain{background:var(--surface);color:var(--ink);border-color:var(--line)}
 .btn.short{filter:saturate(.35);opacity:.8}
 .btn.wide{width:100%}
 .btn.sm{min-height:38px;padding:0 12px;font-size:13px}
-.btn.arm{background:var(--red);color:#fffaf0}
+.btn.arm{background:var(--red);color:#f7e8cc}
 
 /* Goals */
 .today{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center}
@@ -175,7 +175,7 @@ button.row:active{transform:translateY(1px)}
 .note b{color:var(--honey-ink)}
 .cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-top:12px;max-width:380px}
 .cal button{appearance:none;border:0;padding:0;margin:0 auto;width:100%;max-width:44px;min-height:40px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:var(--sunk);font:700 13px var(--body);color:var(--muted);font-variant-numeric:tabular-nums;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.cal button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.cal button:focus-visible{outline:2px solid var(--m-edge,var(--ink));outline-offset:2px}
 .cal .sel{box-shadow:0 0 0 2.5px var(--ink)!important}
 .cal .m.sel{box-shadow:inset 0 0 0 1.5px var(--berry),0 0 0 2.5px var(--ink)!important}
 .back-today{margin-top:12px}
@@ -206,10 +206,10 @@ select.field{padding:0 8px}
 .bar.fern span{background:var(--moss)}
 .blist{display:flex;flex-direction:column;gap:10px}
 .brow{display:grid;grid-template-columns:66px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 12px;background:var(--surface);border:1px solid var(--line);border-radius:18px}
-.brow .mini{width:66px;height:66px;border-radius:14px;overflow:hidden;background:linear-gradient(180deg,#bcdcec,#e9f3f7);position:relative}
+.brow .mini{width:66px;height:66px;border-radius:14px;overflow:hidden;background:linear-gradient(180deg,#b8cfd8,#d6e1e2);position:relative}
 .brow .mini svg{width:100%;height:100%;display:block}
-.brow .mini.night{background:linear-gradient(180deg,#1b2a4a,#3a4a6e)}
-.brow .mini.damaged::after{content:"!";position:absolute;right:4px;top:4px;width:18px;height:18px;border-radius:50%;background:var(--red);color:#fffaf0;font:800 11px/18px var(--body);text-align:center}
+.brow .mini.night{background:linear-gradient(180deg,#424d65,#5c657b)}
+.brow .mini.damaged::after{content:"!";position:absolute;right:4px;top:4px;width:18px;height:18px;border-radius:50%;background:var(--red);color:#f7e8cc;font:800 11px/18px var(--body);text-align:center}
 .brow h3{font:400 16px/1.2 var(--display)}
 .brow h3 small{font:500 12px var(--body);color:var(--muted);white-space:nowrap}
 .brow .lv{font:500 12.5px var(--body);color:var(--muted)}
@@ -246,7 +246,7 @@ select.field{padding:0 8px}
 .pcard .st{display:flex;gap:1px}
 .pcard .st svg{width:10px;height:10px;color:var(--gold)}
 .pcard .ct{position:absolute;top:5px;right:5px;padding:1px 6px;border-radius:8px;background:var(--ink);font:700 11px var(--body);color:var(--bg)}
-.pcard .new{position:absolute;top:-9px;left:50%;transform:translateX(-50%);padding:1px 7px;border-radius:8px;background:var(--red);color:#fffaf0;font:800 10px var(--body);letter-spacing:.06em}
+.pcard .new{position:absolute;top:-9px;left:50%;transform:translateX(-50%);padding:1px 7px;border-radius:8px;background:var(--red);color:#f7e8cc;font:800 10px var(--body);letter-spacing:.06em}
 .pcard .dup{position:absolute;bottom:5px;left:50%;transform:translateX(-50%);font:700 11px var(--body);color:var(--moss);white-space:nowrap}
 .pcard.locked{background:transparent;box-shadow:none;border:1.5px dashed var(--line-strong);transform:none}
 .pcard.locked .art{font:400 26px var(--display);color:var(--line-strong);filter:none}
@@ -300,7 +300,7 @@ select.field{padding:0 8px}
 .dl.down{color:var(--moss)} .dl.up{color:var(--berry)}
 .del{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--berry);display:grid;place-items:center;font:700 12px var(--body)}
 .del svg{width:18px;height:18px}
-.del.arm{background:var(--red);color:#fffaf0;border-color:var(--red)}
+.del.arm{background:var(--red);color:#f7e8cc;border-color:var(--red)}
 .backup{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 .backup .btn{font-size:13px;padding:0 10px}
 .backup .btn.wide{grid-column:1/-1}
@@ -373,7 +373,7 @@ select.field{padding:0 8px}
 .rain-coin{position:fixed;top:-40px;width:30px;height:30px}
 .rain-coin svg{width:100%;height:100%}
 .conf{position:fixed;top:-12px;width:9px;height:14px;border-radius:2px}
-.banner{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%);font:400 50px var(--display);white-space:nowrap;color:var(--gold);-webkit-text-stroke:2px #3a2a1e;paint-order:stroke fill;text-shadow:0 4px 0 rgba(0,0,0,.25);animation:bannerIn 1.6s cubic-bezier(.2,1.5,.4,1) forwards}
+.banner{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%);font:400 50px var(--display);white-space:nowrap;color:var(--gold);-webkit-text-stroke:2px #614e3d;paint-order:stroke fill;text-shadow:0 4px 0 rgba(0,0,0,.25);animation:bannerIn 1.6s cubic-bezier(.2,1.5,.4,1) forwards}
 .banner.rust{color:var(--red)}
 .banner.fern{color:var(--fernc)}
 @keyframes bannerIn{0%{transform:translate(-50%,-50%) scale(.3) rotate(-8deg);opacity:0}25%{transform:translate(-50%,-50%) scale(1.1) rotate(-4deg);opacity:1}75%{transform:translate(-50%,-50%) scale(1) rotate(-4deg);opacity:1}100%{transform:translate(-50%,-70%) scale(1) rotate(-4deg);opacity:0}}
@@ -385,31 +385,31 @@ select.field{padding:0 8px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 /* ---- standalone app (Nov 5): status-bar band, sign-in, loading, phone comfort ---- */
 /* the home-screen app draws under a see-through status bar with a white clock: paint that band as the red awning */
-@media (display-mode: standalone){html::before{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-inset-top,0px);background:#9e2229;z-index:60;pointer-events:none}}
+@media (display-mode: standalone){html::before{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area-inset-top,0px);background:#a54849;z-index:60;pointer-events:none}}
 /* iOS zooms into any field under 16px, and a home-screen app has no easy way back out */
 input,select,textarea{font-size:16px!important}
 button,a,[data-act]{touch-action:manipulation}
 html.hb-gated body{overflow:hidden}
-#hb-gate{position:fixed;inset:0;z-index:100;background:radial-gradient(120% 70% at 50% -10%,#fff6e6 0%,#f8efe1 55%,#f0e3cf 100%);color:#2b1f19;display:grid;place-items:center;padding:max(24px,env(safe-area-inset-top,0px)) 20px max(24px,env(safe-area-inset-bottom,0px));overflow:auto}
+#hb-gate{position:fixed;inset:0;z-index:100;background:radial-gradient(120% 70% at 50% -10%,#f6e4c6 0%,#ecddc7 55%,#e4d4bd 100%);color:#56453a;display:grid;place-items:center;padding:max(24px,env(safe-area-inset-top,0px)) 20px max(24px,env(safe-area-inset-bottom,0px));overflow:auto}
 #hb-gate .card{width:min(400px,100%);display:flex;flex-direction:column;gap:14px;background:transparent;box-shadow:none;border:0;padding:0}
-#hb-gate .logo{font:400 46px/1 var(--marquee-face);color:#9e2229;margin:0;text-align:center}
+#hb-gate .logo{font:400 46px/1 var(--marquee-face);color:#a54849;margin:0;text-align:center}
 #hb-gate h1{font:700 22px/1.2 var(--body);margin:0}
-#hb-gate p{margin:0;color:#6d5d50;font-size:15px;line-height:1.45}
-#hb-gate label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:#6d5d50}
-#hb-gate input{min-height:48px;border-radius:12px;border:1px solid #d5c09f;background:#fffbf4;color:#2b1f19;font:500 17px var(--body);padding:0 14px}
-#hb-gate input:focus-visible{outline:2px solid #9e2229;outline-offset:1px}
-#hb-gate .go{min-height:50px;border:0;border-radius:12px;background:#9e2229;color:#fffaf0;font:700 17px var(--body);cursor:pointer}
+#hb-gate p{margin:0;color:#827365;font-size:15px;line-height:1.45}
+#hb-gate label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:#827365}
+#hb-gate input{min-height:48px;border-radius:12px;border:1px solid #ccba9e;background:#f7e8cf;color:#56453a;font:500 17px var(--body);padding:0 14px}
+#hb-gate input:focus-visible{outline:2px solid #a54849;outline-offset:1px}
+#hb-gate .go{min-height:50px;border:0;border-radius:12px;background:#a54849;color:#f7e8cc;font:700 17px var(--body);cursor:pointer}
 #hb-gate .go[disabled]{opacity:.6}
-#hb-gate .link{min-height:44px;border:0;background:none;color:#9e2229;font:600 15px var(--body);text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:0 4px}
+#hb-gate .link{min-height:44px;border:0;background:none;color:#a54849;font:600 15px var(--body);text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:0 4px}
 #hb-gate .links{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px}
-#hb-gate #hb-msg{min-height:1.4em;color:#9e2229}
-#hb-gate .steps{margin:0;padding-left:22px;color:#2b1f19;font-size:16px;line-height:1.6}
+#hb-gate #hb-msg{min-height:1.4em;color:#a54849}
+#hb-gate .steps{margin:0;padding-left:22px;color:#56453a;font-size:16px;line-height:1.6}
 #hb-gate [data-show]{display:none}
 #hb-gate [data-state="form"] [data-show="form"],#hb-gate [data-state="local"] [data-show="local"],#hb-gate [data-state="install"] [data-show="install"]{display:flex}
-#hb-loading{position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:#f8efe1;color:#6d5d50;font:600 16px var(--body)}
+#hb-loading{position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:#ecddc7;color:#827365;font:600 16px var(--body)}
 #hb-loading p{margin:0;display:flex;flex-direction:column;align-items:center;gap:10px}
-#hb-loading b{font:400 34px/1 var(--marquee-face);color:#9e2229}
-@media (prefers-color-scheme: dark){#hb-loading{background:#1b1315;color:#b5a396}}
+#hb-loading b{font:400 34px/1 var(--marquee-face);color:#a54849}
+@media (prefers-color-scheme: dark){#hb-loading{background:#493b39;color:#b5a598}}
 .feel{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .feel .btn{flex:1 1 0;min-height:44px}
 .kept30{display:block;margin-top:4px;color:var(--muted);font-size:13px}
@@ -418,9 +418,9 @@ html.hb-gated body{overflow:hidden}
 <style>
 /* Prize Booth (Nov 9): a full-screen layer over the app (above the tab bar, under sheets, toasts and effects). It never
    scrolls, so a drag never fights the page. Board 5 × 6 hooks; tiles 56 px (52 px and no shelf strip on an iPhone SE). */
-:root{--mg-cell:56px;--mg-it:50px;--mg-gap:5px;--mg-peg:#d9b483;--mg-hole:#a5794a;--mg-frame:#2c241f;--mg-tile:#fffbf4;--mg-edge:#c9a26c;--mg-spark:#5fb0d6;--mg-ink:#2b1a10}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--mg-tile:#f6efe2;--mg-frame:#1b1315}}
-:root[data-theme="dark"]{--mg-tile:#f6efe2;--mg-frame:#1b1315}
+:root{--mg-cell:56px;--mg-it:50px;--mg-gap:5px;--mg-peg:#ceb18b;--mg-hole:#a88762;--mg-frame:#554940;--mg-tile:#f7e8cf;--mg-edge:#c1a47c;--mg-spark:#7cadc1;--mg-ink:#3a2a22}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--mg-tile:#e9dec9;--mg-frame:#493b39}}
+:root[data-theme="dark"]{--mg-tile:#e9dec9;--mg-frame:#493b39}
 html.mg-open,html.mg-open body{overflow:hidden}
 .mg-layer{position:fixed;inset:0;z-index:45;display:flex;flex-direction:column;gap:10px;background:var(--bg);color:var(--ink);
   padding:calc(env(safe-area-inset-top,0px) + 8px) max(16px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 10px) max(16px,env(safe-area-inset-left,0px));
@@ -435,43 +435,43 @@ html.mg-open,html.mg-open body{overflow:hidden}
 .mg-pill .of{font-weight:600;color:var(--muted)}
 .mg-pill.bump{animation:bump .5s}
 /* the booth: cabinet stripes and marquee, a pegboard wall, cream tiles */
-.mg-booth{position:relative;padding:8px 10px 10px;border-radius:24px;border:1px solid var(--red-d);background:repeating-linear-gradient(90deg,var(--red) 0 22px,#fbf3e6 22px 44px);box-shadow:inset 0 0 0 6px #fbf3e6,0 12px 30px -20px #0007}
-.mg-marquee{position:relative;height:36px;margin:0 6px;border-radius:12px;background:var(--red-d);box-shadow:inset 0 0 0 2px #fbf3e6;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.mg-booth{position:relative;padding:8px 10px 10px;border-radius:24px;border:1px solid var(--red-d);background:repeating-linear-gradient(90deg,var(--red) 0 22px,#efe1c9 22px 44px);box-shadow:inset 0 0 0 6px #efe1c9,0 12px 30px -20px #0007}
+.mg-marquee{position:relative;height:36px;margin:0 6px;border-radius:12px;background:var(--red-d);box-shadow:inset 0 0 0 2px #efe1c9;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .mg-marquee::before{content:"";position:absolute;left:8px;right:8px;top:3px;height:7px;background:radial-gradient(circle,var(--gold) 0 2.2px,transparent 2.8px) 0 50%/16px 7px repeat-x}
-.mg-marquee::after{content:"";position:absolute;left:8px;right:8px;bottom:3px;height:7px;background:radial-gradient(circle,#fff1c4 0 2.2px,transparent 2.8px) 8px 50%/16px 7px repeat-x}
-.mg-marquee span{font:400 20px var(--marquee-face,"Rye",serif);color:#fffaf0;letter-spacing:.06em;text-shadow:0 1px 0 #0005}
+.mg-marquee::after{content:"";position:absolute;left:8px;right:8px;bottom:3px;height:7px;background:radial-gradient(circle,#f2e1b1 0 2.2px,transparent 2.8px) 8px 50%/16px 7px repeat-x}
+.mg-marquee span{font:400 20px var(--marquee-face,"Rye",serif);color:#f7e8cc;letter-spacing:.06em;text-shadow:0 1px 0 #0005}
 .mg-wall{margin-top:8px;padding:7px;border-radius:16px;background:var(--mg-frame)}
 .mg-board{position:relative;width:max-content;margin:0 auto;display:grid;grid-template-columns:repeat(5,var(--mg-cell));grid-auto-rows:var(--mg-cell);gap:var(--mg-gap);padding:6px;border-radius:11px;
   background-color:var(--mg-peg);background-image:radial-gradient(circle,var(--mg-hole) 0 1.5px,transparent 2px);background-size:12.6px 12.6px;background-position:3px 3px;box-shadow:inset 0 2px 6px rgba(43,26,16,.35)}
 .mg-hook{position:relative;width:var(--mg-cell);height:var(--mg-cell);border-radius:12px}
 .mg-hook.empty{border:1.5px dashed rgba(255,250,240,.75)}
 .mg-empty{position:absolute;inset:-1.5px;border:0;border-radius:12px;background:transparent;padding:0}
-.mg-hook.target.empty{background:rgba(255,250,240,.3);border:2px dashed #fffaf0}
+.mg-hook.target.empty{background:rgba(255,250,240,.3);border:2px dashed #f7e8cc}
 .mg-it{position:absolute;inset:0;border:0;padding:0;border-radius:12px;background:var(--mg-tile);color:var(--mg-ink);box-shadow:0 2px 0 var(--mg-edge),0 0 0 1px #c9a26c80;display:grid;place-items:center;transition:opacity .15s}
 .mg-it>svg{width:var(--mg-it);height:var(--mg-it);filter:drop-shadow(0 2px 1.4px rgba(43,26,16,.28));pointer-events:none}
-.mg-it.t6,.mg-it.t7{background:radial-gradient(circle at 50% 46%,#fff1c4 0 38%,var(--mg-tile) 75%)}
+.mg-it.t6,.mg-it.t7{background:radial-gradient(circle at 50% 46%,#f2e1b1 0 38%,var(--mg-tile) 75%)}
 .mg-it.t8{box-shadow:0 0 0 2.5px var(--gold),0 0 10px 2px rgba(242,179,61,.6)}
-.mg-pip{position:absolute;right:3px;bottom:3px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--mg-ink);color:#fffaf0;font:800 10px/16px var(--body);text-align:center;pointer-events:none}
-.mg-new{position:absolute;left:3px;top:3px;padding:0 4px;border-radius:5px;background:var(--red);color:#fffaf0;font:800 9.5px/14px var(--body);letter-spacing:.04em;pointer-events:none}
-.mg-ok{position:absolute;right:-8px;top:-8px;width:22px;height:22px;border-radius:50%;background:var(--mg-ink);color:#fffaf0;border:2px solid #fffaf0;display:grid;place-items:center;pointer-events:none}
+.mg-pip{position:absolute;right:3px;bottom:3px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--mg-ink);color:#f7e8cc;font:800 10px/16px var(--body);text-align:center;pointer-events:none}
+.mg-new{position:absolute;left:3px;top:3px;padding:0 4px;border-radius:5px;background:var(--red);color:#f7e8cc;font:800 9.5px/14px var(--body);letter-spacing:.04em;pointer-events:none}
+.mg-ok{position:absolute;right:-8px;top:-8px;width:22px;height:22px;border-radius:50%;background:var(--mg-ink);color:#f7e8cc;border:2px solid #f7e8cc;display:grid;place-items:center;pointer-events:none}
 .mg-ok svg{width:13px;height:13px}
-.mg-it.sel{box-shadow:0 0 0 3px #fffaf0,0 0 0 6px var(--mg-ink),0 8px 12px -2px rgba(43,26,16,.5);transform:translateY(-3px) scale(1.04);z-index:2}
-.mg-it.match{background:#fff6dc;box-shadow:0 0 0 3px var(--gold),0 0 16px 4px rgba(242,179,61,.9);z-index:2}
+.mg-it.sel{box-shadow:0 0 0 3px #f7e8cc,0 0 0 6px var(--mg-ink),0 8px 12px -2px rgba(43,26,16,.5);transform:translateY(-3px) scale(1.04);z-index:2}
+.mg-it.match{background:#f5e6c0;box-shadow:0 0 0 3px var(--gold),0 0 16px 4px rgba(242,179,61,.9);z-index:2}
 .mg-it.dim>svg,.mg-it.dim>.mg-pip,.mg-it.dim>.mg-new{opacity:.35}
-.mg-it.dim{background:#f3e8d6}
-.mg-hook.target>.mg-it{transform:scale(1.07);box-shadow:0 0 0 3.5px var(--gold),0 0 0 6px #fffaf0,0 0 22px 6px rgba(242,179,61,.9);z-index:3}
+.mg-it.dim{background:#e7d8c1}
+.mg-hook.target>.mg-it{transform:scale(1.07);box-shadow:0 0 0 3.5px var(--gold),0 0 0 6px #f7e8cc,0 0 22px 6px rgba(242,179,61,.9);z-index:3}
 .mg-it.lift{z-index:20;pointer-events:none;background:var(--mg-tile);box-shadow:0 0 0 3px var(--gold),0 16px 22px -8px rgba(43,26,16,.6);will-change:transform;transition:none}
 .mg-it:focus-visible{outline:3px solid var(--fjord);outline-offset:2px}
 .mg-empty:focus-visible{outline:3px solid var(--fjord);outline-offset:1px}
 /* the line under the board (like the slot's result line) */
-.mg-line{display:flex;align-items:center;gap:8px;margin-top:8px;min-height:34px;padding:4px 6px 4px 10px;border-radius:12px;background:#fbf3e6;color:#2c241f;font:600 14px/1.25 var(--body);box-shadow:inset 0 0 0 1px #e7cfbf}
+.mg-line{display:flex;align-items:center;gap:8px;margin-top:8px;min-height:34px;padding:4px 6px 4px 10px;border-radius:12px;background:#efe1c9;color:#554940;font:600 14px/1.25 var(--body);box-shadow:inset 0 0 0 1px #dcc5b3}
 .mg-line.c{justify-content:center;text-align:center;padding:7px 12px}
 .mg-line .tx{flex:1 1 auto;min-width:0}
-.mg-line .tx small{font:600 12.5px var(--body);color:#6d5d50}
+.mg-line .tx small{font:600 12.5px var(--body);color:#827365}
 .mg-line b{color:var(--red-d)}
 .mg-line .mini{width:26px;height:26px;flex:none}
 .mg-chipbtn::after{content:"";position:absolute;inset:-7px -3px}
-.mg-chipbtn{position:relative;display:inline-flex;align-items:center;gap:4px;min-height:30px;padding:0 10px 0 8px;border-radius:9px;background:#fffbf4;border:1px solid #d5c09f;font:700 13px var(--body);color:#2b1f19;white-space:nowrap;flex:none}
+.mg-chipbtn{position:relative;display:inline-flex;align-items:center;gap:4px;min-height:30px;padding:0 10px 0 8px;border-radius:9px;background:#f7e8cf;border:1px solid #ccba9e;font:700 13px var(--body);color:#56453a;white-space:nowrap;flex:none}
 .mg-chipbtn svg{width:17px;height:17px}
 .mg-chipbtn.gold{background:var(--gold);border-color:var(--gold-d);color:var(--gold-ink)}
 .mg-chipbtn.wagon{color:var(--red-d);border:1.5px solid var(--red-d);padding-left:4px}
@@ -482,13 +482,13 @@ html.mg-open,html.mg-open body{overflow:hidden}
 .mg-shelf .lbl b{display:block;font:400 16px/1.2 var(--display)}
 .mg-shelf .lbl small{font:600 12px var(--body);color:var(--muted)}
 .mg-shelf .row{flex:1;position:relative;display:flex;align-items:flex-end;gap:6px;height:56px;padding:0 6px}
-.mg-shelf .row::after{content:"";position:absolute;left:-4px;right:-16px;bottom:0;height:9px;background:linear-gradient(#b8763a,#8b5a2b);box-shadow:inset 0 2px 0 #d9a866}
+.mg-shelf .row::after{content:"";position:absolute;left:-4px;right:-16px;bottom:0;height:9px;background:linear-gradient(#b58557,#98714a);box-shadow:inset 0 2px 0 #cca878}
 .mg-shelf .row svg{width:44px;height:44px;position:relative;z-index:1;margin-bottom:6px}
 .mg-shelf .row .slot{width:38px;height:40px;margin-bottom:9px;border:2px dashed var(--line-strong);border-radius:10px}
 .mg-shelf .mg-chipbtn{margin-bottom:8px}
 /* bottom row: Get sparks tag · pairs ready · Undo */
 .mg-brow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;margin-top:auto}
-.mg-get{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;width:88px;height:66px;padding:0 0 8px;border:0;background:var(--tag,#dcc6a1);color:#3a2a1e;
+.mg-get{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;width:88px;height:66px;padding:0 0 8px;border:0;background:var(--tag,#d2bf9f);color:#614e3d;
   clip-path:polygon(0 12px,50% 0,100% 12px,100% 100%,0 100%);border-radius:0 0 10px 10px;filter:drop-shadow(0 3px 4px #0004);transform:rotate(-3deg)}
 .mg-get::before{content:"";position:absolute;top:10px;left:50%;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;background:#00000038}
 .mg-get small{font:700 10px var(--body);letter-spacing:.1em;text-transform:uppercase}
@@ -499,9 +499,9 @@ html.mg-open,html.mg-open body{overflow:hidden}
 .mg-undo svg{width:20px;height:20px}
 .mg-undo.off{color:var(--muted);background:transparent;border-style:dashed;box-shadow:none}
 /* drag chip, name pop, payout chip */
-.mg-chip{position:fixed;left:0;top:0;z-index:62;display:inline-flex;align-items:center;gap:5px;padding:4px 11px 4px 8px;border-radius:999px;background:#2b1a10;color:#fffaf0;font:700 13.5px var(--body);white-space:nowrap;box-shadow:0 8px 16px -8px #000c;pointer-events:none}
+.mg-chip{position:fixed;left:0;top:0;z-index:62;display:inline-flex;align-items:center;gap:5px;padding:4px 11px 4px 8px;border-radius:999px;background:#3a2a22;color:#f7e8cc;font:700 13.5px var(--body);white-space:nowrap;box-shadow:0 8px 16px -8px #000c;pointer-events:none}
 .mg-chip svg{width:20px;height:20px}
-.mg-pop{position:fixed;z-index:61;font:400 20px/1 var(--display);color:var(--gold);-webkit-text-stroke:5px #3a2a1e;paint-order:stroke fill;text-shadow:0 3px 0 rgba(0,0,0,.25);white-space:nowrap;pointer-events:none}
+.mg-pop{position:fixed;z-index:61;font:400 20px/1 var(--display);color:var(--gold);-webkit-text-stroke:5px #614e3d;paint-order:stroke fill;text-shadow:0 3px 0 rgba(0,0,0,.25);white-space:nowrap;pointer-events:none}
 .mg-gain{position:fixed;z-index:61;display:inline-flex;align-items:center;gap:4px;padding:3px 10px 3px 4px;border-radius:999px;background:var(--surface);border:2px solid var(--gold);font:800 15px var(--body);color:var(--honey-ink);box-shadow:0 6px 12px -6px #0008;pointer-events:none}
 .mg-gain svg{width:22px;height:22px}
 /* sheets: get sparks, chain, grand prize, Joker */
@@ -537,28 +537,28 @@ html.mg-open,html.mg-open body{overflow:hidden}
 .mg-rung .pay{display:flex;align-items:center;gap:3px;font:700 13px var(--body);color:var(--honey-ink);background:var(--honey-soft);padding:4px 8px 4px 5px;border-radius:999px;white-space:nowrap;font-variant-numeric:tabular-nums}
 .mg-rung .pay svg{width:17px;height:17px}
 .mg-rung .pay.none{background:transparent;color:var(--muted);font-weight:600}
-.mg-rung.here{border:2px solid var(--gold);background:#fff7e3;color:#2b1f19}
+.mg-rung.here{border:2px solid var(--gold);background:#f5e6c4;color:#56453a}
 .mg-rung.locked .ico svg{filter:brightness(0) opacity(.2)}
 .mg-rung.locked .ico{background:var(--sunk)}
-.mg-rung.top{background:linear-gradient(90deg,#fff1c4,var(--surface));border-color:var(--gold)}
+.mg-rung.top{background:linear-gradient(90deg,#f2e1b1,var(--surface));border-color:var(--gold)}
 .mg-tag{display:inline-block;padding:0 6px;border-radius:999px;background:var(--gold);color:var(--gold-ink);font:800 10.5px/1.6 var(--body)}
 .mg-gainrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .mg-gainrow div{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;border-radius:14px;background:var(--bg);border:1px solid var(--line);text-align:center}
 .mg-gainrow svg{width:40px;height:40px}
 .mg-gainrow b{font:400 18px/1.1 var(--display);color:var(--honey-ink)}
 .mg-gainrow small{font:600 12px/1.25 var(--body);color:var(--muted)}
-.mg-shelfbig{position:relative;padding:10px 10px 0;border-radius:16px;background:linear-gradient(#fbf3e6,#f3e4c8)}
+.mg-shelfbig{position:relative;padding:10px 10px 0;border-radius:16px;background:linear-gradient(#efe1c9,#e6d5b7)}
 .mg-shelfbig .r{display:grid;grid-template-columns:repeat(5,1fr);align-items:end;gap:6px;height:66px}
 .mg-shelfbig .s{position:relative;height:60px;display:grid;place-items:end center}
 .mg-shelfbig .s svg{position:relative;width:58px;height:58px}
-.mg-shelfbig .s.empty::before{content:"";position:absolute;left:50%;bottom:4px;width:44px;height:50px;margin-left:-22px;border-radius:12px;border:2px dashed #d5c09f}
-.mg-shelfbig .plank{height:12px;margin:0 -10px;border-radius:0 0 16px 16px;background:linear-gradient(#b8763a,#8b5a2b);box-shadow:inset 0 2px 0 #d9a866}
+.mg-shelfbig .s.empty::before{content:"";position:absolute;left:50%;bottom:4px;width:44px;height:50px;margin-left:-22px;border-radius:12px;border:2px dashed #ccba9e}
+.mg-shelfbig .plank{height:12px;margin:0 -10px;border-radius:0 0 16px 16px;background:linear-gradient(#b58557,#98714a);box-shadow:inset 0 2px 0 #cca878}
 .mg-shelfcap{display:flex;justify-content:space-between;font:600 12.5px var(--body);color:var(--muted)}
 .mg-picks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-height:52vh;overflow:auto;padding:4px;touch-action:pan-y}
 .mg-picks button{display:block;border:0;padding:0;background:none;text-align:inherit}
 /* entries: the Park card and the Spin screen's row */
 .mg-card{display:grid;grid-template-columns:76px minmax(0,1fr) auto;gap:12px;align-items:center;width:100%;padding:10px 12px 10px 10px;border-radius:18px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--soft);text-align:left;color:var(--ink)}
-.mg-card .art{position:relative;width:76px;height:76px;border-radius:14px;background:repeating-linear-gradient(90deg,var(--red) 0 9px,#fbf3e6 9px 18px);box-shadow:inset 0 0 0 3px #fbf3e6;display:grid;place-items:center;overflow:hidden}
+.mg-card .art{position:relative;width:76px;height:76px;border-radius:14px;background:repeating-linear-gradient(90deg,var(--red) 0 9px,#efe1c9 9px 18px);box-shadow:inset 0 0 0 3px #efe1c9;display:grid;place-items:center;overflow:hidden}
 .mg-card .art::before{content:"";position:absolute;left:8px;right:8px;top:8px;bottom:8px;border-radius:8px;background-color:var(--mg-peg);background-image:radial-gradient(circle,var(--mg-hole) 0 1.2px,transparent 1.6px);background-size:9px 9px}
 .mg-card .art svg{position:relative;width:52px;height:52px;filter:drop-shadow(0 2px 1px #0004)}
 .mg-card b{display:block;font:400 19px/1.2 var(--display)}
@@ -661,17 +661,17 @@ html.mg-open,html.mg-open body{overflow:hidden}
 let S=null;
 /* ============ Sticker art ============ */
 const SYM={
-coin:'<svg viewBox="0 0 64 64"><g stroke="#2b1a10" stroke-width="3" stroke-linejoin="round"><circle cx="32" cy="32" r="25" fill="#f2b33d"/><circle cx="32" cy="32" r="18" fill="#f8c95a" stroke-width="2.2"/><path d="M32 19.5l3.9 7.9 8.7 1.3-6.3 6.1 1.5 8.7-7.8-4.1-7.8 4.1 1.5-8.7-6.3-6.1 8.7-1.3z" fill="#c9861f" stroke-width="2"/></g><path d="M16 24a17 17 0 0 1 9-8" stroke="#fff6dc" stroke-width="3" fill="none" stroke-linecap="round"/></svg>',
-bag:'<svg viewBox="0 0 64 64"><g stroke="#2b1a10" stroke-width="3" stroke-linejoin="round"><path d="M23 7h18l-5 10h-8z" fill="#8b5a2b"/><path d="M26 19C12 25 8 39 11 47c3 8 11 11 21 11s18-3 21-11c3-8-1-22-15-28z" fill="#b8763a"/><rect x="21" y="16" width="22" height="6" rx="3" fill="#e9cf9a"/><circle cx="32" cy="40" r="10" fill="#f2b33d"/><path d="M32 33.6l2 4.1 4.5.6-3.3 3.2.8 4.5-4-2.1-4 2.1.8-4.5-3.3-3.2 4.5-.6z" fill="#c9861f" stroke-width="1.4"/></g><path d="M17 37c0-6 3-11 8-14" stroke="#e0a466" stroke-width="3" fill="none" stroke-linecap="round"/></svg>',
-bolt:'<svg viewBox="0 0 64 64"><g transform="rotate(-16 32 32)" stroke="#2b1a10" stroke-width="3" stroke-linejoin="round"><path d="M6 19H58V27.5A4.5 4.5 0 0 0 58 36.5V45H6V36.5A4.5 4.5 0 0 0 6 27.5Z" fill="#e4472f"/><path d="M17.5 23V41" stroke="#fbf1dc" stroke-width="2.2" stroke-dasharray="2.6 3.2" stroke-linecap="round"/><rect x="23" y="24" width="29" height="16" rx="2.5" fill="#fbf1dc" stroke-width="2"/><path d="M37.5 26.2l1.9 3.9 4.3.6-3.1 3 .7 4.3-3.8-2-3.8 2 .7-4.3-3.1-3 4.3-.6z" fill="#f2b33d" stroke-width="1.4"/></g></svg>',
-shield:'<svg viewBox="0 0 64 64"><g fill="none"><circle cx="32" cy="32" r="19.5" stroke="#2b1a10" stroke-width="17"/><circle cx="32" cy="32" r="19.5" stroke="#fbf1dc" stroke-width="12"/><circle cx="32" cy="32" r="19.5" stroke="#e4472f" stroke-width="12" stroke-dasharray="15.3 15.3" transform="rotate(-22 32 32)"/><path d="M18.5 15.5a20 20 0 0 1 9-4.4" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" opacity=".85"/></g></svg>',
-hammer:'<svg viewBox="0 0 64 64"><g transform="rotate(-32 32 32)" stroke="#2b1a10" stroke-width="3" stroke-linejoin="round"><rect x="29" y="24" width="6" height="36" rx="3" fill="#d9a866"/><rect x="11" y="5" width="42" height="21" rx="7" fill="#c08447"/><rect x="18" y="5" width="6" height="21" fill="#e4472f" stroke-width="2"/><rect x="40" y="5" width="6" height="21" fill="#e4472f" stroke-width="2"/></g></svg>',
-dig:'<svg viewBox="0 0 64 64"><g stroke="#2b1a10" stroke-width="3" stroke-linejoin="round"><path d="M5 58Q32 45 59 58Z" fill="#ead39c"/><g transform="rotate(26 44 30)"><rect x="41" y="3" width="6" height="30" rx="3" fill="#f2b33d"/><path d="M35 31H53V39Q53 49 44 54Q35 49 35 39Z" fill="#e4472f"/></g><path d="M9 29H31L28 54H12Z" fill="#5fb0d6"/><path d="M9.5 29Q20 13 30.5 29" fill="none" stroke-width="2.4"/><path d="M10.6 36H29.4" stroke="#fbf1dc" stroke-width="2.6"/></g></svg>'
+coin:'<svg viewBox="0 0 64 64"><g stroke="#3a2a22" stroke-width="3" stroke-linejoin="round"><circle cx="32" cy="32" r="25" fill="#dbaf5e"/><circle cx="32" cy="32" r="18" fill="#e2bf70" stroke-width="2.2"/><path d="M32 19.5l3.9 7.9 8.7 1.3-6.3 6.1 1.5 8.7-7.8-4.1-7.8 4.1 1.5-8.7-6.3-6.1 8.7-1.3z" fill="#c19044" stroke-width="2"/></g><path d="M16 24a17 17 0 0 1 9-8" stroke="#f5e6c0" stroke-width="3" fill="none" stroke-linecap="round"/></svg>',
+bag:'<svg viewBox="0 0 64 64"><g stroke="#3a2a22" stroke-width="3" stroke-linejoin="round"><path d="M23 7h18l-5 10h-8z" fill="#98714a"/><path d="M26 19C12 25 8 39 11 47c3 8 11 11 21 11s18-3 21-11c3-8-1-22-15-28z" fill="#b58557"/><rect x="21" y="16" width="22" height="6" rx="3" fill="#dcc59a"/><circle cx="32" cy="40" r="10" fill="#dbaf5e"/><path d="M32 33.6l2 4.1 4.5.6-3.3 3.2.8 4.5-4-2.1-4 2.1.8-4.5-3.3-3.2 4.5-.6z" fill="#c19044" stroke-width="1.4"/></g><path d="M17 37c0-6 3-11 8-14" stroke="#d1a678" stroke-width="3" fill="none" stroke-linecap="round"/></svg>',
+bolt:'<svg viewBox="0 0 64 64"><g transform="rotate(-16 32 32)" stroke="#3a2a22" stroke-width="3" stroke-linejoin="round"><path d="M6 19H58V27.5A4.5 4.5 0 0 0 58 36.5V45H6V36.5A4.5 4.5 0 0 0 6 27.5Z" fill="#cf6955"/><path d="M17.5 23V41" stroke="#efe0c2" stroke-width="2.2" stroke-dasharray="2.6 3.2" stroke-linecap="round"/><rect x="23" y="24" width="29" height="16" rx="2.5" fill="#efe0c2" stroke-width="2"/><path d="M37.5 26.2l1.9 3.9 4.3.6-3.1 3 .7 4.3-3.8-2-3.8 2 .7-4.3-3.1-3 4.3-.6z" fill="#dbaf5e" stroke-width="1.4"/></g></svg>',
+shield:'<svg viewBox="0 0 64 64"><g fill="none"><circle cx="32" cy="32" r="19.5" stroke="#3a2a22" stroke-width="17"/><circle cx="32" cy="32" r="19.5" stroke="#efe0c2" stroke-width="12"/><circle cx="32" cy="32" r="19.5" stroke="#cf6955" stroke-width="12" stroke-dasharray="15.3 15.3" transform="rotate(-22 32 32)"/><path d="M18.5 15.5a20 20 0 0 1 9-4.4" stroke="#ebe8e3" stroke-width="2.6" stroke-linecap="round" opacity=".85"/></g></svg>',
+hammer:'<svg viewBox="0 0 64 64"><g transform="rotate(-32 32 32)" stroke="#3a2a22" stroke-width="3" stroke-linejoin="round"><rect x="29" y="24" width="6" height="36" rx="3" fill="#cca878"/><rect x="11" y="5" width="42" height="21" rx="7" fill="#b88f64"/><rect x="18" y="5" width="6" height="21" fill="#cf6955" stroke-width="2"/><rect x="40" y="5" width="6" height="21" fill="#cf6955" stroke-width="2"/></g></svg>',
+dig:'<svg viewBox="0 0 64 64"><g stroke="#3a2a22" stroke-width="3" stroke-linejoin="round"><path d="M5 58Q32 45 59 58Z" fill="#dcc89b"/><g transform="rotate(26 44 30)"><rect x="41" y="3" width="6" height="30" rx="3" fill="#dbaf5e"/><path d="M35 31H53V39Q53 49 44 54Q35 49 35 39Z" fill="#cf6955"/></g><path d="M9 29H31L28 54H12Z" fill="#7cadc1"/><path d="M9.5 29Q20 13 30.5 29" fill="none" stroke-width="2.4"/><path d="M10.6 36H29.4" stroke="#efe0c2" stroke-width="2.6"/></g></svg>'
 };
 /* Streak icon: a little Ferris wheel with its lights on */
-const LIGHTS=(()=>{let b='';for(let k=0;k<8;k++){const a=k*Math.PI/4;b+=`<circle cx="${(16+10.5*Math.cos(a)).toFixed(1)}" cy="${(13+10.5*Math.sin(a)).toFixed(1)}" r="1.8" fill="#fff1a8" stroke-width=".8"/>`;}
- return `<svg viewBox="0 0 32 32"><g stroke="#2b1a10" stroke-linejoin="round" stroke-linecap="round"><path d="M16 13L8.5 29.5M16 13L23.5 29.5" stroke-width="3.6"/><path d="M16 13L8.5 29.5M16 13L23.5 29.5" stroke="#e4472f" stroke-width="1.8"/><circle cx="16" cy="13" r="10.5" fill="#ffd66b" fill-opacity=".2" stroke-width="3.6"/><circle cx="16" cy="13" r="10.5" fill="none" stroke="#f2b33d" stroke-width="1.8"/><path d="M16 2.5V23.5M5.5 13H26.5M8.6 5.6L23.4 20.4M23.4 5.6L8.6 20.4" stroke-width="1"/><circle cx="16" cy="13" r="2.6" fill="#e4472f" stroke-width="1.2"/>${b}<rect x="5" y="28.5" width="22" height="2.6" rx="1.2" fill="#7a8fa6" stroke-width="1.2"/></g></svg>`;})();
-const PLANK_ICON=(on)=>`<svg viewBox="0 0 20 24" class="${on?'':'off'}"><rect x="2.5" y="2.5" width="15" height="19" rx="2" fill="${on?'#c9945a':'#e3d8c6'}" stroke="${on?'#6f4f30':'#cdbfa8'}" stroke-width="1.2"/><path d="M5.5 9h6M8.5 15h6" stroke="${on?'#9b7448':'#cdbfa8'}" stroke-width="1.3" stroke-linecap="round"/><circle cx="5.5" cy="5.5" r="1" fill="#2b1a10"/><circle cx="14.5" cy="5.5" r="1" fill="#2b1a10"/><circle cx="5.5" cy="18.5" r="1" fill="#2b1a10"/><circle cx="14.5" cy="18.5" r="1" fill="#2b1a10"/></svg>`;
+const LIGHTS=(()=>{let b='';for(let k=0;k<8;k++){const a=k*Math.PI/4;b+=`<circle cx="${(16+10.5*Math.cos(a)).toFixed(1)}" cy="${(13+10.5*Math.sin(a)).toFixed(1)}" r="1.8" fill="#efe0a0" stroke-width=".8"/>`;}
+ return `<svg viewBox="0 0 32 32"><g stroke="#3a2a22" stroke-linejoin="round" stroke-linecap="round"><path d="M16 13L8.5 29.5M16 13L23.5 29.5" stroke-width="3.6"/><path d="M16 13L8.5 29.5M16 13L23.5 29.5" stroke="#cf6955" stroke-width="1.8"/><circle cx="16" cy="13" r="10.5" fill="#e9c97a" fill-opacity=".2" stroke-width="3.6"/><circle cx="16" cy="13" r="10.5" fill="none" stroke="#dbaf5e" stroke-width="1.8"/><path d="M16 2.5V23.5M5.5 13H26.5M8.6 5.6L23.4 20.4M23.4 5.6L8.6 20.4" stroke-width="1"/><circle cx="16" cy="13" r="2.6" fill="#cf6955" stroke-width="1.2"/>${b}<rect x="5" y="28.5" width="22" height="2.6" rx="1.2" fill="#8d97a1" stroke-width="1.2"/></g></svg>`;})();
+const PLANK_ICON=(on)=>`<svg viewBox="0 0 20 24" class="${on?'':'off'}"><rect x="2.5" y="2.5" width="15" height="19" rx="2" fill="${on?'#bf9a71':'#d8ccb8'}" stroke="${on?'#85694c':'#c7b9a4'}" stroke-width="1.2"/><path d="M5.5 9h6M8.5 15h6" stroke="${on?'#a28360':'#c7b9a4'}" stroke-width="1.3" stroke-linecap="round"/><circle cx="5.5" cy="5.5" r="1" fill="#3a2a22"/><circle cx="14.5" cy="5.5" r="1" fill="#3a2a22"/><circle cx="5.5" cy="18.5" r="1" fill="#3a2a22"/><circle cx="14.5" cy="18.5" r="1" fill="#3a2a22"/></svg>`;
 const IC={
 spin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="15" height="13" rx="3"/><path d="M7.5 10v5M12.5 10v5"/><path d="M21 5v8h-3.5"/><circle cx="21" cy="4" r="1.6" fill="currentColor"/></svg>',
 goals:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16.2 9.5"/></svg>',
@@ -698,8 +698,8 @@ pause:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="
    squash (origin 50 92) keeps them planted. Helpers live inside GOB_ART so nothing collides with the game's globals. */
 const GOBLINS={fry:'Deep-Fry Goblin',donut:'Donut Goblin',soda:'Soda Goblin',phone:'Doomscroll Goblin',moon:'Midnight Snack Goblin',car:'Drive-Thru Goblin',zzz:'Snooze Goblin'};
 const GOB_ART=(()=>{
-  const INK='#2b1a10',K=`stroke="${INK}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"`;
-  const MOUTH='#8a2f2a',FANG='#fffaf0',BLUSH='#f4998a',CREAM='#fbf1dc';
+  const INK='#3a2a22',K=`stroke="${INK}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"`;
+  const MOUTH='#985149',FANG='#f7e8cc',BLUSH='#e39e8e',CREAM='#efe0c2';
   const r1=n=>Math.round(n*10)/10;
   /* outlined thick stroke (fries, straws, arms): ink underneath, color on top */
   const tube=(d,col,w,cap='round')=>`<path d="${d}" fill="none" stroke="${INK}" stroke-width="${r1(w+4.4)}" stroke-linecap="${cap}"/><path d="${d}" fill="none" stroke="${col}" stroke-width="${w}" stroke-linecap="${cap}"/>`;
@@ -721,12 +721,12 @@ const GOB_ART=(()=>{
     round:`<ellipse cx="-8" cy=".4" rx="4.2" ry="5"/><ellipse cx="8" cy=".4" rx="4.2" ry="5"/><circle cx="-9.4" cy="-1.2" r="1.5" fill="#fff"/><circle cx="6.6" cy="-1.2" r="1.5" fill="#fff"/><circle cx="-6.6" cy="2.3" r=".8" fill="#fff"/><circle cx="9.4" cy="2.3" r=".8" fill="#fff"/>`,
     bliss:`<path d="M-12.2 2.2Q-8-4.2-3.8 2.2M3.8 2.2Q8-4.2 12.2 2.2" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/>`,
     sleepy:`<path d="M-12.2 1.4H-4A4.1 3.6 0 0 1-12.2 1.4ZM4 1.4H12.2A4.1 3.6 0 0 1 4 1.4Z"/><path d="M-13.4 1.2H-2.8M2.8 1.2H13.4" stroke="${INK}" stroke-width="2.2" stroke-linecap="round"/><circle cx="-9.6" cy="2.9" r="1" fill="#fff"/><circle cx="6.6" cy="2.9" r="1" fill="#fff"/>`,
-    glow:`<ellipse cx="-8" cy=".4" rx="4" ry="4.8"/><ellipse cx="8" cy=".4" rx="4" ry="4.8"/><rect x="-8.9" y="-2.6" width="2.4" height="3.4" rx=".6" fill="#9be7ff"/><rect x="7.1" y="-2.6" width="2.4" height="3.4" rx=".6" fill="#9be7ff"/>`,
+    glow:`<ellipse cx="-8" cy=".4" rx="4" ry="4.8"/><ellipse cx="8" cy=".4" rx="4" ry="4.8"/><rect x="-8.9" y="-2.6" width="2.4" height="3.4" rx=".6" fill="#a0d8e6"/><rect x="7.1" y="-2.6" width="2.4" height="3.4" rx=".6" fill="#a0d8e6"/>`,
     mask:`<g stroke="${INK}" stroke-width="1.6"><ellipse cx="-8" cy=".2" rx="4.2" ry="3.7" fill="#fff"/><ellipse cx="8" cy=".2" rx="4.2" ry="3.7" fill="#fff"/></g><circle cx="-5.9" cy=".6" r="2"/><circle cx="10.1" cy=".6" r="2"/>`
   };
   const MOUTHS={
     grin:`<path d="M-8 7Q0 9.5 8 6Q6.5 14.5-.5 14Q-7 13.5-8 7Z" fill="${MOUTH}" ${K} stroke-width="2"/><path d="M1.4 7.9L3.1 11.4L4.6 7.3Z" fill="${FANG}" stroke="${INK}" stroke-width="1.3" stroke-linejoin="round"/>`,
-    blep:`<path d="M.5 10.2Q.5 15.8 3.3 15.8Q6.3 15.8 5.5 8.5Z" fill="#f07f8f" stroke="${INK}" stroke-width="1.8" stroke-linejoin="round"/><path d="M-7 7.5Q0 13 7 7.5" fill="none" ${K}/>`,
+    blep:`<path d="M.5 10.2Q.5 15.8 3.3 15.8Q6.3 15.8 5.5 8.5Z" fill="#df8c93" stroke="${INK}" stroke-width="1.8" stroke-linejoin="round"/><path d="M-7 7.5Q0 13 7 7.5" fill="none" ${K}/>`,
     cat:`<path d="M-6.5 7.6Q-3.2 11.6 0 8Q3.2 11.6 6.5 7.6" fill="none" ${K}/><path d="M2.6 9.6L3.6 12.2L4.8 9.4Z" fill="${FANG}" stroke="${INK}" stroke-width="1.2" stroke-linejoin="round"/>`,
     smirk:`<path d="M-6 9Q1 12.5 7.5 6.5" fill="none" ${K}/><path d="M4.4 8.8L5.5 11.8L6.6 7.5Z" fill="${FANG}" stroke="${INK}" stroke-width="1.3" stroke-linejoin="round"/>`,
     sneak:`<path d="M-9 7Q0 13 9 7" fill="none" ${K}/><path d="M5.4 8.9L4.2 11.9L3 9.7Z" fill="${FANG}" stroke="${INK}" stroke-width="1.3" stroke-linejoin="round"/>`,
@@ -740,15 +740,15 @@ const GOB_ART=(()=>{
     </g>`;
   /* pot lid (dome, shine, rim, knob) plus the flinch: patches over the eyes and squeezed > < */
   const lid=(cx,rimY,w,fx,fy,patch,sq=INK)=>`<g class="lid" ${K}>
-     <rect x="${cx-5}" y="${rimY-23.5}" width="10" height="7" rx="2.6" fill="#3a3f45"/>
-     <path d="M${cx-w} ${rimY}Q${cx-w+1} ${rimY-19} ${cx} ${rimY-19}Q${cx+w-1} ${rimY-19} ${cx+w} ${rimY}Z" fill="#b9c3cb"/>
-     <path d="M${cx-w+6} ${rimY-5}Q${cx-w+9} ${rimY-14} ${cx-6} ${rimY-15.5}" fill="none" stroke="#f1f5f8" stroke-width="2.6"/>
-     <rect x="${cx-w-2.5}" y="${rimY-2.6}" width="${2*w+5}" height="5.6" rx="2.8" fill="#8995a0"/>
+     <rect x="${cx-5}" y="${rimY-23.5}" width="10" height="7" rx="2.6" fill="#5c5d5e"/>
+     <path d="M${cx-w} ${rimY}Q${cx-w+1} ${rimY-19} ${cx} ${rimY-19}Q${cx+w-1} ${rimY-19} ${cx+w} ${rimY}Z" fill="#b8bcbe"/>
+     <path d="M${cx-w+6} ${rimY-5}Q${cx-w+9} ${rimY-14} ${cx-6} ${rimY-15.5}" fill="none" stroke="#dde1e2" stroke-width="2.6"/>
+     <rect x="${cx-w-2.5}" y="${rimY-2.6}" width="${2*w+5}" height="5.6" rx="2.8" fill="#979b9e"/>
      <g transform="translate(${fx} ${fy})"><ellipse cx="-8" cy=".4" rx="5.7" ry="5.6" fill="${patch}" stroke="none"/><ellipse cx="8" cy=".4" rx="5.7" ry="5.6" fill="${patch}" stroke="none"/>
       <path d="M-11.6-2.8L-4.8.4L-11.6 3.6M11.6-2.8L4.8.4L11.6 3.6" fill="none" stroke="${sq}" stroke-width="2.4"/>
-      <path d="M19-7q-2.6 3.6 0 5.2q2.6-1.6 0-5.2Z" fill="#9fdcf5" stroke-width="1.4"/></g>
+      <path d="M19-7q-2.6 3.6 0 5.2q2.6-1.6 0-5.2Z" fill="#a4cfde" stroke-width="1.4"/></g>
     </g>`;
-  const stars=pts=>`<g class="stars" fill="#ffd66b" stroke="${INK}" stroke-width="1.5" stroke-linejoin="round">${pts.map(p=>star(p[0],p[1],r1(p[2]*1.18))).join('')}</g>`;
+  const stars=pts=>`<g class="stars" fill="#e9c97a" stroke="${INK}" stroke-width="1.5" stroke-linejoin="round">${pts.map(p=>star(p[0],p[1],r1(p[2]*1.18))).join('')}</g>`;
   const legs=(skin,y=84,gap=5.5)=>`<g ${K} fill="${skin}"><path d="M${50-gap-8} ${y}V89.4Q${50-gap-8} 92 ${50-gap-5.2} 92H${50-gap}V${y}Z"/><path d="M${50+gap} ${y}V92H${50+gap+5.2}Q${50+gap+8} 92 ${50+gap+8} 89.4V${y}Z"/></g>`;
   const hand=(x,y,skin,r=4)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${skin}" ${K}/>`;
   const head=(skin,earStyle,inner)=>`${ears(earStyle,skin,inner)}<path d="${HEAD}" fill="${skin}" ${K}/>`;
@@ -756,47 +756,47 @@ const GOB_ART=(()=>{
 
   /* ---- the seven figures: [body markup, stars, shadow rx] ---- */
   const FIG={
-    fry(){const S='#a8d35a',IN='#f0a49b';
-      const fries=[[38,40,29.5,15],[45,36,40.5,9.5],[50,36,50.8,7.6],[56,36,60.5,10],[62,40,70.5,16]].map(f=>tube(`M${f[0]} ${f[1]}L${f[2]} ${f[3]}`,'#f2b33d',5,'square')).join('');
+    fry(){const S='#abc371',IN='#e1a59a';
+      const fries=[[38,40,29.5,15],[45,36,40.5,9.5],[50,36,50.8,7.6],[56,36,60.5,10],[62,40,70.5,16]].map(f=>tube(`M${f[0]} ${f[1]}L${f[2]} ${f[3]}`,'#dbaf5e',5,'square')).join('');
       return [`${fries}
         ${legs(S)}
         <g ${K}><path d="M33 64L24 74" fill="none" stroke-width="8.4"/><path d="M33 64L24 74" fill="none" stroke="${S}" stroke-width="4"/></g>
-        ${tube('M77.4 64L83.4 43.4','#f2b33d',4.4,'square')}<path d="M82.3 47.2L83.4 43.4" stroke="#e4472f" stroke-width="4.4" stroke-linecap="square"/>
-        <g ${K}><path d="M24.5 50Q31 48.5 35.5 55Q42 63.5 50 63.5Q58 63.5 64.5 55Q69 48.5 75.5 50L68.5 86.5Q50 89 31.5 86.5Z" fill="#e4472f"/>
-         <path d="M27.5 53.5Q31.5 53 34 57" fill="none" stroke="#ff8a72" stroke-width="2"/><path d="M42 76Q50 81 58 76" fill="none" stroke="${CREAM}" stroke-width="2.8"/></g>
+        ${tube('M77.4 64L83.4 43.4','#dbaf5e',4.4,'square')}<path d="M82.3 47.2L83.4 43.4" stroke="#cf6955" stroke-width="4.4" stroke-linecap="square"/>
+        <g ${K}><path d="M24.5 50Q31 48.5 35.5 55Q42 63.5 50 63.5Q58 63.5 64.5 55Q69 48.5 75.5 50L68.5 86.5Q50 89 31.5 86.5Z" fill="#cf6955"/>
+         <path d="M27.5 53.5Q31.5 53 34 57" fill="none" stroke="#ea947e" stroke-width="2"/><path d="M42 76Q50 81 58 76" fill="none" stroke="${CREAM}" stroke-width="2.8"/></g>
         ${hand(23.5,74.5,S)}${hand(78,63,S)}
         ${at(50,41,head(S,'up',IN))}
         ${face(50,41,'smug','grin')}
         ${lid(50,32,25,50,41,S)}`,
        [[20,14,4.6],[50,7.5,3.6],[80,14,4.6]],27];},
-    donut(){const S='#7fd3a6',IN='#f0a49b',DO='#d99a50',FR='#f59bc3';
-      const spr=[[24,64,26,61,'#fbf1dc'],[30,70,33,71,'#5fb0d6'],[22,69.5,23,72.5,'#7a4fb5'],[70,70,67,71,'#f2b33d'],[77,64,74,61.5,'#5fb0d6'],[78,69.5,77,72.5,'#e4472f'],[40,73,43,74.5,'#7a4fb5'],[57,74.5,60,73,'#fbf1dc'],[48.5,75.6,51.5,75.6,'#e4472f']];
+    donut(){const S='#91c6a3',IN='#e1a59a',DO='#ca9e6a',FR='#e59eb8';
+      const spr=[[24,64,26,61,'#efe0c2'],[30,70,33,71,'#7cadc1'],[22,69.5,23,72.5,'#8c6ea9'],[70,70,67,71,'#dbaf5e'],[77,64,74,61.5,'#7cadc1'],[78,69.5,77,72.5,'#cf6955'],[40,73,43,74.5,'#8c6ea9'],[57,74.5,60,73,'#efe0c2'],[48.5,75.6,51.5,75.6,'#cf6955']];
       return [`${legs(S,80,4.5)}
-        <g ${K}><path d="M40 78Q38 70 50 70Q62 70 60 78V86H40Z" fill="#7a4fb5"/>
+        <g ${K}><path d="M40 78Q38 70 50 70Q62 70 60 78V86H40Z" fill="#8c6ea9"/>
          <ellipse cx="50" cy="68" rx="33.5" ry="11.5" fill="${DO}"/>
          <path d="M17.2 67.2C17.2 60 31 56.5 50 56.5S82.8 60 82.8 67.2C82.8 70.4 80.6 71.6 79 71.4C77 71.2 77.6 74.6 74.8 74.8C72 75 72.4 72.4 69.6 73.4C67.2 74.2 67.6 77.6 64.2 77.4C61.4 77.2 61.8 74.6 58.6 75.6C55.6 76.6 54.4 78.8 50 78.6C45.6 78.8 44.4 76.6 41.4 75.6C38.2 74.6 38.6 77.2 35.8 77.4C32.4 77.6 32.8 74.2 30.4 73.4C27.6 72.4 28 75 25.2 74.8C22.4 74.6 23 71.2 21 71.4C19.4 71.6 17.2 70.4 17.2 67.2Z" fill="${FR}"/></g>
         <g stroke-linecap="round" stroke-width="2.2">${spr.map(s=>`<path d="M${s[0]} ${s[1]}L${s[2]} ${s[3]}" stroke="${s[4]}"/>`).join('')}</g>
         ${at(50,44,head(S,'up',IN))}
         <g ${K}><path d="M29 58.5Q50 62.5 71 58.5L72 65Q50 71 28 65Z" fill="${FR}" stroke="none"/><path d="M29 58.5Q50 62.5 71 58.5" fill="none"/></g>
-        <g stroke-linecap="round" stroke-width="2.2"><path d="M44 66L46.5 66.8" stroke="#5fb0d6"/><path d="M54.5 66.6L57 65.6" stroke="#f2b33d"/></g>
+        <g stroke-linecap="round" stroke-width="2.2"><path d="M44 66L46.5 66.8" stroke="#7cadc1"/><path d="M54.5 66.6L57 65.6" stroke="#dbaf5e"/></g>
         ${hand(17.5,66.5,S)}${hand(82.5,66.5,S)}
         ${face(50,42.5,'round','blep')}
         ${lid(50,34.5,25,50,42.5,S)}`,
        [[20,16,4.6],[50,8.5,3.6],[80,16,4.6]],27];},
-    soda(){const S='#6cc46e',IN='#f0a49b';
+    soda(){const S='#84ba7e',IN='#e1a59a';
       return [`<g ${K}><path d="M66 58L68 15Q68.4 9.6 63.4 8.8L57.6 8" fill="none" stroke-width="8.6"/></g>
-        <path d="M66 58L68 15Q68.4 9.6 63.4 8.8L57.6 8" fill="none" stroke="#fffaf0" stroke-width="4.2" stroke-linejoin="round" stroke-linecap="round"/>
-        <path d="M66 58L68 15Q68.4 9.6 63.4 8.8L57.6 8" fill="none" stroke="#e4472f" stroke-width="4.2" stroke-dasharray="4.4 4.4"/>
+        <path d="M66 58L68 15Q68.4 9.6 63.4 8.8L57.6 8" fill="none" stroke="#f7e8cc" stroke-width="4.2" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M66 58L68 15Q68.4 9.6 63.4 8.8L57.6 8" fill="none" stroke="#cf6955" stroke-width="4.2" stroke-dasharray="4.4 4.4"/>
         ${at(50,40,head(S,'up',IN))}
         ${face(50,39.5,'bliss','cat')}
-        <g ${K}><path d="M26 58H74L67.4 89Q67 91.6 64.2 91.6H35.8Q33 91.6 32.6 89Z" fill="#5fb0d6"/>
+        <g ${K}><path d="M26 58H74L67.4 89Q67 91.6 64.2 91.6H35.8Q33 91.6 32.6 89Z" fill="#7cadc1"/>
          <path d="M29.2 72.5Q33.4 69 37.6 72.5T46 72.5T54.4 72.5T62.8 72.5T71 72.5L69.8 78.4Q65.6 75 61.4 78.4T53 78.4T44.6 78.4T36.2 78.4T30.4 78.4Z" fill="${CREAM}" stroke-width="1.8"/>
-         <rect x="22.5" y="54.2" width="55" height="7" rx="3.5" fill="#2f7aa3"/>
-         <circle cx="19.5" cy="47.5" r="2.8" fill="#d8f2fb"/><circle cx="15" cy="39.5" r="1.9" fill="#d8f2fb"/><circle cx="82" cy="47" r="2.2" fill="#d8f2fb"/></g>
+         <rect x="22.5" y="54.2" width="55" height="7" rx="3.5" fill="#5688a0"/>
+         <circle cx="19.5" cy="47.5" r="2.8" fill="#c8e2e7"/><circle cx="15" cy="39.5" r="1.9" fill="#c8e2e7"/><circle cx="82" cy="47" r="2.2" fill="#c8e2e7"/></g>
         ${hand(44,57.6,S,3.8)}${hand(57,57.6,S,3.8)}
         ${lid(50,31,25,50,39.5,S)}`,
        [[21,15,4.6],[44,8,3.6],[80,25,4.4]],27];},
-    phone(){const S='#86d6c0',IN='#f0a49b',HO='#7a4fb5',HD='#5a378f';
+    phone(){const S='#95c8b5',IN='#e1a59a',HO='#8c6ea9',HD='#745892';
       return [`${legs(S)}
         <g ${K}><path d="M31 62Q28 86 31 86H69Q72 86 69 62Z" fill="${HO}"/>
          <path d="M39 75H61L58.5 82H41.5Z" fill="${HD}"/>
@@ -808,14 +808,14 @@ const GOB_ART=(()=>{
         <ellipse cx="50" cy="46" rx="17.6" ry="15.8" fill="${S}" ${K}/>
         <path d="M44.5 63.5L44 70M55.5 63.5L56 70" stroke="${CREAM}" stroke-width="2.4" stroke-linecap="round"/>
         ${face(50,44.5,'glow','smirk',12.2)}
-        <g transform="translate(-4 1) rotate(8 78 63)" ${K}><rect x="68.5" y="47" width="19" height="31" rx="4" fill="#2a2d31"/>
-         <rect x="71" y="51" width="14" height="21.5" rx="1.6" fill="#9be7ff" stroke="none"/>
-         <path d="M75.6 55.8V63.2L81.6 59.5Z" fill="#e4472f" stroke-width="1.6"/><path d="M73.6 67.2H82.4" stroke="#2f7aa3" stroke-width="2"/>
-         <circle cx="87" cy="47.6" r="3.6" fill="#e4472f" stroke-width="1.8"/></g>
+        <g transform="translate(-4 1) rotate(8 78 63)" ${K}><rect x="68.5" y="47" width="19" height="31" rx="4" fill="#51504f"/>
+         <rect x="71" y="51" width="14" height="21.5" rx="1.6" fill="#a0d8e6" stroke="none"/>
+         <path d="M75.6 55.8V63.2L81.6 59.5Z" fill="#cf6955" stroke-width="1.6"/><path d="M73.6 67.2H82.4" stroke="#5688a0" stroke-width="2"/>
+         <circle cx="87" cy="47.6" r="3.6" fill="#cf6955" stroke-width="1.8"/></g>
         ${hand(67,74.4,S)}
         ${lid(50,27,27,50,44.5,S)}`,
        [[19,14,4.6],[50,7.5,3.6],[80,13,4.4]],27];},
-    moon(){const S='#a4b3ec',IN='#e9a3b4',NV='#2e3765',MK='#252b4d';
+    moon(){const S='#a8b0d7',IN='#dca4ac',NV='#535676',MK='#4b4d66';
       const cx=75.5,cy=27.5,R=11.5;
       const P=a=>[r1(cx+R*Math.cos(a*Math.PI/180)),r1(cy+R*Math.sin(a*Math.PI/180))];
       const [ax,ay]=P(-78),[bx,by]=P(-8),mx=r1((ax+bx)/2-(bx-ax)*.05-3.2),my=r1((ay+by)/2+3.2);
@@ -826,8 +826,8 @@ const GOB_ART=(()=>{
         <g ${K}><path d="M31 61Q28 86 32 86H68Q72 86 69 61Z" fill="none"/>
          <path d="M33 65L25 76" fill="none" stroke-width="8.4"/><path d="M33 65L25 76" fill="none" stroke="${NV}" stroke-width="4"/>
          <path d="M67 64L70.6 41" fill="none" stroke-width="8.4"/><path d="M67 64L70.6 41" fill="none" stroke="${NV}" stroke-width="4"/>
-         <path d="${cookie}" fill="#d9a35f"/></g>
-        <g fill="#5a3a22"><circle cx="69" cy="27" r="1.8"/><circle cx="74.4" cy="33.4" r="1.8"/><circle cx="80.6" cy="30.6" r="1.6"/><circle cx="70" cy="20.4" r="1.4"/><circle cx="67.4" cy="33.6" r="1.2"/></g>
+         <path d="${cookie}" fill="#cba574"/></g>
+        <g fill="#775941"><circle cx="69" cy="27" r="1.8"/><circle cx="74.4" cy="33.4" r="1.8"/><circle cx="80.6" cy="30.6" r="1.6"/><circle cx="70" cy="20.4" r="1.4"/><circle cx="67.4" cy="33.6" r="1.2"/></g>
         ${hand(24.5,76.5,S)}${hand(70.4,39.4,S)}
         ${at(48,42,head(S,'low',IN))}
         <g transform="translate(48 42)"><path d="M-21.4-5.8Q0-9.6 21.4-5.8V5Q11 8.8 0 3.6Q-11 8.8-21.4 5Z" fill="${MK}" ${K} stroke-width="1.6"/>
@@ -835,35 +835,35 @@ const GOB_ART=(()=>{
         ${face(48,41.5,'mask','sneak')}
         ${lid(48,32,25,48,41.5,MK,CREAM)}`,
        [[19,15,4.6],[45,7.5,3.6],[66,11,3.8]],27];},
-    car(){const S='#a3c24c',IN='#f0a49b';
+    car(){const S='#a6b667',IN='#e1a59a';
       return [`${at(49.5,44,head(S,'up',IN))}
         ${face(49.5,43,'smug','grin')}
-        <g ${K}><path d="M72 48.5L73 63H85L86 48.5Z" fill="#c9a46a"/>
-         <path d="M71.2 44.8Q73.8 42.8 76.4 44.4Q79 42.8 81.6 44.4Q84.2 42.8 86.8 44.8L86.2 50.4H71.8Z" fill="#b08550"/>
-         <path d="M73.8 54.8L75.4 57.8M84.2 54.8L82.6 57.8" fill="none" stroke-width="1.4"/><circle cx="79" cy="50.2" r="2.5" fill="#e4472f" stroke-width="1.6"/></g>
-        <g ${K}><path d="M14 76C14 66.5 17.5 62 24.5 62H60Q66 62 72 64L83 66.6Q88.5 68 88.5 75V80Q88.5 84.6 84.4 84.6H18Q14 84.6 14 80Z" fill="#f2b33d"/>
-         <path d="M15 73.6H87.6" stroke="#e4472f" stroke-width="3.2" stroke-linecap="butt"/>
+        <g ${K}><path d="M72 48.5L73 63H85L86 48.5Z" fill="#c1a57b"/>
+         <path d="M71.2 44.8Q73.8 42.8 76.4 44.4Q79 42.8 81.6 44.4Q84.2 42.8 86.8 44.8L86.2 50.4H71.8Z" fill="#ad8f6a"/>
+         <path d="M73.8 54.8L75.4 57.8M84.2 54.8L82.6 57.8" fill="none" stroke-width="1.4"/><circle cx="79" cy="50.2" r="2.5" fill="#cf6955" stroke-width="1.6"/></g>
+        <g ${K}><path d="M14 76C14 66.5 17.5 62 24.5 62H60Q66 62 72 64L83 66.6Q88.5 68 88.5 75V80Q88.5 84.6 84.4 84.6H18Q14 84.6 14 80Z" fill="#dbaf5e"/>
+         <path d="M15 73.6H87.6" stroke="#cf6955" stroke-width="3.2" stroke-linecap="butt"/>
          <path d="M25 62Q23 68 25 73" fill="none" stroke-width="1.8"/>
-         <circle cx="85" cy="69.6" r="3" fill="${CREAM}" stroke-width="1.8"/><rect x="12.6" y="66.4" width="4" height="5.4" rx="1.4" fill="#e4472f" stroke-width="1.6"/>
-         <circle cx="28.5" cy="85.6" r="6.4" fill="#3a2a22"/><circle cx="28.5" cy="85.6" r="2.4" fill="#cfd5da" stroke-width="1.4"/>
-         <circle cx="72" cy="85.6" r="6.4" fill="#3a2a22"/><circle cx="72" cy="85.6" r="2.4" fill="#cfd5da" stroke-width="1.4"/></g>
+         <circle cx="85" cy="69.6" r="3" fill="${CREAM}" stroke-width="1.8"/><rect x="12.6" y="66.4" width="4" height="5.4" rx="1.4" fill="#cf6955" stroke-width="1.6"/>
+         <circle cx="28.5" cy="85.6" r="6.4" fill="#604d41"/><circle cx="28.5" cy="85.6" r="2.4" fill="#c8c9c9" stroke-width="1.4"/>
+         <circle cx="72" cy="85.6" r="6.4" fill="#604d41"/><circle cx="72" cy="85.6" r="2.4" fill="#c8c9c9" stroke-width="1.4"/></g>
         ${hand(28,61.6,S)}${hand(71,59,S)}
         ${lid(49.5,34,25,49.5,43,S)}`,
        [[20,15,4.6],[48,7.5,3.6],[77,14,4.6]],37];},
-    zzz(){const S='#c3dcaa',IN='#ecb0a6',BL='#a9c6ef',BD='#7f9fd6';
+    zzz(){const S='#c0cfa5',IN='#dfaea1',BL='#abbed9',BD='#91a3c3';
       return [`<g ${K}><path d="M50 15.5C31 15.5 21 31 21 51C21 70 23 85 28 91H72C77 85 79 70 79 51C79 31 69 15.5 50 15.5Z" fill="${BL}"/>
          <path d="M22 62Q44 64 75 83" fill="none" stroke="${BD}" stroke-width="2"/><path d="M22.4 62.6Q44 65 75.2 83.6" fill="none"/>
          <path d="M27 76Q30 84 31 90M70 33Q75 42 76 52" fill="none" stroke="${CREAM}" stroke-width="1.8" stroke-dasharray="2.6 2.6"/></g>
         ${at(50,47,ears('droop',S,IN,-1))}
         <g ${K}><ellipse cx="50" cy="45.5" rx="19.6" ry="17.4" fill="${BD}" stroke="none"/><ellipse cx="50" cy="46" rx="17" ry="15.2" fill="${S}"/></g>
         ${face(50,44.5,'sleepy','doze',12)}
-        <g ${K}><path d="M36.4 66.4A6.2 6.2 0 0 1 45.4 59.6Z" fill="#f2b33d" stroke-width="1.8"/><path d="M63.6 66.4A6.2 6.2 0 0 0 54.6 59.6Z" fill="#f2b33d" stroke-width="1.8"/>
-         <circle cx="50" cy="74" r="10.2" fill="#e4472f"/><circle cx="50" cy="74" r="6.8" fill="${CREAM}" stroke-width="1.6"/>
+        <g ${K}><path d="M36.4 66.4A6.2 6.2 0 0 1 45.4 59.6Z" fill="#dbaf5e" stroke-width="1.8"/><path d="M63.6 66.4A6.2 6.2 0 0 0 54.6 59.6Z" fill="#dbaf5e" stroke-width="1.8"/>
+         <circle cx="50" cy="74" r="10.2" fill="#cf6955"/><circle cx="50" cy="74" r="6.8" fill="${CREAM}" stroke-width="1.6"/>
          <path d="M50 74V69.6M50 74L53.4 75.6" fill="none" stroke-width="1.8"/>
-         <rect x="47" y="61.2" width="6" height="3.2" rx="1.2" fill="#3a3f45" stroke-width="1.4"/></g>
+         <rect x="47" y="61.2" width="6" height="3.2" rx="1.2" fill="#5c5d5e" stroke-width="1.4"/></g>
         ${hand(38.6,76,S,4.2)}${hand(61.4,76,S,4.2)}
         <g ${K} fill="${S}"><ellipse cx="41" cy="89.6" rx="5.4" ry="2.8"/><ellipse cx="59" cy="89.6" rx="5.4" ry="2.8"/></g>
-        <g class="cap" ${K}><path d="M31 27Q36 9 53 8.5Q72 8.5 81 31Q72 22 65 24Q50 18 31 27Z" fill="#2f7aa3"/>
+        <g class="cap" ${K}><path d="M31 27Q36 9 53 8.5Q72 8.5 81 31Q72 22 65 24Q50 18 31 27Z" fill="#5688a0"/>
          <path d="M33.5 21.6Q49 15 64 19" fill="none" stroke="${CREAM}" stroke-width="2.6"/><circle cx="81.5" cy="33" r="5" fill="${CREAM}"/></g>
         ${lid(50,30,25,50,44.5,S)}`,
        [[19,22,4.6],[42,10,3.6],[80,17,4.4]],27];}
@@ -879,31 +879,31 @@ const GOB_ART=(()=>{
   return {svg};
 })();
 function gobSVG(v,i){return GOB_ART.svg(v,i);}
-const MOUND='<svg viewBox="0 0 64 40"><g stroke="#2b1a10" stroke-width="2" stroke-linejoin="round"><ellipse cx="32" cy="33" rx="28" ry="6" fill="#c9a868"/><path d="M5 33c4-15 14-23 27-23s23 8 27 23z" fill="#ead39c"/><path d="M42 24l3-4 3 4z" fill="#f39a8a" stroke-width="1.4"/></g><path d="M15 26c4-7 10-10 17-10" stroke="#f8e8bf" stroke-width="3" fill="none" stroke-linecap="round"/></svg>';
-const HOLE='<svg viewBox="0 0 64 40"><g stroke="#2b1a10" stroke-width="2"><ellipse cx="32" cy="30" rx="27" ry="8" fill="#e3c88d"/><ellipse cx="32" cy="29" rx="19" ry="5" fill="#7a5a32"/></g></svg>';
-function chestSVG(t){t=String(t||'wood').split('*')[0];const c={wood:['#a5652a','#7a4416','#e6aa52'],silver:['#a3b4cf','#5f708d','#eef3fb'],gold:['#f2b33d','#b97300','#fff1b8']}[t]||['#a5652a','#7a4416','#e6aa52'];
-return `<svg viewBox="0 0 64 64"><g stroke="#2b1a10" stroke-width="2.6" stroke-linejoin="round"><rect x="8" y="28" width="48" height="27" rx="4" fill="${c[0]}"/><path d="M8 31v-7a12 12 0 0 1 12-12h24a12 12 0 0 1 12 12v7z" fill="${c[1]}"/><rect x="8" y="27" width="48" height="5" fill="${c[2]}"/><rect x="14" y="13" width="4" height="42" fill="${c[2]}" stroke-width="1.6"/><rect x="46" y="13" width="4" height="42" fill="${c[2]}" stroke-width="1.6"/><rect x="27" y="23" width="10" height="13" rx="2.5" fill="${c[2]}"/></g><circle cx="32" cy="29" r="2" fill="#2b1a10"/></svg>`;}
+const MOUND='<svg viewBox="0 0 64 40"><g stroke="#3a2a22" stroke-width="2" stroke-linejoin="round"><ellipse cx="32" cy="33" rx="28" ry="6" fill="#c0a87a"/><path d="M5 33c4-15 14-23 27-23s23 8 27 23z" fill="#dcc89b"/><path d="M42 24l3-4 3 4z" fill="#e29f8f" stroke-width="1.4"/></g><path d="M15 26c4-7 10-10 17-10" stroke="#ebd9b0" stroke-width="3" fill="none" stroke-linecap="round"/></svg>';
+const HOLE='<svg viewBox="0 0 64 40"><g stroke="#3a2a22" stroke-width="2"><ellipse cx="32" cy="30" rx="27" ry="8" fill="#d6c092"/><ellipse cx="32" cy="29" rx="19" ry="5" fill="#8c714e"/></g></svg>';
+function chestSVG(t){t=String(t||'wood').split('*')[0];const c={wood:['#a9794a','#8f6138','#d4a96b'],silver:['#a9b2c0','#788190','#d8dde7'],gold:['#dbaf5e','#ba832a','#f1e1aa']}[t]||['#a9794a','#8f6138','#d4a96b'];
+return `<svg viewBox="0 0 64 64"><g stroke="#3a2a22" stroke-width="2.6" stroke-linejoin="round"><rect x="8" y="28" width="48" height="27" rx="4" fill="${c[0]}"/><path d="M8 31v-7a12 12 0 0 1 12-12h24a12 12 0 0 1 12 12v7z" fill="${c[1]}"/><rect x="8" y="27" width="48" height="5" fill="${c[2]}"/><rect x="14" y="13" width="4" height="42" fill="${c[2]}" stroke-width="1.6"/><rect x="46" y="13" width="4" height="42" fill="${c[2]}" stroke-width="1.6"/><rect x="27" y="23" width="10" height="13" rx="2.5" fill="${c[2]}"/></g><circle cx="32" cy="29" r="2" fill="#3a2a22"/></svg>`;}
 
 /* ============ Ride art: twelve ride types, four fix-up stages ============ */
 /* Stage 1 is rusty, crooked and half there; 2 is fixed but still in grey primer; 3 is painted with seats; 4 has its lights on. */
-const INK='#2b1a10',WIN='#ffd66b',BULB='#fff1a8',SKIN='#f3c9a0';
+const INK='#3a2a22',WIN='#e9c97a',BULB='#efe0a0',SKIN='#e4c19d';
 const f1=n=>(Math.round(n*10)/10);
 const flagAt=(x,y,col)=>`<path d="M${x} ${y}V${y-13}" stroke-width="1.8"/><path d="M${x} ${y-13}L${x+11} ${y-9.8}L${x} ${y-6.6}Z" fill="${col}" stroke-width="1.4"/>`;
-const sparkle=(x,y,s=4)=>`<path class="spk" d="M${x} ${y-s}L${f1(x+s*.3)} ${f1(y-s*.3)}L${x+s} ${y}L${f1(x+s*.3)} ${f1(y+s*.3)}L${x} ${y+s}L${f1(x-s*.3)} ${f1(y+s*.3)}L${x-s} ${y}L${f1(x-s*.3)} ${f1(y-s*.3)}Z" fill="#fff8d6" stroke="none"/>`;
-const smoke=(x,y)=>`<g class="smoke" stroke="none"><circle cx="${x}" cy="${y}" r="3.5" fill="#efe8dc"/><circle cx="${x+3}" cy="${y-6}" r="4.5" fill="#efe8dc" opacity=".85"/><circle cx="${x}" cy="${y-13}" r="5.5" fill="#efe8dc" opacity=".6"/></g>`;
+const sparkle=(x,y,s=4)=>`<path class="spk" d="M${x} ${y-s}L${f1(x+s*.3)} ${f1(y-s*.3)}L${x+s} ${y}L${f1(x+s*.3)} ${f1(y+s*.3)}L${x} ${y+s}L${f1(x-s*.3)} ${f1(y+s*.3)}L${x-s} ${y}L${f1(x-s*.3)} ${f1(y-s*.3)}Z" fill="#f4e8bc" stroke="none"/>`;
+const smoke=(x,y)=>`<g class="smoke" stroke="none"><circle cx="${x}" cy="${y}" r="3.5" fill="#e2d8c7"/><circle cx="${x+3}" cy="${y-6}" r="4.5" fill="#e2d8c7" opacity=".85"/><circle cx="${x}" cy="${y-13}" r="5.5" fill="#e2d8c7" opacity=".6"/></g>`;
 const baseOval=col=>`<path d="M6 90Q50 81 94 90Q50 98 6 90Z" fill="${col}"/>`;
 const beam=(d,col,w=2.6)=>`<path d="${d}" fill="none" stroke="${INK}" stroke-width="${f1(w+1.8)}"/><path d="${d}" fill="none" stroke="${col}" stroke-width="${w}"/>`;
 const bulb=(x,y,r=1.4)=>`<circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(r*2.4)}" fill="${BULB}" opacity=".3" stroke="none"/><circle cx="${f1(x)}" cy="${f1(y)}" r="${r}" fill="${BULB}" stroke-width=".7"/>`;
 const bulbs=pts=>pts.map(p=>bulb(p[0],p[1],p[2]||1.3)).join('');
 const linePts=(x0,y0,x1,y1,n,r)=>{const p=[];for(let k=0;k<n;k++){const t=n<2?0:k/(n-1);p.push([x0+(x1-x0)*t,y0+(y1-y0)*t,r]);}return p;};
 const arcPts=(cx,cy,rx,ry,a0,a1,n,r)=>{const p=[];for(let k=0;k<n;k++){const a=(a0+(a1-a0)*(n<2?0:k/(n-1)))*Math.PI/180;p.push([cx+rx*Math.cos(a),cy+ry*Math.sin(a),r]);}return p;};
-const weeds=x=>`<path d="M${x} 90l1.4-7 1.2 7 1.7-9 1.3 9 1.5-6 1 6Z" fill="#7f8f3c" stroke-width="1"/>`;
-const barricade=(x,y)=>`<path d="M${x+2} ${y+9}l2-9M${x+14} ${y+9}l-2-9" stroke-width="1.5"/><rect x="${x}" y="${y}" width="16" height="5" rx="1" fill="#f28a2b" stroke-width="1.3"/><path d="M${x+3.5} ${y+.9}l2.3 3.2M${x+8.5} ${y+.9}l2.3 3.2M${x+13} ${y+.9}l1.6 2.2" stroke="#fbf1dc" stroke-width="1.5"/>`;
-const toolbox=(x,y)=>`<path d="M${x+3} ${y}v-2.2h4v2.2" fill="none" stroke-width="1.2"/><rect x="${x}" y="${y}" width="10" height="6" rx="1" fill="#d9362b" stroke-width="1.3"/><path d="M${x} ${y+2.4}h10" stroke-width=".9"/>`;
+const weeds=x=>`<path d="M${x} 90l1.4-7 1.2 7 1.7-9 1.3 9 1.5-6 1 6Z" fill="#8f9757" stroke-width="1"/>`;
+const barricade=(x,y)=>`<path d="M${x+2} ${y+9}l2-9M${x+14} ${y+9}l-2-9" stroke-width="1.5"/><rect x="${x}" y="${y}" width="16" height="5" rx="1" fill="#d99453" stroke-width="1.3"/><path d="M${x+3.5} ${y+.9}l2.3 3.2M${x+8.5} ${y+.9}l2.3 3.2M${x+13} ${y+.9}l1.6 2.2" stroke="#efe0c2" stroke-width="1.5"/>`;
+const toolbox=(x,y)=>`<path d="M${x+3} ${y}v-2.2h4v2.2" fill="none" stroke-width="1.2"/><rect x="${x}" y="${y}" width="10" height="6" rx="1" fill="#c75e53" stroke-width="1.3"/><path d="M${x} ${y+2.4}h10" stroke-width=".9"/>`;
 function paint(L,c){
-  if(L<=1)return{main:'#8e857a',acc:'#a8673f',acc2:'#77706a',seat:'#6c645b',metal:'#8a8279',lt:'#a39a8f'};
-  if(L===2)return{main:'#b8c0c6',acc:'#d3d8dc',acc2:'#9aa3ab',seat:'#8e979f',metal:'#a8b0b7',lt:'#e1e5e8'};
-  return{main:c.main,acc:c.acc,acc2:c.acc2||c.acc,seat:c.seat||c.acc,metal:c.metal||'#ece6da',lt:c.lt||'#fbf1dc'};
+  if(L<=1)return{main:'#999084',acc:'#ab7a5a',acc2:'#898178',seat:'#81786d',metal:'#968d83',lt:'#a89f93'};
+  if(L===2)return{main:'#b8baba',acc:'#cbccca',acc2:'#a3a5a6',seat:'#9a9d9d',metal:'#acafaf',lt:'#d4d5d3'};
+  return{main:c.main,acc:c.acc,acc2:c.acc2||c.acc,seat:c.seat||c.acc,metal:c.metal||'#e0d6c6',lt:c.lt||'#efe0c2'};
 }
 const horse=(x,y,col,flip)=>`<g transform="translate(${x} ${y})${flip?' scale(-1 1)':''}"><path d="M-6 -2.5Q-8.6 -2 -8.4 1.5" fill="none" stroke-width="1.2"/><path d="M-6 0Q-6 -3.5 -2 -3.5H3L5 -7.5Q7 -8.5 8 -6.5L7.5 -3Q7 -1 5 0V4H3.6V1.2H-3.6V4H-5V.8Q-6 .6 -6 0Z" fill="${col}" stroke-width="1.2"/></g>`;
 function carousel(L,c){
@@ -911,10 +911,10 @@ function carousel(L,c){
   s+=`<path d="M12 79V84Q50 91 88 84V79Z" fill="${P.acc2}"/><ellipse cx="50" cy="79" rx="38" ry="5.5" fill="${P.lt}"/>`;
   s+=`<rect x="44" y="47" width="12" height="32" fill="${P.main}"/>`;
   if(L>=3)s+=`<path d="M44 55h12M44 63h12M44 71h12" stroke-width="1" opacity=".55"/>`;
-  const brass=L>=3?'#e8c45a':P.metal;
-  (L<=1?[22,78]:[21,34,66,79]).forEach((x,k)=>{s+=`<rect x="${x-1.1}" y="48" width="2.2" height="30" fill="${brass}" stroke-width="1"/>`;if(L>=3)s+=horse(x,k%2?62:68,k%2?c.seat:'#fbf1dc',x>50);});
+  const brass=L>=3?'#d6bb70':P.metal;
+  (L<=1?[22,78]:[21,34,66,79]).forEach((x,k)=>{s+=`<rect x="${x-1.1}" y="48" width="2.2" height="30" fill="${brass}" stroke-width="1"/>`;if(L>=3)s+=horse(x,k%2?62:68,k%2?c.seat:'#efe0c2',x>50);});
   const x0=10,x1=90,peak=24,eave=48,segs=8;
-  for(let k=0;k<segs;k++){const a=x0+(x1-x0)*k/segs,b=x0+(x1-x0)*(k+1)/segs;const col=(L<=1&&k===5)?'#4a423b':(k%2?P.lt:P.main);s+=`<path d="M50 ${peak}L${f1(a)} ${eave}H${f1(b)}Z" fill="${col}" stroke-width="1.2"/>`;}
+  for(let k=0;k<segs;k++){const a=x0+(x1-x0)*k/segs,b=x0+(x1-x0)*(k+1)/segs;const col=(L<=1&&k===5)?'#695f55':(k%2?P.lt:P.main);s+=`<path d="M50 ${peak}L${f1(a)} ${eave}H${f1(b)}Z" fill="${col}" stroke-width="1.2"/>`;}
   s+=`<path d="M50 ${peak}L${x0} ${eave}H${x1}Z" fill="none"/>`;
   const sw=(x1-x0)/10;
   for(let k=0;k<10;k++){if(L<=1&&(k===3||k===7))continue;const a=x0+k*sw;s+=`<path d="M${f1(a)} ${eave}H${f1(a+sw)}V${eave+2.5}A${f1(sw/2)} ${f1(sw/2)} 0 0 1 ${f1(a)} ${eave+2.5}Z" fill="${k%2?P.acc:P.main}" stroke-width="1.1"/>`;}
@@ -933,8 +933,8 @@ function wheel(L,c){
   if(L<=1){const [ax,ay]=pt(0,R),[bx,by]=pt(n-3,R);s+=beam(`M${f1(ax)} ${f1(ay)}A${R} ${R} 0 1 1 ${f1(bx)} ${f1(by)}`,P.main,2.6);}
   else{s+=beam(`M${cx-R} ${cy}a${R} ${R} 0 1 0 ${2*R} 0a${R} ${R} 0 1 0 ${-2*R} 0`,P.main,2.8)+`<circle cx="${cx}" cy="${cy}" r="${R-5}" fill="none" stroke-width="1"/>`;}
   s+=`<circle cx="${cx}" cy="${cy}" r="4" fill="${P.acc}" stroke-width="1.4"/>`;
-  if(L>=3){const cols=[c.acc,c.seat,c.lt||'#fbf1dc'];for(let k=0;k<n;k++){const [x,y]=pt(k,R);
-    s+=big?`<path d="M${f1(x)} ${f1(y)}V${f1(y+2)}" stroke-width="1.2"/><rect x="${f1(x-3.4)}" y="${f1(y+2)}" width="6.8" height="7" rx="2.2" fill="${cols[k%3]}" stroke-width="1.2"/><rect x="${f1(x-2.2)}" y="${f1(y+3.4)}" width="4.4" height="2.6" rx=".8" fill="#cfe9f5" stroke-width=".8"/>`
+  if(L>=3){const cols=[c.acc,c.seat,c.lt||'#efe0c2'];for(let k=0;k<n;k++){const [x,y]=pt(k,R);
+    s+=big?`<path d="M${f1(x)} ${f1(y)}V${f1(y+2)}" stroke-width="1.2"/><rect x="${f1(x-3.4)}" y="${f1(y+2)}" width="6.8" height="7" rx="2.2" fill="${cols[k%3]}" stroke-width="1.2"/><rect x="${f1(x-2.2)}" y="${f1(y+3.4)}" width="4.4" height="2.6" rx=".8" fill="#c3d9e1" stroke-width=".8"/>`
       :`<path d="M${f1(x)} ${f1(y)}V${f1(y+3)}" stroke-width="1.2"/><path d="M${f1(x-4.2)} ${f1(y+3)}H${f1(x+4.2)}L${f1(x+3)} ${f1(y+8)}H${f1(x-3)}Z" fill="${cols[k%3]}" stroke-width="1.2"/>`;}}
   if(L>=4){const p=[];for(let k=0;k<n*2;k++){const a=(k/(n*2))*2*Math.PI-Math.PI/2+Math.PI/(n*2);p.push([cx+R*Math.cos(a),cy+R*Math.sin(a),1.2]);}s+=bulbs(p)+bulb(cx,cy,1.6);}
   return s;
@@ -943,9 +943,9 @@ function carShape(v,col,acc){
   if(v==='tilt')return `<path d="M-8.5 0A8.5 8.5 0 0 1 8.5 0Z" fill="${col}"/><path d="M-5.6 -1.6A5.6 5.6 0 0 1 5.6 -1.6" fill="none" stroke="${acc}" stroke-width="2"/><path d="M-9.5 0H9.5" stroke-width="2"/>`;
   if(v==='scrambler'||v==='scat')return `<path d="M-6 0H6L5 -5H-5Z" fill="${col}"/><rect x="-5" y="-9" width="10" height="4.5" rx="2" fill="${acc}" stroke-width="1.2"/>`;
   if(v==='boats')return `<path d="M-1 -4V-11" stroke-width="1.2"/><path d="M-1 -11L4 -8.5L-1 -6.5Z" fill="${acc}" stroke-width="1"/><path d="M-8 -4H8L5.5 1H-5.5Z" fill="${col}"/>`;
-  if(v==='jeeps')return `<path d="M-4 -7V-10.5H3V-7" fill="none" stroke-width="1.2"/><rect x="-7" y="-7" width="14" height="5.5" rx="1" fill="${col}"/><circle cx="-4.5" cy="-.8" r="2" fill="#3a3a3a" stroke-width="1"/><circle cx="4.5" cy="-.8" r="2" fill="#3a3a3a" stroke-width="1"/><circle cx="8" cy="-4.8" r="1.8" fill="${acc}" stroke-width="1"/>`;
-  if(v==='cars')return `<path d="M-8.5 -1.5V-3.5Q-6 -6.5 -1 -6.5H3L8.5 -3.5V-1.5Z" fill="${col}"/><circle cx="0" cy="-3.6" r="1.7" fill="${acc}" stroke-width=".9"/><circle cx="-5" cy="-.6" r="1.9" fill="#3a3a3a" stroke-width="1"/><circle cx="5" cy="-.6" r="1.9" fill="#3a3a3a" stroke-width="1"/>`;
-  if(v==='bugs')return `<circle cx="7.6" cy="-2.2" r="2.5" fill="#2b1a10" stroke-width="1"/><path d="M-7 0A7 6.5 0 0 1 7 0Z" fill="${col}"/><path d="M0 -6.5V0" stroke-width="1"/><circle cx="-3.4" cy="-2.6" r="1.1" fill="${acc}" stroke="none"/><circle cx="3.4" cy="-2.6" r="1.1" fill="${acc}" stroke="none"/><circle cx="-1.8" cy="-4.8" r=".9" fill="${acc}" stroke="none"/>`;
+  if(v==='jeeps')return `<path d="M-4 -7V-10.5H3V-7" fill="none" stroke-width="1.2"/><rect x="-7" y="-7" width="14" height="5.5" rx="1" fill="${col}"/><circle cx="-4.5" cy="-.8" r="2" fill="#5d5a55" stroke-width="1"/><circle cx="4.5" cy="-.8" r="2" fill="#5d5a55" stroke-width="1"/><circle cx="8" cy="-4.8" r="1.8" fill="${acc}" stroke-width="1"/>`;
+  if(v==='cars')return `<path d="M-8.5 -1.5V-3.5Q-6 -6.5 -1 -6.5H3L8.5 -3.5V-1.5Z" fill="${col}"/><circle cx="0" cy="-3.6" r="1.7" fill="${acc}" stroke-width=".9"/><circle cx="-5" cy="-.6" r="1.9" fill="#5d5a55" stroke-width="1"/><circle cx="5" cy="-.6" r="1.9" fill="#5d5a55" stroke-width="1"/>`;
+  if(v==='bugs')return `<circle cx="7.6" cy="-2.2" r="2.5" fill="#3a2a22" stroke-width="1"/><path d="M-7 0A7 6.5 0 0 1 7 0Z" fill="${col}"/><path d="M0 -6.5V0" stroke-width="1"/><circle cx="-3.4" cy="-2.6" r="1.1" fill="${acc}" stroke="none"/><circle cx="3.4" cy="-2.6" r="1.1" fill="${acc}" stroke="none"/><circle cx="-1.8" cy="-4.8" r=".9" fill="${acc}" stroke="none"/>`;
   return `<rect x="-6" y="-6" width="12" height="6" rx="2" fill="${col}"/>`;
 }
 const car=(x,y,sc,v,col,acc,flip)=>`<g transform="translate(${f1(x)} ${f1(y)}) scale(${flip?-sc:sc} ${sc})">${carShape(v,col,acc)}</g>`;
@@ -953,17 +953,17 @@ function umbrella(P,L,top=40,w=26){
   let s=`<rect x="48.6" y="${top}" width="2.8" height="${78-top}" fill="${P.metal}" stroke-width="1"/>`;
   for(let k=0;k<6;k++){const a=50-w+2*w*k/6,b=50-w+2*w*(k+1)/6;s+=`<path d="M50 ${top-7}L${f1(a)} ${top+6}H${f1(b)}Z" fill="${k%2?P.lt:P.main}" stroke-width="1.1"/>`;}
   s+=`<path d="M50 ${top-7}L${50-w} ${top+6}H${50+w}Z" fill="none"/><circle cx="50" cy="${top-8}" r="1.8" fill="${P.acc}" stroke-width="1"/>`;
-  if(L<=1)s+=`<path d="M${f1(50+w*.3)} ${top+1}l5 4-4 2Z" fill="#4a423b" stroke-width="1"/>`;
+  if(L<=1)s+=`<path d="M${f1(50+w*.3)} ${top+1}l5 4-4 2Z" fill="#695f55" stroke-width="1"/>`;
   if(L>=4)s+=bulbs(linePts(50-w+3,top+8.5,50+w-3,top+8.5,6,1.2));
   return s;
 }
-const checkered=(x,y)=>{let d='';for(let r=0;r<4;r++)for(let k=0;k<4;k++)if((r+k)%2===0)d+=`M${f1(x+k*2.5)} ${f1(y+r*1.75)}h2.5v1.75h-2.5z`;return `<path d="M${x} ${y+14}V${y}" stroke-width="1.5"/><rect x="${x}" y="${y}" width="10" height="7" fill="#fbf1dc" stroke-width="1.2"/><path d="${d}" fill="#2b1a10" stroke="none"/>`;};
+const checkered=(x,y)=>{let d='';for(let r=0;r<4;r++)for(let k=0;k<4;k++)if((r+k)%2===0)d+=`M${f1(x+k*2.5)} ${f1(y+r*1.75)}h2.5v1.75h-2.5z`;return `<path d="M${x} ${y+14}V${y}" stroke-width="1.5"/><rect x="${x}" y="${y}" width="10" height="7" fill="#efe0c2" stroke-width="1.2"/><path d="${d}" fill="#3a2a22" stroke="none"/>`;};
 function spinner(L,c){
   const P=paint(L,c),v=c.v;let s='';
   const col=k=>L>=3?(v==='bugs'?(k%2?(c.seat||c.main):c.main):(k%2?c.acc:c.main)):(k%2?P.acc:P.seat);
-  const accC=L>=3?(v==='bugs'?c.acc:(c.lt||'#fbf1dc')):P.lt;
-  if(v==='boats'){s+=`<ellipse cx="50" cy="80" rx="40" ry="9" fill="${P.acc2}"/><ellipse cx="50" cy="79.5" rx="35" ry="6.5" fill="${L<=1?'#8a7a5a':'#5fb0d6'}" stroke-width="1.4"/>`;if(L>=2)s+=`<path d="M22 80h7M63 78h9M44 84h6" stroke="#dff3fb" stroke-width="1.2"/>`;}
-  else if(v==='jeeps'||v==='cars'||v==='bugs')s+=`<ellipse cx="50" cy="80" rx="40" ry="9" fill="${P.acc2}"/><ellipse cx="50" cy="79.5" rx="26" ry="4.4" fill="${L<=1?'#9a8f6a':(c.base||'#8ccb66')}" stroke-width="1.4"/>`;
+  const accC=L>=3?(v==='bugs'?c.acc:(c.lt||'#efe0c2')):P.lt;
+  if(v==='boats'){s+=`<ellipse cx="50" cy="80" rx="40" ry="9" fill="${P.acc2}"/><ellipse cx="50" cy="79.5" rx="35" ry="6.5" fill="${L<=1?'#96886d':'#7cadc1'}" stroke-width="1.4"/>`;if(L>=2)s+=`<path d="M22 80h7M63 78h9M44 84h6" stroke="#cce2e8" stroke-width="1.2"/>`;}
+  else if(v==='jeeps'||v==='cars'||v==='bugs')s+=`<ellipse cx="50" cy="80" rx="40" ry="9" fill="${P.acc2}"/><ellipse cx="50" cy="79.5" rx="26" ry="4.4" fill="${L<=1?'#a0967a':(c.base||'#99be78')}" stroke-width="1.4"/>`;
   else if(v==='tilt')s+=`<path d="M10 79Q22 73 34 78T58 77T90 79V84Q50 91 10 84Z" fill="${P.acc2}"/><path d="M10 79Q22 73 34 78T58 77T90 79Q50 86 10 79Z" fill="${P.lt}" stroke-width="1.4"/>`;
   else if(v==='scat')s+=`<ellipse cx="50" cy="83" rx="24" ry="5" fill="${P.acc2}"/>`;
   else s+=`<path d="M12 79V84Q50 90 88 84V79Z" fill="${P.acc2}"/><ellipse cx="50" cy="79" rx="38" ry="5.5" fill="${P.lt}"/>`;
@@ -997,11 +997,11 @@ function spinner(L,c){
 function train(L,c){
   const P=paint(L,c);let s='';
   const tx1=L<=1?62:96;
-  for(let x=6;x<tx1-2;x+=6.5)if(!(L<=1&&x>30&&x<40))s+=`<rect x="${f1(x)}" y="85.5" width="4" height="3" fill="#6b4a32" stroke-width="1"/>`;
+  for(let x=6;x<tx1-2;x+=6.5)if(!(L<=1&&x>30&&x<40))s+=`<rect x="${f1(x)}" y="85.5" width="4" height="3" fill="#82654e" stroke-width="1"/>`;
   s+=`<path d="M4 85.5H${tx1}" stroke-width="1.6"/>`;
   if(L>=3){
     s+=`<path d="M9.5 58V70M40.5 58V70" stroke-width="1.4"/>`+[15,25,35].map(x=>`<circle cx="${x}" cy="67" r="3" fill="${SKIN}" stroke-width="1.2"/>`).join('');
-    s+=`<rect x="7" y="55" width="36" height="4" rx="1" fill="${c.acc}" stroke-width="1.2"/><rect x="8" y="70" width="34" height="11" rx="1.5" fill="${c.seat}"/><path d="M8 74H42" stroke-width="1.2"/><circle cx="15" cy="82.5" r="3" fill="#3a3a3a" stroke-width="1.2"/><circle cx="35" cy="82.5" r="3" fill="#3a3a3a" stroke-width="1.2"/><path d="M42 77H48" stroke-width="1.6"/>`;
+    s+=`<rect x="7" y="55" width="36" height="4" rx="1" fill="${c.acc}" stroke-width="1.2"/><rect x="8" y="70" width="34" height="11" rx="1.5" fill="${c.seat}"/><path d="M8 74H42" stroke-width="1.2"/><circle cx="15" cy="82.5" r="3" fill="#5d5a55" stroke-width="1.2"/><circle cx="35" cy="82.5" r="3" fill="#5d5a55" stroke-width="1.2"/><path d="M42 77H48" stroke-width="1.6"/>`;
     if(L>=4)s+=bulbs(linePts(9,54,41,54,5,1.1))+flagAt(25,55,c.main);
   }
   s+=`<rect x="50" y="77" width="42" height="5" fill="${P.acc2}"/>`;
@@ -1009,7 +1009,7 @@ function train(L,c){
   if(L<=1)s+=`<path d="M57 66L56.5 60H63.5L63 66Z" fill="${P.acc2}"/>`;
   else s+=`<path d="M57 66L56 57H64L63 66Z" fill="${P.acc2}"/><rect x="54.5" y="54" width="11" height="3.5" rx="1" fill="${P.acc}" stroke-width="1.3"/>`;
   s+=`<circle cx="69" cy="65.5" r="3" fill="${P.acc}" stroke-width="1.3"/>`;
-  s+=`<rect x="76" y="56" width="16" height="24" fill="${P.main}"/><rect x="79.5" y="60" width="9" height="7" rx="1" fill="${L>=3?WIN:'#5a5550'}" stroke-width="1.2"/>`;
+  s+=`<rect x="76" y="56" width="16" height="24" fill="${P.main}"/><rect x="79.5" y="60" width="9" height="7" rx="1" fill="${L>=3?WIN:'#746d65'}" stroke-width="1.2"/>`;
   if(L>=2)s+=`<rect x="74" y="52.5" width="20" height="4" rx="1" fill="${P.acc}" stroke-width="1.3"/>`;
   s+=`<path d="M54 77L46 85H55Z" fill="${P.acc}"/>`;
   s+=`<rect x="49" y="69" width="5" height="5" rx="1" fill="${L>=3?WIN:P.lt}" stroke-width="1.2"/>`;
@@ -1019,8 +1019,8 @@ function train(L,c){
 }
 function bumper(L,c){
   const P=paint(L,c);let s='';
-  s+=`<rect x="10" y="83" width="80" height="6" fill="#8a8f96"/>`;
-  if(L>=3)[[25,82,'#5fb0d6'],[51,80,'#f2b33d'],[75,82,'#8fd16f']].forEach(([x,y,col])=>{s+=`<path d="M${x} ${y-8}V54" stroke-width="1"/><circle cx="${x}" cy="${y-8.5}" r="2.6" fill="${SKIN}" stroke-width="1"/><rect x="${x-8}" y="${y-6}" width="16" height="7" rx="3.5" fill="${col}"/><rect x="${x-9}" y="${y-2}" width="18" height="3" rx="1.5" fill="#3a3a3a" stroke-width="1"/>`;});
+  s+=`<rect x="10" y="83" width="80" height="6" fill="#979797"/>`;
+  if(L>=3)[[25,82,'#7cadc1'],[51,80,'#dbaf5e'],[75,82,'#9bc37e']].forEach(([x,y,col])=>{s+=`<path d="M${x} ${y-8}V54" stroke-width="1"/><circle cx="${x}" cy="${y-8.5}" r="2.6" fill="${SKIN}" stroke-width="1"/><rect x="${x-8}" y="${y-6}" width="16" height="7" rx="3.5" fill="${col}"/><rect x="${x-9}" y="${y-2}" width="18" height="3" rx="1.5" fill="#5d5a55" stroke-width="1"/>`;});
   (L<=1?[12,38,86]:[12,37,63,86]).forEach(x=>{s+=`<rect x="${x-1.6}" y="52" width="3.2" height="31" fill="${P.acc2}" stroke-width="1.2"/>`;});
   s+=`<rect x="8" y="49" width="84" height="5" fill="${P.lt}"/><path d="M12 51.5h76" stroke-width=".8" opacity=".6"/>`;
   if(L<=1)s+=`<path d="M6 49L20 35H78L94 53L80 50Z" fill="${P.main}"/><path d="M48 35L56 50" stroke-width="1.2"/>`;
@@ -1039,7 +1039,7 @@ function slide(L,c){
   if(L>=3)s+=`<path d="M7 18.5L20 8L33 18.5Z" fill="${c.acc}"/>`;
   const d=L<=1?'M30 22C42 24 44 48 54 47':'M30 22C42 24 44 48 54 47S64 64 72 63S84 85 96 87';
   s+=`<path d="${d}" fill="none" stroke="${INK}" stroke-width="13"/><path d="${d}" fill="none" stroke="${P.main}" stroke-width="10"/>`;
-  if(L>=3)s+=`<path d="${d}" fill="none" stroke="${c.acc}" stroke-width="6.6"/><path d="${d}" fill="none" stroke="${c.lt||'#fbf1dc'}" stroke-width="3.2"/>`;
+  if(L>=3)s+=`<path d="${d}" fill="none" stroke="${c.acc}" stroke-width="6.6"/><path d="${d}" fill="none" stroke="${c.lt||'#efe0c2'}" stroke-width="3.2"/>`;
   else s+=`<path d="${d}" fill="none" stroke="${P.lt}" stroke-width="1.2" stroke-dasharray="3 3"/>`;
   if(L<=1)s+=`<path d="M64 86l18-4 2 5-18 4z" fill="${P.main}"/>`;
   if(L>=4)s+=flagAt(20,8,c.acc2)+bulbs([[37,17.5],[45,30],[51,40],[60,40.5],[67,51],[74,56],[83,67],[91,79]].map(p=>[p[0],p[1],1.2]));
@@ -1052,7 +1052,7 @@ function swing(L,c){
     g+=`<path d="M${x0} ${y0}L${f1(x1)} ${f1(y1)}" stroke-width="1"/>`;
     if(L>=3)g+=`<circle cx="${f1(x1)}" cy="${f1(y1-1)}" r="2" fill="${SKIN}" stroke-width=".9"/><path d="M${f1(x1-3.2)} ${f1(y1)}h6.4v3.2h-6.4z" fill="${k%2?c.seat:c.acc}" stroke-width="1"/>`;});
   g+=`<path d="M18 34Q50 40 82 34L76 28H24Z" fill="${P.main}"/>`;
-  for(let k=0;k<6;k++){const a=24+52*k/6,b=24+52*(k+1)/6;g+=`<path d="M50 14L${f1(a)} 28H${f1(b)}Z" fill="${(L<=1&&k===4)?'#4a423b':(k%2?P.lt:P.acc)}" stroke-width="1.1"/>`;}
+  for(let k=0;k<6;k++){const a=24+52*k/6,b=24+52*(k+1)/6;g+=`<path d="M50 14L${f1(a)} 28H${f1(b)}Z" fill="${(L<=1&&k===4)?'#695f55':(k%2?P.lt:P.acc)}" stroke-width="1.1"/>`;}
   g+=`<path d="M50 14L24 28H76Z" fill="none"/><circle cx="50" cy="12.5" r="2" fill="${P.main}" stroke-width="1"/>`;
   if(L>=4)g+=bulbs(linePts(21,35.4,79,35.4,7,1.2))+flagAt(50,11,c.acc2);
   s+=`<g transform="rotate(${yo&&run?-9:L<=1?4:0} 50 28)">${g}</g>`;
@@ -1062,10 +1062,10 @@ function ship(L,c){
   const P=paint(L,c);let s='',g='';
   s+=beam('M50 14L20 90M50 14L80 90',P.acc2,3.2);
   g+=beam('M50 14L40 62M50 14L60 62',P.metal,2);
-  if(L>=2)g+=`<path d="M81 60C88 56 90 48 87 42L92 44C95 51 92 59 84 63Z" fill="${P.main}"/><path d="M18 61C12 54 11 45 15 39L21 41C18 46 19 53 24 60Z" fill="${P.main}"/><path d="M20 33l2-6 2.5 6z" fill="${P.acc}" stroke-width="1"/><ellipse cx="16" cy="36" rx="7.5" ry="4.6" fill="${P.main}"/><circle cx="15" cy="34.6" r="1.3" fill="#fbf1dc" stroke-width=".8"/><path d="M9 38.5h4" stroke-width="1"/>`;
+  if(L>=2)g+=`<path d="M81 60C88 56 90 48 87 42L92 44C95 51 92 59 84 63Z" fill="${P.main}"/><path d="M18 61C12 54 11 45 15 39L21 41C18 46 19 53 24 60Z" fill="${P.main}"/><path d="M20 33l2-6 2.5 6z" fill="${P.acc}" stroke-width="1"/><ellipse cx="16" cy="36" rx="7.5" ry="4.6" fill="${P.main}"/><circle cx="15" cy="34.6" r="1.3" fill="#efe0c2" stroke-width=".8"/><path d="M9 38.5h4" stroke-width="1"/>`;
   if(L>=3)g+=[28,38,48,58,68].map(x=>`<circle cx="${x}" cy="57.5" r="2.6" fill="${SKIN}" stroke-width="1"/>`).join('');
   g+=`<path d="M18 60H82Q78 80 50 80Q22 80 18 60Z" fill="${P.main}"/><path d="M20.5 66Q50 71 79.5 66" fill="none" stroke="${P.acc}" stroke-width="3"/>`;
-  if(L<=1)g+=`<path d="M34 70l4 2-3 3zM60 69l5 1-2 4z" fill="#3a332c" stroke-width="1"/>`;
+  if(L<=1)g+=`<path d="M34 70l4 2-3 3zM60 69l5 1-2 4z" fill="#5e554a" stroke-width="1"/>`;
   g+=`<rect x="17" y="58.5" width="66" height="3" rx="1" fill="${P.lt}" stroke-width="1.2"/>`;
   if(L>=4)g+=bulbs(linePts(21,58.6,79,58.6,7,1.1));
   s+=`<g transform="rotate(${L>=3?9:0} 50 14)">${g}</g><circle cx="50" cy="14" r="3" fill="${P.acc}" stroke-width="1.3"/>`;
@@ -1078,14 +1078,14 @@ function drop(L,c){
   let lat='';for(let y=top+3;y<76;y+=8)lat+=`M44 ${y}L56 ${y+8}M56 ${y}L44 ${y+8}`;s+=`<path d="${lat}" stroke="${P.metal}" stroke-width="1"/>`;
   if(L<=1)s+=`<path d="M44 ${top}l3-4 3 3 3-5 3 6Z" fill="${P.acc2}"/>`;
   else{s+=`<rect x="38" y="4" width="24" height="10" rx="3" fill="${P.main}"/>`;
-    if(L>=3)s+=`<path d="M40 14l2 3 2-3 2 3 2-3 2 3 2-3 2 3 2-3 2 3 2-3 2 3 2-3" fill="#fbf1dc" stroke-width="1"/><circle cx="44.5" cy="8.6" r="2.6" fill="${WIN}" stroke-width="1"/><circle cx="55.5" cy="8.6" r="2.6" fill="${WIN}" stroke-width="1"/><circle cx="45" cy="9" r="1" fill="${INK}" stroke="none"/><circle cx="55" cy="9" r="1" fill="${INK}" stroke="none"/>`;}
+    if(L>=3)s+=`<path d="M40 14l2 3 2-3 2 3 2-3 2 3 2-3 2 3 2-3 2 3 2-3 2 3 2-3" fill="#efe0c2" stroke-width="1"/><circle cx="44.5" cy="8.6" r="2.6" fill="${WIN}" stroke-width="1"/><circle cx="55.5" cy="8.6" r="2.6" fill="${WIN}" stroke-width="1"/><circle cx="45" cy="9" r="1" fill="${INK}" stroke="none"/><circle cx="55" cy="9" r="1" fill="${INK}" stroke="none"/>`;}
   if(L>=3){const ry=L>=4?24:62;s+=[33,40,47,53,60,67].map(x=>`<path d="M${x} ${ry+7}v4" stroke-width="1.6"/><circle cx="${x}" cy="${ry-1.5}" r="2.2" fill="${SKIN}" stroke-width=".9"/>`).join('')+`<rect x="30" y="${ry}" width="40" height="7" rx="2" fill="${c.seat}"/>`;}
-  if(L>=4)s+=bulbs(linePts(42.5,34,42.5,78,6,1.1).concat(linePts(57.5,34,57.5,78,6,1.1)))+`<circle cx="50" cy="2.5" r="5" fill="#ff5a4a" opacity=".35" stroke="none"/><circle cx="50" cy="2.5" r="1.8" fill="#ff5a4a" stroke-width=".8"/>`;
+  if(L>=4)s+=bulbs(linePts(42.5,34,42.5,78,6,1.1).concat(linePts(57.5,34,57.5,78,6,1.1)))+`<circle cx="50" cy="2.5" r="5" fill="#e67566" opacity=".35" stroke="none"/><circle cx="50" cy="2.5" r="1.8" fill="#e67566" stroke-width=".8"/>`;
   return s;
 }
 function vehicle(heli,col,acc){
-  if(heli)return `<path d="M5 -1L13 -3.5" stroke-width="1.6"/><path d="M12 -6V-1" stroke-width="1.2"/><path d="M0 -4.6V-7.5" stroke-width="1.2"/><path d="M-9 -7.8H9" stroke-width="1.8"/><ellipse cx="0" cy="0" rx="7" ry="4.6" fill="${col}"/><ellipse cx="-2.4" cy="-1" rx="3.2" ry="2.5" fill="#cfe9f5" stroke-width="1"/>`;
-  return `<path d="M5 -2L9 -8H11L10 -2Z" fill="${acc}" stroke-width="1.1"/><ellipse cx="0" cy="1" rx="5.5" ry="1.8" fill="${acc}" stroke-width="1.1"/><path d="M-8 -1.5Q-8 -4 -4 -4H6Q9 -4 9 -1.5Q9 1 6 1H-4Q-8 1 -8 -1.5Z" fill="${col}"/><path d="M-2 -4Q0 -7 3 -4" fill="#cfe9f5" stroke-width="1"/><path d="M-9.5 -5V2" stroke-width="1.5"/>`;
+  if(heli)return `<path d="M5 -1L13 -3.5" stroke-width="1.6"/><path d="M12 -6V-1" stroke-width="1.2"/><path d="M0 -4.6V-7.5" stroke-width="1.2"/><path d="M-9 -7.8H9" stroke-width="1.8"/><ellipse cx="0" cy="0" rx="7" ry="4.6" fill="${col}"/><ellipse cx="-2.4" cy="-1" rx="3.2" ry="2.5" fill="#c3d9e1" stroke-width="1"/>`;
+  return `<path d="M5 -2L9 -8H11L10 -2Z" fill="${acc}" stroke-width="1.1"/><ellipse cx="0" cy="1" rx="5.5" ry="1.8" fill="${acc}" stroke-width="1.1"/><path d="M-8 -1.5Q-8 -4 -4 -4H6Q9 -4 9 -1.5Q9 1 6 1H-4Q-8 1 -8 -1.5Z" fill="${col}"/><path d="M-2 -4Q0 -7 3 -4" fill="#c3d9e1" stroke-width="1"/><path d="M-9.5 -5V2" stroke-width="1.5"/>`;
 }
 function jets(L,c){
   const P=paint(L,c),heli=c.v==='heli';let s='';
@@ -1103,7 +1103,7 @@ function nebula(L,c,P){
   const tilt=L>=3?-16:L<=1?6:-6;let g='';
   if(L<=1)g+=`<path d="M10 46A40 8 0 0 1 50 38V46Z" fill="${P.main}"/>`;
   else g+=`<ellipse cx="50" cy="46" rx="40" ry="8" fill="${P.main}"/><ellipse cx="50" cy="44.5" rx="34" ry="5.6" fill="${P.lt}" stroke-width="1.2"/>`;
-  if(L>=2){const pod=(a,sc)=>{const x=50+30*Math.cos(a*Math.PI/180),y=44.5+4.8*Math.sin(a*Math.PI/180);return `<g transform="translate(${f1(x)} ${f1(y)}) scale(${sc})"><path d="M-6 0A6 5 0 0 1 6 0Z" fill="${L>=3?c.acc:P.acc}"/><path d="M-3.4 -2.4A3.4 3 0 0 1 3.4 -2.4" fill="#cfe9f5" stroke-width="1"/><path d="M-7 0H7" stroke-width="1.6"/></g>`;};
+  if(L>=2){const pod=(a,sc)=>{const x=50+30*Math.cos(a*Math.PI/180),y=44.5+4.8*Math.sin(a*Math.PI/180);return `<g transform="translate(${f1(x)} ${f1(y)}) scale(${sc})"><path d="M-6 0A6 5 0 0 1 6 0Z" fill="${L>=3?c.acc:P.acc}"/><path d="M-3.4 -2.4A3.4 3 0 0 1 3.4 -2.4" fill="#c3d9e1" stroke-width="1"/><path d="M-7 0H7" stroke-width="1.6"/></g>`;};
     [[220,.8],[320,.8],[160,1],[20,1],[90,1]].forEach(p=>{g+=pod(p[0],p[1]);});
     g+=`<ellipse cx="50" cy="40" rx="8" ry="5.5" fill="${P.acc}"/><path d="M50 34.5V26" stroke-width="1.4"/><circle cx="50" cy="25" r="1.8" fill="${L>=4?BULB:P.lt}" stroke-width="1"/>`;}
   if(L>=4)g+=bulbs(arcPts(50,46,40,8,0,330,12,1.1))+`<circle cx="50" cy="25" r="4.5" fill="${BULB}" opacity=".35" stroke="none"/>`;
@@ -1114,8 +1114,8 @@ function tug(L,c){
   let s=beam('M10 60V90M90 60V90',P.acc2,2);
   s+=beam(L<=1?'M10 60Q30 86 50 86':'M10 60Q30 86 50 86T90 60',P.acc2,3);
   let b=`<path d="M28 74H72L66 86H34Z" fill="${P.main}"/>`;
-  if(L>=2)b+=`<path d="M60 74V52H66V74" fill="${P.seat}"/><rect x="59" y="50" width="8" height="3" fill="${P.acc2}" stroke-width="1.2"/><rect x="38" y="60" width="22" height="14" rx="2" fill="${P.lt}"/><rect x="41" y="63" width="6" height="5" rx="1" fill="${L>=3?'#cfe9f5':'#6f6a64'}" stroke-width="1"/><rect x="51" y="63" width="6" height="5" rx="1" fill="${L>=3?'#cfe9f5':'#6f6a64'}" stroke-width="1"/><rect x="36" y="57" width="26" height="3.5" rx="1" fill="${P.acc}" stroke-width="1.2"/>`;
-  if(L>=3)b+=`<path d="M30 77H70" stroke="${c.lt||'#fbf1dc'}" stroke-width="2"/>`+[34,46,58].map(x=>`<circle cx="${x}" cy="81" r="2.6" fill="#3a3a3a" stroke-width="1"/>`).join('');
+  if(L>=2)b+=`<path d="M60 74V52H66V74" fill="${P.seat}"/><rect x="59" y="50" width="8" height="3" fill="${P.acc2}" stroke-width="1.2"/><rect x="38" y="60" width="22" height="14" rx="2" fill="${P.lt}"/><rect x="41" y="63" width="6" height="5" rx="1" fill="${L>=3?'#c3d9e1':'#837c73'}" stroke-width="1"/><rect x="51" y="63" width="6" height="5" rx="1" fill="${L>=3?'#c3d9e1':'#837c73'}" stroke-width="1"/><rect x="36" y="57" width="26" height="3.5" rx="1" fill="${P.acc}" stroke-width="1.2"/>`;
+  if(L>=3)b+=`<path d="M30 77H70" stroke="${c.lt||'#efe0c2'}" stroke-width="2"/>`+[34,46,58].map(x=>`<circle cx="${x}" cy="81" r="2.6" fill="#5d5a55" stroke-width="1"/>`).join('');
   if(L>=4)b+=smoke(63,45)+flagAt(41,57,c.acc);
   s+=`<g transform="rotate(${L>=3?-12:L<=1?6:0} 50 86)">${b}</g>`;
   if(L>=4)s+=bulbs([[14,67],[22,76.5],[32,82.5],[42,85.5],[58,85.5],[68,82.5],[78,76.5],[86,67]].map(p=>[p[0],p[1]-2.5,1.1]));
@@ -1133,7 +1133,7 @@ const lenTo=(pts,n)=>{let acc=0;for(let i=0;i<n&&i<pts.length-1;i++)acc+=Math.hy
 function coaster(L,c){
   const P=paint(L,c),raw=TRACKS[c.v]||TRACKS.pippin;let pts=smoothPts(raw);
   const peak=raw[3];if(L<=1)pts=pts.filter(p=>p[0]<=peak[0]+.5);
-  const wood=L<=1?'#9a8a78':L===2?'#c9a46a':(c.metal||'#f4f1ea'),xMax=Math.min(94,pts[pts.length-1][0]);
+  const wood=L<=1?'#a19383':L===2?'#c1a57b':(c.metal||'#e6dfd1'),xMax=Math.min(94,pts[pts.length-1][0]);
   let sup='',br='';
   for(let x=8;x<=xMax;x+=6){const y=yAt(pts,x);if(y==null||y>86)continue;sup+=`M${x} ${f1(y+2)}V90`;}
   for(let x=8;x+6<=xMax;x+=6){const y1=yAt(pts,x),y2=yAt(pts,x+6);if(y1==null||y2==null)continue;const t=Math.max(y1,y2)+5;if(t>84)continue;br+=`M${x} ${f1(t)}L${x+6} 90M${x+6} ${f1(t)}L${x} 90`;}
@@ -1146,18 +1146,18 @@ function coaster(L,c){
   return s;
 }
 const CR_ITEM={
- fry:'<path d="M37 26l-1.5-13h4l1.5 13M45 26v-16h4v16M53 26l1-14h4l-1 14M60 26l2-11h4l-2 11" fill="#ffd66b" stroke-width="1.4"/><path d="M36 44L32 24H68L64 44Z" fill="#e4472f"/><path d="M34 31H66" stroke="#fbf1dc" stroke-width="2.4"/>',
- donut:'<circle cx="50" cy="28" r="15" fill="#d9a35a"/><path d="M36 26Q38 15 50 14Q62 15 64 26Q60 31 56 28Q52 33 47 29Q42 33 36 26Z" fill="#ff7ab0" stroke-width="1.4"/><circle cx="50" cy="26" r="4.6" fill="#f6ecd6"/><path d="M41 21l2 1M57 19l1 2M45 16l2-1M55 25l2 1" stroke="#5fb0d6" stroke-width="1.6"/>',
- soda:'<path d="M54 16L62 3" stroke-width="3.2"/><path d="M54 16L62 3" stroke="#fbf1dc" stroke-width="1.4"/><path d="M38 19H62L58 44H42Z" fill="#c04dff"/><path d="M40 28H60M41.5 36H58.5" stroke="#fbf1dc" stroke-width="2.4"/><rect x="36" y="14" width="28" height="5.5" rx="2" fill="#fbf1dc"/>',
- phone:'<rect x="37" y="5" width="26" height="40" rx="4" fill="#2b2b3a"/><rect x="40" y="9" width="20" height="31" rx="1.5" fill="#7fd6ff" stroke-width="1.2"/><path d="M43 15h14M43 20h10M43 25h14M43 30h8M43 35h12" stroke="#2b5a7a" stroke-width="1.6"/><circle cx="62" cy="8" r="5" fill="#e4472f" stroke-width="1.4"/><path d="M62 5.6v3.2" stroke="#fbf1dc" stroke-width="1.6"/>',
- moon:'<path d="M57 9A17 17 0 1 0 66 38A14 14 0 0 1 57 9Z" fill="#ffd66b"/><path class="spk" d="M33 14l1.2 3 3 1.2-3 1.2-1.2 3-1.2-3-3-1.2 3-1.2z" fill="#fff8d6" stroke="none"/>',
- car:'<path d="M28 31H56V22L72 35L56 48V39H28Z" fill="#7bdc3a"/><path d="M34 35H50" stroke="#fbf1dc" stroke-width="2.4"/>',
- zzz:'<path d="M30 40Q27 26 36 24Q50 20 64 24Q73 26 70 40Q50 45 30 40Z" fill="#c9d6ff"/><path d="M58 6h8l-8 8h8M47 1h6l-6 6h6" fill="none" stroke-width="1.8"/>'
+ fry:'<path d="M37 26l-1.5-13h4l1.5 13M45 26v-16h4v16M53 26l1-14h4l-1 14M60 26l2-11h4l-2 11" fill="#e9c97a" stroke-width="1.4"/><path d="M36 44L32 24H68L64 44Z" fill="#cf6955"/><path d="M34 31H66" stroke="#efe0c2" stroke-width="2.4"/>',
+ donut:'<circle cx="50" cy="28" r="15" fill="#cba571"/><path d="M36 26Q38 15 50 14Q62 15 64 26Q60 31 56 28Q52 33 47 29Q42 33 36 26Z" fill="#eb88aa" stroke-width="1.4"/><circle cx="50" cy="26" r="4.6" fill="#eadcc0"/><path d="M41 21l2 1M57 19l1 2M45 16l2-1M55 25l2 1" stroke="#7cadc1" stroke-width="1.6"/>',
+ soda:'<path d="M54 16L62 3" stroke-width="3.2"/><path d="M54 16L62 3" stroke="#efe0c2" stroke-width="1.4"/><path d="M38 19H62L58 44H42Z" fill="#bc6cde"/><path d="M40 28H60M41.5 36H58.5" stroke="#efe0c2" stroke-width="2.4"/><rect x="36" y="14" width="28" height="5.5" rx="2" fill="#efe0c2"/>',
+ phone:'<rect x="37" y="5" width="26" height="40" rx="4" fill="#514d57"/><rect x="40" y="9" width="20" height="31" rx="1.5" fill="#8ecae3" stroke-width="1.2"/><path d="M43 15h14M43 20h10M43 25h14M43 30h8M43 35h12" stroke="#517185" stroke-width="1.6"/><circle cx="62" cy="8" r="5" fill="#cf6955" stroke-width="1.4"/><path d="M62 5.6v3.2" stroke="#efe0c2" stroke-width="1.6"/>',
+ moon:'<path d="M57 9A17 17 0 1 0 66 38A14 14 0 0 1 57 9Z" fill="#e9c97a"/><path class="spk" d="M33 14l1.2 3 3 1.2-3 1.2-1.2 3-1.2-3-3-1.2 3-1.2z" fill="#f4e8bc" stroke="none"/>',
+ car:'<path d="M28 31H56V22L72 35L56 48V39H28Z" fill="#8dc75c"/><path d="M34 35H50" stroke="#efe0c2" stroke-width="2.4"/>',
+ zzz:'<path d="M30 40Q27 26 36 24Q50 20 64 24Q73 26 70 40Q50 45 30 40Z" fill="#bcc6eb"/><path d="M58 6h8l-8 8h8M47 1h6l-6 6h6" fill="none" stroke-width="1.8"/>'
 };
 function stand(L,c){
   let s=CR_ITEM[c.v]||CR_ITEM.fry;
-  s+=`<rect x="22" y="50" width="56" height="40" fill="${c.wall}"/><rect x="28" y="57" width="44" height="13" fill="#3a2a40"/><rect x="18" y="70" width="64" height="5" rx="1.5" fill="${c.trim}"/>`;
-  const sw=8;for(let k=0;k<8;k++){const a=18+k*sw;s+=`<path d="M${a} 44H${a+sw}V50A4 4 0 0 1 ${a} 50Z" fill="${k%2?'#fbf1dc':c.roof}" stroke-width="1.2"/>`;}
+  s+=`<rect x="22" y="50" width="56" height="40" fill="${c.wall}"/><rect x="28" y="57" width="44" height="13" fill="#5e4c5b"/><rect x="18" y="70" width="64" height="5" rx="1.5" fill="${c.trim}"/>`;
+  const sw=8;for(let k=0;k<8;k++){const a=18+k*sw;s+=`<path d="M${a} 44H${a+sw}V50A4 4 0 0 1 ${a} 50Z" fill="${k%2?'#efe0c2':c.roof}" stroke-width="1.2"/>`;}
   if(L>=3)s+=`<path d="M18 52Q34 58 50 52T82 52" fill="none" stroke-width="1"/>`+bulbs([[26,55.2],[34,56.2],[42,55],[58,55],[66,56.2],[74,55.2]]);
   if(L>=4)s+=flagAt(84,44,c.accent);
   return s;
@@ -1175,20 +1175,20 @@ function bSVG(arch,lvl,c){
 
 /* ============ Scenery: Bay Beach on the shore of the bay ============ */
 function rng(seed){let a=(seed*2654435761)>>>0;return()=>{a=(a+0x6D2B79F5)|0;let t=Math.imul(a^(a>>>15),1|a);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296;};}
-function shadeTree(x,b,h,col,V){const r=h*.3;let s=`<rect x="${f1(x-h*.04)}" y="${f1(b-h*.45)}" width="${f1(h*.08)}" height="${f1(h*.45)}" fill="#5a3d28"/><circle cx="${f1(x-r*.65)}" cy="${f1(b-h*.56)}" r="${f1(r*.85)}" fill="${col}"/><circle cx="${f1(x+r*.65)}" cy="${f1(b-h*.58)}" r="${f1(r*.8)}" fill="${col}"/><circle cx="${f1(x)}" cy="${f1(b-h*.76)}" r="${f1(r)}" fill="${col}"/>`;
-  if(V.blossom)for(let k=0;k<6;k++){const a=k*1.1,rr=r*.7;s+=`<circle cx="${f1(x+Math.cos(a)*rr)}" cy="${f1(b-h*.68+Math.sin(a)*rr*.8)}" r="${f1(Math.max(.8,h*.035))}" fill="#ffc6d9"/>`;}
-  if(V.snow)s+=`<path d="M${f1(x-r)} ${f1(b-h*.82)}Q${f1(x)} ${f1(b-h*1.12)} ${f1(x+r)} ${f1(b-h*.82)}Q${f1(x)} ${f1(b-h*.9)} ${f1(x-r)} ${f1(b-h*.82)}Z" fill="#ffffff"/>`;
+function shadeTree(x,b,h,col,V){const r=h*.3;let s=`<rect x="${f1(x-h*.04)}" y="${f1(b-h*.45)}" width="${f1(h*.08)}" height="${f1(h*.45)}" fill="#775b46"/><circle cx="${f1(x-r*.65)}" cy="${f1(b-h*.56)}" r="${f1(r*.85)}" fill="${col}"/><circle cx="${f1(x+r*.65)}" cy="${f1(b-h*.58)}" r="${f1(r*.8)}" fill="${col}"/><circle cx="${f1(x)}" cy="${f1(b-h*.76)}" r="${f1(r)}" fill="${col}"/>`;
+  if(V.blossom)for(let k=0;k<6;k++){const a=k*1.1,rr=r*.7;s+=`<circle cx="${f1(x+Math.cos(a)*rr)}" cy="${f1(b-h*.68+Math.sin(a)*rr*.8)}" r="${f1(Math.max(.8,h*.035))}" fill="#f2b7c5"/>`;}
+  if(V.snow)s+=`<path d="M${f1(x-r)} ${f1(b-h*.82)}Q${f1(x)} ${f1(b-h*1.12)} ${f1(x+r)} ${f1(b-h*.82)}Q${f1(x)} ${f1(b-h*.9)} ${f1(x-r)} ${f1(b-h*.82)}Z" fill="#ebe8e3"/>`;
   return s;}
-function pavilion(x,b,sc,V){const W=V.snow?'#ffffff':'#f6f2ea',R=V.night?'#7d8496':'#9aa3ad',L=V.night?WIN:'#c9ced6';
-  return `<g transform="translate(${x} ${b}) scale(${sc})"><rect x="-26" y="-9" width="18" height="9" fill="${W}"/><rect x="8" y="-9" width="18" height="9" fill="${W}"/><rect x="-27" y="-10.6" width="20" height="1.8" fill="${R}"/><rect x="7" y="-10.6" width="20" height="1.8" fill="${R}"/><rect x="-8" y="-14" width="16" height="14" fill="${W}"/><path d="M-9.5 -14L0 -19.5L9.5 -14Z" fill="${W}"/><path d="M-6 -13V0M-2 -13V0M2 -13V0M6 -13V0" stroke="#cfc9bd" stroke-width=".9"/><rect x="-2.6" y="-23.5" width="5.2" height="4.4" fill="${W}"/><path d="M-3.6 -23.4Q0 -30 3.6 -23.4Z" fill="${R}"/><path d="M0 -29V-31.5" stroke="${R}" stroke-width=".8"/>`+[-23,-18,-13,11,16,21].map(wx=>`<rect x="${wx}" y="-6.5" width="2.6" height="3.4" fill="${L}"/>`).join('')+`</g>`;}
-const lampPost=(x,b,h,V)=>`${V.night?`<circle cx="${x}" cy="${b-h}" r="5" fill="${WIN}" opacity=".35"/>`:''}<path d="M${x} ${b}V${b-h}" stroke="#2f3440" stroke-width="1"/><circle cx="${x}" cy="${b-h}" r="1.6" fill="${V.night?WIN:'#f4f1ea'}" stroke="#2f3440" stroke-width=".6"/>`;
+function pavilion(x,b,sc,V){const W=V.snow?'#ebe8e3':'#e8e0d0',R=V.night?'#8e8f96':'#a3a5a7',L=V.night?WIN:'#c3c4c6';
+  return `<g transform="translate(${x} ${b}) scale(${sc})"><rect x="-26" y="-9" width="18" height="9" fill="${W}"/><rect x="8" y="-9" width="18" height="9" fill="${W}"/><rect x="-27" y="-10.6" width="20" height="1.8" fill="${R}"/><rect x="7" y="-10.6" width="20" height="1.8" fill="${R}"/><rect x="-8" y="-14" width="16" height="14" fill="${W}"/><path d="M-9.5 -14L0 -19.5L9.5 -14Z" fill="${W}"/><path d="M-6 -13V0M-2 -13V0M2 -13V0M6 -13V0" stroke="#c9c1b3" stroke-width=".9"/><rect x="-2.6" y="-23.5" width="5.2" height="4.4" fill="${W}"/><path d="M-3.6 -23.4Q0 -30 3.6 -23.4Z" fill="${R}"/><path d="M0 -29V-31.5" stroke="${R}" stroke-width=".8"/>`+[-23,-18,-13,11,16,21].map(wx=>`<rect x="${wx}" y="-6.5" width="2.6" height="3.4" fill="${L}"/>`).join('')+`</g>`;}
+const lampPost=(x,b,h,V)=>`${V.night?`<circle cx="${x}" cy="${b-h}" r="5" fill="${WIN}" opacity=".35"/>`:''}<path d="M${x} ${b}V${b-h}" stroke="#54555b" stroke-width="1"/><circle cx="${x}" cy="${b-h}" r="1.6" fill="${V.night?WIN:'#e6dfd1'}" stroke="#54555b" stroke-width=".6"/>`;
 function burst(x,y,r,col){let d='';for(let k=0;k<12;k++){const a=k*Math.PI/6;d+=`M${f1(x+Math.cos(a)*r*.35)} ${f1(y+Math.sin(a)*r*.35)}L${f1(x+Math.cos(a)*r)} ${f1(y+Math.sin(a)*r)}`;}return `<path d="${d}" stroke="${col}" stroke-width="1.1" stroke-linecap="round" opacity=".9"/><circle cx="${x}" cy="${y}" r="1" fill="${col}"/>`;}
-const sailboat=(x,y,sc,V)=>`<g transform="translate(${x} ${y}) scale(${sc})"><path d="M-6 0H6L4 2.4H-4Z" fill="${V.night?'#4a5468':'#f4f1ea'}"/><path d="M0 -1V-12L6 -1Z" fill="${V.night?'#5a6478':'#ffffff'}"/><path d="M-.6 -1V-10L-5 -1Z" fill="${V.night?'#4a5468':'#f2d9b8'}"/></g>`;
-const gull=(x,y)=>`<path d="M${x} ${y}q2.5 -2.5 5 0q2.5 -2.5 5 0" fill="none" stroke="#3a3f4a" stroke-width=".9" stroke-linecap="round"/>`;
+const sailboat=(x,y,sc,V)=>`<g transform="translate(${x} ${y}) scale(${sc})"><path d="M-6 0H6L4 2.4H-4Z" fill="${V.night?'#686c77':'#e6dfd1'}"/><path d="M0 -1V-12L6 -1Z" fill="${V.night?'#747882':'#ebe8e3'}"/><path d="M-.6 -1V-10L-5 -1Z" fill="${V.night?'#686c77':'#e5cdad'}"/></g>`;
+const gull=(x,y)=>`<path d="M${x} ${y}q2.5 -2.5 5 0q2.5 -2.5 5 0" fill="none" stroke="#5c5d61" stroke-width=".9" stroke-linecap="round"/>`;
 function sceneBg(V,n){
   const r=rng(n*131+7);let s='';
-  if(V.night){for(let i=0;i<28;i++)s+=`<circle cx="${f1(r()*240)}" cy="${f1(r()*36)}" r="${(.4+r()*.6).toFixed(2)}" fill="#fff8e0"/>`;}
-  if(V.fireworks)s+=burst(46,15,9,'#ff7ab0')+burst(116,10,10,'#ffd66b')+burst(158,25,6,'#7fe0ff');
+  if(V.night){for(let i=0;i<28;i++)s+=`<circle cx="${f1(r()*240)}" cy="${f1(r()*36)}" r="${(.4+r()*.6).toFixed(2)}" fill="#f5e8c3"/>`;}
+  if(V.fireworks)s+=burst(46,15,9,'#eb88aa')+burst(116,10,10,'#e9c97a')+burst(158,25,6,'#8ed1e3');
   else if(!V.snow)s+=gull(70,18)+gull(84,24)+gull(176,14);
   s+=`<path d="M0 40Q50 36 110 39T240 37V46H0Z" fill="${V.far}"/>`;
   s+=`<rect x="0" y="43" width="240" height="21" fill="${V.bay}"/><path d="M18 48h18M92 52h26M168 47h14M206 56h20M54 58h12M130 60h16" stroke="${V.shine}" stroke-width="1.2" stroke-linecap="round" opacity=".8"/>`;
@@ -1215,63 +1215,63 @@ function particles(V,n){const r=rng(n*31+5);let h='';
 const SLOTS=[{x:1,y:3,w:30,z:5},{x:21,y:24,w:24,z:2},{x:37,y:1,w:28,z:6},{x:56,y:22,w:26,z:3},{x:74,y:6,w:26,z:4}];
 const R=(n,a,v,c,s,f)=>({n,a,v,c,s,f});
 const PHASES=[
- {name:'Opening Day',blurb:'A spring morning on the shore. Get the classics turning again.',sky:['#a9d8ee','#fde6d3'],sun:'#fff4d6',far:'#86a7a4',bay:'#5aa9cf',shine:'#e0f4fb',sand:'#ecdcae',hill:'#7cbf5e',ground:'#8ccb66',path:'#dcd6c8',trees:['#7cb85f','#5a9a4a'],base:'#8ccb66',blossom:true,
-  rides:[R('Merry-Go-Round','carousel','',{main:'#e4472f',acc:'#f2b33d',acc2:'#7a4fb5',seat:'#c9a46a'},['Scrape the rust off the old frame','Fix the center pole and the drive motor','Paint the horses and gild the poles','Mirrors and bulbs on, music playing'],'Theel carousel · 1971'),
-   R('Ferris Wheel','wheel','',{main:'#e4472f',acc:'#f2b33d',acc2:'#2f7aa3',seat:'#5fb0d6',metal:'#f4efe4'},['Pull the weeds and free the rusted rim','Rebuild the hub, spokes and motor','Fresh paint and swinging seats','Rim lights on and the first ride up'],'Big Eli · 1952'),
-   R('Tilt-a-Whirl','spinner','tilt',{main:'#5fb0d6',acc:'#e4472f',acc2:'#7a4fb5'},['Clear the weeds off the platform','Fix the hills and the spin motor','Paint the shells and redo the seats','Lights on and the cars whirling'],'Since 1982'),
-   R('Scrambler','spinner','scrambler',{main:'#f2b33d',acc:'#e4472f',acc2:'#2f7aa3'},['Free the rusted arms','Fix the motor and the arm joints','Paint the tubs and add seat pads','Lights on and scrambling'],'Eli Bridge · 1977'),
-   R('Train','train','',{main:'#2f7a52',acc:'#e4472f',acc2:'#3a3f4a',seat:'#f2b33d'},['Clear the weeds off the old track','Fix the engine and lay new ties','Paint the engine and add a passenger car','Headlamp on, whistle and steam'],'Since 1956')]},
- {name:'The Midway',blurb:'High noon on the midway: bumper cars, the big slide and the Sea Dragon.',sky:['#4ea8e0','#d2effc'],sun:'#fffbe0',far:'#5f8f8f',bay:'#2f8fc7',shine:'#d8f3fb',sand:'#efdca8',hill:'#5fae4f',ground:'#72bb55',path:'#e0d9c8',trees:['#3f8f48','#2f723a'],base:'#72bb55',
-  rides:[R('Bumper Cars','bumper','',{main:'#e4472f',acc:'#fbf1dc',acc2:'#2f7aa3'},['Sweep out the old pavilion','Fix the posts and the ceiling grid','Paint the roof and bring in the cars','Sign lit and cars bumping'],'Since 1993'),
-   R('Giant Slide','slide','',{main:'#e4472f',acc:'#f2b33d',acc2:'#2f7aa3'},['Patch the rusty tower','Rebuild the stairs and the humps','Paint the lanes and wax the slide','Flag up and sacks ready'],'Since 1971'),
-   R('Yo-Yo','swing','yoyo',{main:'#7a4fb5',acc:'#f2b33d',acc2:'#5fb0d6',seat:'#e4472f'},['Free the rusted top','Fix the tower and the tilt motor','Paint the canopy and hang new swings','Lights on and swings flying'],'Swing ride · 1996'),
-   R('Scat','spinner','scat',{main:'#2f7aa3',acc:'#f2b33d',acc2:'#e4472f'},['Clear the weeds around the base','Fix the tilt arm and the motor','Paint the tubs and add lap bars','Lights on and spinning'],'Since 1985'),
-   R('Sea Dragon','ship','',{main:'#3f9a5a',acc:'#f2b33d',acc2:'#4a5a6a',metal:'#c9cfd4'},['Patch the holes in the hull','Fix the A-frame and the swing motor','Paint the dragon and redo the benches','Lights on and swinging high'],'Pirate ship · 2013')]},
- {name:'Kiddieland',blurb:'A golden late afternoon in the little kids’ corner.',sky:['#f3c46a','#fdf1d2'],sun:'#fff6dc',far:'#9a9c76',bay:'#4f9fc0',shine:'#fff2c8',sand:'#f0d9a0',hill:'#97b35a',ground:'#a6c162',path:'#e8ddc4',trees:['#7fa54c','#5f8a3a'],base:'#a6c162',
-  rides:[R('Helicopters','jets','heli',{main:'#e4472f',acc:'#f2b33d',acc2:'#2f7aa3'},['Bend the drooping arms back up','Fix the motor and the lift arms','Paint the choppers and add rotors','Lights on and lifting off'],'Since 1964'),
-   R('Sky Fighters','jets','plane',{main:'#3f7fc4',acc:'#e4472f',acc2:'#f2b33d'},['Clear the weeds and the rust','Fix the lift arms and the controls','Paint the jets and their tails','Lights on and ready for takeoff'],'Since 1998'),
-   R('Boats','spinner','boats',{main:'#e4472f',acc:'#fbf1dc',acc2:'#2f7aa3',lt:'#f2b33d'},['Drain the old pool','Fix the pump and refill the water','Paint the boats and their flags','Canopy lights on and boats circling'],'Since 1972'),
-   R('Jeeps','spinner','jeeps',{main:'#5f8a3a',acc:'#f2b33d',acc2:'#8a8f96'},['Clear the weeds off the track','Fix the track and the drive','Paint the jeeps and spare tires','Lights on and jeeps rolling'],'Since 1972'),
-   R('Lady Bugs','spinner','bugs',{main:'#e4472f',seat:'#f2b33d',acc:'#2b1a10',acc2:'#8fd16f'},['Sweep the old platform','Fix the motor and the track','Paint the bugs and add their spots','Lights on and bugs crawling'],'Since 1977')]},
- {name:'New This Summer',blurb:'Sunset over the bay and the park’s newest rides.',sky:['#e9776a','#ffd69c'],sun:'#ffe7bc',far:'#6d5f7d',bay:'#8a7aa6',shine:'#ffcfa6',sand:'#d9b993',hill:'#4f7a52',ground:'#5c8a50',path:'#cbbcae',trees:['#3d5f46','#2c4a38'],base:'#5c8a50',
+ {name:'Opening Day',blurb:'A spring morning on the shore. Get the classics turning again.',sky:['#abccd9','#f1d5bb'],sun:'#f4e4bc',far:'#95a7a0',bay:'#79a8bc',shine:'#cde3e8',sand:'#dfcfa7',hill:'#8eb573',ground:'#99be78',path:'#d3caba',trees:['#8eb174','#759e62'],base:'#99be78',blossom:true,
+  rides:[R('Merry-Go-Round','carousel','',{main:'#cf6955',acc:'#dbaf5e',acc2:'#8c6ea9',seat:'#c1a57b'},['Scrape the rust off the old frame','Fix the center pole and the drive motor','Paint the horses and gild the poles','Mirrors and bulbs on, music playing'],'Theel carousel · 1971'),
+   R('Ferris Wheel','wheel','',{main:'#cf6955',acc:'#dbaf5e',acc2:'#5688a0',seat:'#7cadc1',metal:'#e7decc'},['Pull the weeds and free the rusted rim','Rebuild the hub, spokes and motor','Fresh paint and swinging seats','Rim lights on and the first ride up'],'Big Eli · 1952'),
+   R('Tilt-a-Whirl','spinner','tilt',{main:'#7cadc1',acc:'#cf6955',acc2:'#8c6ea9'},['Clear the weeds off the platform','Fix the hills and the spin motor','Paint the shells and redo the seats','Lights on and the cars whirling'],'Since 1982'),
+   R('Scrambler','spinner','scrambler',{main:'#dbaf5e',acc:'#cf6955',acc2:'#5688a0'},['Free the rusted arms','Fix the motor and the arm joints','Paint the tubs and add seat pads','Lights on and scrambling'],'Eli Bridge · 1977'),
+   R('Train','train','',{main:'#548966',acc:'#cf6955',acc2:'#5c5d61',seat:'#dbaf5e'},['Clear the weeds off the old track','Fix the engine and lay new ties','Paint the engine and add a passenger car','Headlamp on, whistle and steam'],'Since 1956')]},
+ {name:'The Midway',blurb:'High noon on the midway: bumper cars, the big slide and the Sea Dragon.',sky:['#71a8c7','#c3dfe8'],sun:'#f5ecc3',far:'#789691',bay:'#5996b6',shine:'#c8e3e7',sand:'#e1cfa2',hill:'#7aa968',ground:'#87b26d',path:'#d6cdba',trees:['#61975f','#548454'],base:'#87b26d',
+  rides:[R('Bumper Cars','bumper','',{main:'#cf6955',acc:'#efe0c2',acc2:'#5688a0'},['Sweep out the old pavilion','Fix the posts and the ceiling grid','Paint the roof and bring in the cars','Sign lit and cars bumping'],'Since 1993'),
+   R('Giant Slide','slide','',{main:'#cf6955',acc:'#dbaf5e',acc2:'#5688a0'},['Patch the rusty tower','Rebuild the stairs and the humps','Paint the lanes and wax the slide','Flag up and sacks ready'],'Since 1971'),
+   R('Yo-Yo','swing','yoyo',{main:'#8c6ea9',acc:'#dbaf5e',acc2:'#7cadc1',seat:'#cf6955'},['Free the rusted top','Fix the tower and the tilt motor','Paint the canopy and hang new swings','Lights on and swings flying'],'Swing ride · 1996'),
+   R('Scat','spinner','scat',{main:'#5688a0',acc:'#dbaf5e',acc2:'#cf6955'},['Clear the weeds around the base','Fix the tilt arm and the motor','Paint the tubs and add lap bars','Lights on and spinning'],'Since 1985'),
+   R('Sea Dragon','ship','',{main:'#619e6c',acc:'#dbaf5e',acc2:'#687178',metal:'#c4c5c4'},['Patch the holes in the hull','Fix the A-frame and the swing motor','Paint the dragon and redo the benches','Lights on and swinging high'],'Pirate ship · 2013')]},
+ {name:'Kiddieland',blurb:'A golden late afternoon in the little kids’ corner.',sky:['#e0bc7a','#f1e1bb'],sun:'#f5e6c0',far:'#a19f82',bay:'#71a0b0',shine:'#f3e2b4',sand:'#e2cd9d',hill:'#9ead70',ground:'#a9b776',path:'#dcd0b6',trees:['#8ea564','#789355'],base:'#a9b776',
+  rides:[R('Helicopters','jets','heli',{main:'#cf6955',acc:'#dbaf5e',acc2:'#5688a0'},['Bend the drooping arms back up','Fix the motor and the lift arms','Paint the choppers and add rotors','Lights on and lifting off'],'Since 1964'),
+   R('Sky Fighters','jets','plane',{main:'#678cb2',acc:'#cf6955',acc2:'#dbaf5e'},['Clear the weeds and the rust','Fix the lift arms and the controls','Paint the jets and their tails','Lights on and ready for takeoff'],'Since 1998'),
+   R('Boats','spinner','boats',{main:'#cf6955',acc:'#efe0c2',acc2:'#5688a0',lt:'#dbaf5e'},['Drain the old pool','Fix the pump and refill the water','Paint the boats and their flags','Canopy lights on and boats circling'],'Since 1972'),
+   R('Jeeps','spinner','jeeps',{main:'#789355',acc:'#dbaf5e',acc2:'#979797'},['Clear the weeds off the track','Fix the track and the drive','Paint the jeeps and spare tires','Lights on and jeeps rolling'],'Since 1972'),
+   R('Lady Bugs','spinner','bugs',{main:'#cf6955',seat:'#dbaf5e',acc:'#3a2a22',acc2:'#9bc37e'},['Sweep the old platform','Fix the motor and the track','Paint the bugs and add their spots','Lights on and bugs crawling'],'Since 1977')]},
+ {name:'New This Summer',blurb:'Sunset over the bay and the park’s newest rides.',sky:['#d8887b','#eecb98'],sun:'#f1d8ac',far:'#827585',bay:'#978aa1',shine:'#efc59f',sand:'#cfb596',hill:'#6c8866',ground:'#769366',path:'#c5b7a9',trees:['#5e755d','#516753'],base:'#769366',
   slots:[SLOTS[0],SLOTS[1],{x:55,y:20,w:28,z:2},{x:36,y:1,w:28,z:6},SLOTS[4]],
-  rides:[R('Rockin’ Tug','tug','tug',{main:'#e4472f',acc:'#2f7aa3',acc2:'#5f6f80',seat:'#f2b33d'},['Clear the lot for the new tug','Set the rocking track and the motor','Paint the tug and hang the bumpers','Lights on and rocking'],'Since 2016'),
-   R('NebulaZ','tug','nebula',{main:'#7a4fb5',acc:'#5ef0c8',acc2:'#3a3f6a',lt:'#e6dcff'},['Pour the footing','Raise the arm and the spin motor','Paint the pods and add the seats','Lights on and spinning'],'Zamperla · 2023'),
-   R('Bay Beast','drop','',{main:'#3fb59a',acc:'#7a4fb5',acc2:'#3a3f4a',seat:'#f2b33d',metal:'#8a93a0'},['Clear the lot','Raise the tower','Add the seat ring and paint the beast','Beacon on and ready to drop'],'Drop tower · 2024'),
-   R('Race Cars','spinner','cars',{main:'#e4472f',acc:'#2f7aa3',acc2:'#5a6470'},['Clear the weeds off the track','Fix the track and the drive','Paint the cars and their numbers','Checkered flag and lights on'],'Since 1998'),
-   R('Granny Bugs','spinner','bugs',{main:'#c08cff',seat:'#5fb0d6',acc:'#2b1a10',acc2:'#f2b33d'},['Sweep the old platform','Fix the motor and the track','Paint the bugs and add their spots','Lights on and bugs crawling'],'Since 1998')]},
- {name:'The Big Ones',blurb:'After dark under the lights: the coasters, the Big Wheel and rides brought back from the old days.',sky:['#121c3c','#38386c'],sun:'#f3efd6',night:true,fireflies:true,fireworks:true,far:'#18263a',bay:'#1d3858',shine:'#8aa6dc',sand:'#4a4a5a',hill:'#1f3a32',ground:'#27453a',path:'#4b505c',trees:['#17312a','#10261f'],base:'#2f5a44',
-  rides:[R('Zippin Pippin','coaster','pippin',{main:'#e4472f',acc:'#2f7a52',seat:'#f2b33d',metal:'#f4f1ea'},['Raise the lift hill','Finish the drops, hills and brakes','Paint it white and bring the train','Lights on, ready for the first drop'],'Wooden coaster · 2011'),
-   R('Big Wheel','wheel','big',{main:'#eef3f7',acc:'#e4472f',acc2:'#2f7aa3',seat:'#f2b33d',lt:'#5fb0d6',metal:'#dfe6ec'},['Pour the footing and set the legs','Raise the rim and the spokes','Paint it and hang the gondolas','Rim lights on over the bay'],'100 feet · 2019'),
-   R('Greyhound','coaster','grey',{main:'#3a5f9a',acc:'#c8432f',seat:'#fbf1dc',metal:'#e3d3b2'},['Dig out the old footings','Rebuild the wooden track','Paint it and bring a train','Lights on, back after 90 years'],'Ran 1929–1936'),
-   R('Jack Rabbit','coaster','rabbit',{main:'#c8432f',acc:'#f2b33d',seat:'#5fb0d6',metal:'#f6efe0'},['Dig out the old footings','Rebuild the hills and the lift','Paint it and bring a train','Lights on, the oldest ride is back'],'Ran 1901–1928'),
-   R('Chairplane','swing','chair',{main:'#e4472f',acc:'#fbf1dc',acc2:'#f2b33d',seat:'#2f7aa3'},['Find the old tower in storage','Fix the tower and the motor','Paint the top and hang the chairs','Lights on and chairs flying'],'A classic, brought back')]}
+  rides:[R('Rockin’ Tug','tug','tug',{main:'#cf6955',acc:'#5688a0',acc2:'#788087',seat:'#dbaf5e'},['Clear the lot for the new tug','Set the rocking track and the motor','Paint the tug and hang the bumpers','Lights on and rocking'],'Since 2016'),
+   R('NebulaZ','tug','nebula',{main:'#8c6ea9',acc:'#7bd9ba',acc2:'#5c5d79',lt:'#d5c5ed'},['Pour the footing','Raise the arm and the spin motor','Paint the pods and add the seats','Lights on and spinning'],'Zamperla · 2023'),
+   R('Bay Beast','drop','',{main:'#63b099',acc:'#8c6ea9',acc2:'#5c5d61',seat:'#dbaf5e',metal:'#979a9e'},['Clear the lot','Raise the tower','Add the seat ring and paint the beast','Beacon on and ready to drop'],'Drop tower · 2024'),
+   R('Race Cars','spinner','cars',{main:'#cf6955',acc:'#5688a0',acc2:'#74787c'},['Clear the weeds off the track','Fix the track and the drive','Paint the cars and their numbers','Checkered flag and lights on'],'Since 1998'),
+   R('Granny Bugs','spinner','bugs',{main:'#bd93e5',seat:'#7cadc1',acc:'#3a2a22',acc2:'#dbaf5e'},['Sweep the old platform','Fix the motor and the track','Paint the bugs and add their spots','Lights on and bugs crawling'],'Since 1998')]},
+ {name:'The Big Ones',blurb:'After dark under the lights: the coasters, the Big Wheel and rides brought back from the old days.',sky:['#3a415d','#5b577a'],sun:'#e7dfc1',night:true,fireflies:true,fireworks:true,far:'#404a5a',bay:'#44586f',shine:'#98a8c9',sand:'#68656c',hill:'#465d51',ground:'#4d6456',path:'#69696e',trees:['#3f584c','#395144'],base:'#53735c',
+  rides:[R('Zippin Pippin','coaster','pippin',{main:'#cf6955',acc:'#548966',seat:'#dbaf5e',metal:'#e6dfd1'},['Raise the lift hill','Finish the drops, hills and brakes','Paint it white and bring the train','Lights on, ready for the first drop'],'Wooden coaster · 2011'),
+   R('Big Wheel','wheel','big',{main:'#dbdfe1',acc:'#cf6955',acc2:'#5688a0',seat:'#dbaf5e',lt:'#7cadc1',metal:'#d2d6d7'},['Pour the footing and set the legs','Raise the rim and the spokes','Paint it and hang the gondolas','Rim lights on over the bay'],'100 feet · 2019'),
+   R('Greyhound','coaster','grey',{main:'#5e749a',acc:'#bf6452',seat:'#efe0c2',metal:'#d8c8aa'},['Dig out the old footings','Rebuild the wooden track','Paint it and bring a train','Lights on, back after 90 years'],'Ran 1929–1936'),
+   R('Jack Rabbit','coaster','rabbit',{main:'#bf6452',acc:'#dbaf5e',seat:'#7cadc1',metal:'#e9dec8'},['Dig out the old footings','Rebuild the hills and the lift','Paint it and bring a train','Lights on, the oldest ride is back'],'Ran 1901–1928'),
+   R('Chairplane','swing','chair',{main:'#cf6955',acc:'#efe0c2',acc2:'#dbaf5e',seat:'#5688a0'},['Find the old tower in storage','Fix the tower and the motor','Paint the top and hang the chairs','Lights on and chairs flying'],'A classic, brought back')]}
 ];
 PHASES.forEach(p=>{p.b=p.rides.map(r=>r.n);});
 const LAPMOD=[
- {trees:['#e0782b','#c2412a'],hill:'#a8893f',ground:'#b99f52',base:'#c2a858',blossom:false},
- {snow:true,trees:['#8fa8a2','#6a8a82'],hill:'#e3ecf4',ground:'#f2f7fb',base:'#eef4f9',sand:'#e8eef3',bay:'#b9d5e6',shine:'#ffffff',path:'#cfd5dc',blossom:false}
+ {trees:['#cc8853','#bc614c'],hill:'#ab925a',ground:'#b4a06b',base:'#baa76f',blossom:false},
+ {snow:true,trees:['#9ba8a0','#809389'],hill:'#d3dadf',ground:'#dbe2e6',base:'#d9e0e4',sand:'#d7dcdd',bay:'#b7cad3',shine:'#ebe8e3',path:'#c8c9cb',blossom:false}
 ];
 const ROMAN=['','','II','III','IV','V','VI','VII','VIII','IX','X'];
-function villageDef(n){const base=PHASES[(n-1)%PHASES.length];const lap=Math.floor((n-1)/PHASES.length)+1;if(lap<2)return base;let m=LAPMOD[(lap-2)%LAPMOD.length];if(base.night&&m.snow)m={...m,hill:'#4f5f78',ground:'#5f6f88',base:'#6f7f98',sand:'#4a5a6e',bay:'#253a58',path:'#5a6070',shine:'#9fb8e0'};return{...base,...m,name:base.name+' '+(ROMAN[lap]||lap)};}
+function villageDef(n){const base=PHASES[(n-1)%PHASES.length];const lap=Math.floor((n-1)/PHASES.length)+1;if(lap<2)return base;let m=LAPMOD[(lap-2)%LAPMOD.length];if(base.night&&m.snow)m={...m,hill:'#6c7482',ground:'#78808d',base:'#858c97',sand:'#68717b',bay:'#4b596e',path:'#74757c',shine:'#a6b4cd'};return{...base,...m,name:base.name+' '+(ROMAN[lap]||lap)};}
 const ghostOf=V=>V.night?'rgba(240,235,210,.6)':'rgba(30,20,10,.5)';
 const rideOf=(V,i)=>V.rides[i];
 const slotsOf=V=>V.slots||SLOTS;
 const colorsFor=(V,i)=>({...V.rides[i].c,v:V.rides[i].v,base:V.base});
 const CRAVINGS=[{name:'Deep-Fry Shack',arch:'stand',v:'fry'},{name:'Donut Dome',arch:'stand',v:'donut'},{name:'Soda Geyser',arch:'stand',v:'soda'},{name:'Doomscroll Arcade',arch:'stand',v:'phone'},{name:'Midnight Snack Bar',arch:'stand',v:'moon'},{name:'Drive-Thru Window',arch:'stand',v:'car'},{name:'Snooze Tent',arch:'stand',v:'zzz'}];
-const CR_WALLS=['#ffd6ec','#e3ffb0','#ffe0a3','#e6d6ff'],CR_ROOFS=['#c04dff','#ff4fa3','#7bdc3a','#ff7a1f'];
+const CR_WALLS=['#f4c1d6','#d8eda5','#efd39d','#d7c1ec'],CR_ROOFS=['#bc6cde','#e66da1','#8dc75c','#e18a4b'];
 /* Sticker sets keep their ids so stickers already collected stay put */
-const PELICAN='<svg viewBox="0 0 40 40" width="1em" height="1em" style="display:block;margin:auto"><g stroke="#2b1a10" stroke-width="1.8" stroke-linejoin="round"><path d="M8 30Q6 20 14 17Q22 15 26 22Q28 28 22 31Z" fill="#fbfbf6"/><path d="M14 18Q13 9 18 8Q22 8 22 12L22 16Q18 15 16 19Z" fill="#fbfbf6"/><path d="M21 10L37 15L22 15Z" fill="#f2a33a"/><path d="M22 15Q30 15 36 15.5Q30 21 22 17Z" fill="#f7c66b"/><path d="M8 26Q4 27 3 31Q8 31 11 29" fill="#2b2b2b"/><path d="M15 31V36M20 31V36" stroke-width="1.6"/></g><circle cx="18.6" cy="11" r="1.1" fill="#2b1a10"/></svg>';
-const LIGHTHOUSE='<svg viewBox="0 0 40 40" width="1em" height="1em" style="display:block;margin:auto"><g stroke="#2b1a10" stroke-width="1.8" stroke-linejoin="round"><path d="M3 18L14 15V21Z" fill="#ffe98a" stroke="none" opacity=".8"/><path d="M37 18L26 15V21Z" fill="#ffe98a" stroke="none" opacity=".8"/><path d="M14 37L16 14H24L26 37Z" fill="#fbfbf6"/><path d="M15 30H25L25.5 34H14.5ZM15.6 22H24.4L24.8 26H15.2Z" fill="#e4472f"/><rect x="15" y="9" width="10" height="6" fill="#ffd66b"/><path d="M14 9L20 3L26 9Z" fill="#e4472f"/><path d="M8 37H32" stroke-width="2.2"/></g></svg>';
+const PELICAN='<svg viewBox="0 0 40 40" width="1em" height="1em" style="display:block;margin:auto"><g stroke="#3a2a22" stroke-width="1.8" stroke-linejoin="round"><path d="M8 30Q6 20 14 17Q22 15 26 22Q28 28 22 31Z" fill="#ede9d8"/><path d="M14 18Q13 9 18 8Q22 8 22 12L22 16Q18 15 16 19Z" fill="#ede9d8"/><path d="M21 10L37 15L22 15Z" fill="#dba45c"/><path d="M22 15Q30 15 36 15.5Q30 21 22 17Z" fill="#e3be7b"/><path d="M8 26Q4 27 3 31Q8 31 11 29" fill="#524f4a"/><path d="M15 31V36M20 31V36" stroke-width="1.6"/></g><circle cx="18.6" cy="11" r="1.1" fill="#3a2a22"/></svg>';
+const LIGHTHOUSE='<svg viewBox="0 0 40 40" width="1em" height="1em" style="display:block;margin:auto"><g stroke="#3a2a22" stroke-width="1.8" stroke-linejoin="round"><path d="M3 18L14 15V21Z" fill="#ecd98d" stroke="none" opacity=".8"/><path d="M37 18L26 15V21Z" fill="#ecd98d" stroke="none" opacity=".8"/><path d="M14 37L16 14H24L26 37Z" fill="#ede9d8"/><path d="M15 30H25L25.5 34H14.5ZM15.6 22H24.4L24.8 26H15.2Z" fill="#cf6955"/><rect x="15" y="9" width="10" height="6" fill="#e9c97a"/><path d="M14 9L20 3L26 9Z" fill="#cf6955"/><path d="M8 37H32" stroke-width="2.2"/></g></svg>';
 const SETS=[
- {id:'fuel',name:'Green Grocer',unlock:1,color:'#3fbf6a',cards:[['Apple','🍎',1],['Carrot','🥕',1],['Blueberries','🫐',2],['Avocado','🥑',3],['Salmon','🐟',4],['Rainbow Bowl','🥗',5]]},
- {id:'move',name:'On the Move',unlock:1,color:'#ff8a3d',cards:[['Sneakers','👟',1],['Jump Rope','🪢',1],['Bike Ride','🚲',2],['Kettlebell','🏋️',3],['Kayak','🛶',4],['Finish Line','🏁',5]]},
- {id:'rest',name:'Recharge',unlock:1,color:'#5fb0d6',cards:[['Water Bottle','💧',1],['Herbal Tea','🍵',1],['Early Night','🛏️',2],['Sunrise','🌅',3],['Stretch','🧘',4],['Deep Sleep','🌙',5]]},
- {id:'mind',name:'Mindset',unlock:1,color:'#c08cff',cards:[['Journal','📓',1],['Compass','🧭',1],['Bullseye','🎯',2],['Streak Flame','🔥',3],['Summit','🏔️',4],['Trophy','🏆',5]]},
- {id:'critters',name:'Bay Critters',unlock:4,color:'#d9622b',cards:[['Mallard','🦆',1],['Pelican',PELICAN,1],['Swan','🦢',2],['Turtle','🐢',3],['Red Fox','🦊',4],['Deer','🦌',5]]},
- {id:'camp',name:'Park Day',unlock:8,color:'#e4472f',cards:[['Ride Ticket','🎟️',1],['Balloon','🎈',1],['Prize Bear','🧸',2],['Carousel Horse','🎠',3],['Roller Coaster','🎢',4],['Ferris Wheel','🎡',5]]},
- {id:'lake',name:'Bay Life',unlock:12,color:'#2f7aa3',cards:[['Frog','🐸',1],['Water Lily','🪷',1],['Fishing Pole','🎣',2],['Sailboat','⛵',3],['Lighthouse',LIGHTHOUSE,4],['Big Wave','🌊',5]]},
- {id:'sky',name:'Fireworks Night',unlock:16,color:'#7b5cc8',cards:[['Sparkler','🎇',1],['Lantern','🏮',1],['Fireworks','🎆',2],['Full Moon','🌕',3],['North Star','⭐',4],['Shooting Star','🌠',5]]}
+ {id:'fuel',name:'Green Grocer',unlock:1,color:'#67b37a',cards:[['Apple','🍎',1],['Carrot','🥕',1],['Blueberries','🫐',2],['Avocado','🥑',3],['Salmon','🐟',4],['Rainbow Bowl','🥗',5]]},
+ {id:'move',name:'On the Move',unlock:1,color:'#e5955e',cards:[['Sneakers','👟',1],['Jump Rope','🪢',1],['Bike Ride','🚲',2],['Kettlebell','🏋️',3],['Kayak','🛶',4],['Finish Line','🏁',5]]},
+ {id:'rest',name:'Recharge',unlock:1,color:'#7cadc1',cards:[['Water Bottle','💧',1],['Herbal Tea','🍵',1],['Early Night','🛏️',2],['Sunrise','🌅',3],['Stretch','🧘',4],['Deep Sleep','🌙',5]]},
+ {id:'mind',name:'Mindset',unlock:1,color:'#bd93e5',cards:[['Journal','📓',1],['Compass','🧭',1],['Bullseye','🎯',2],['Streak Flame','🔥',3],['Summit','🏔️',4],['Trophy','🏆',5]]},
+ {id:'critters',name:'Bay Critters',unlock:4,color:'#c77a53',cards:[['Mallard','🦆',1],['Pelican',PELICAN,1],['Swan','🦢',2],['Turtle','🐢',3],['Red Fox','🦊',4],['Deer','🦌',5]]},
+ {id:'camp',name:'Park Day',unlock:8,color:'#cf6955',cards:[['Ride Ticket','🎟️',1],['Balloon','🎈',1],['Prize Bear','🧸',2],['Carousel Horse','🎠',3],['Roller Coaster','🎢',4],['Ferris Wheel','🎡',5]]},
+ {id:'lake',name:'Bay Life',unlock:12,color:'#5688a0',cards:[['Frog','🐸',1],['Water Lily','🪷',1],['Fishing Pole','🎣',2],['Sailboat','⛵',3],['Lighthouse',LIGHTHOUSE,4],['Big Wave','🌊',5]]},
+ {id:'sky',name:'Fireworks Night',unlock:16,color:'#8e77b7',cards:[['Sparkler','🎇',1],['Lantern','🏮',1],['Fireworks','🎆',2],['Full Moon','🌕',3],['North Star','⭐',4],['Shooting Star','🌠',5]]}
 ];
 const ALLCARDS=[];SETS.forEach(st=>st.cards.forEach((c,i)=>ALLCARDS.push({id:st.id+'-'+i,set:st,name:c[0],art:c[1],star:c[2]})));
 const cardById=id=>ALLCARDS.find(c=>c.id===id);
@@ -2055,7 +2055,7 @@ function fly(fromEl,toEl,kind,n=8){
 }
 function banner(text,cls){const b=document.createElement('div');b.className='banner '+(cls||'');b.textContent=text;fx.appendChild(b);setTimeout(()=>b.remove(),1700);}
 function coinRain(n=26){if(reduced)return;for(let i=0;i<n;i++){const c=document.createElement('div');c.className='rain-coin';c.innerHTML=SYM.coin;c.style.left=rnd(0,100)+'vw';fx.appendChild(c);const an=c.animate([{transform:'translateY(0) rotate(0)'},{transform:`translateY(${innerHeight+80}px) rotate(${rnd(-360,360)}deg)`}],{duration:rnd(1100,2000),delay:rnd(0,500),easing:'cubic-bezier(.4,0,.8,.6)',fill:'forwards'});an.onfinish=()=>c.remove();}}
-function confetti(n=60){if(reduced)return;const cols=['#f2b33d','#8fd16f','#d9622b','#5fb0d6','#fbf1dc','#c08cff'];for(let i=0;i<n;i++){const c=document.createElement('div');c.className='conf';c.style.left=rnd(0,100)+'vw';c.style.background=pick(cols);fx.appendChild(c);const an=c.animate([{transform:'translate(0,0) rotate(0)'},{transform:`translate(${rnd(-80,80)}px,${innerHeight+40}px) rotate(${rnd(-720,720)}deg)`}],{duration:rnd(1400,2600),delay:rnd(0,400),easing:'cubic-bezier(.3,.2,.7,1)',fill:'forwards'});an.onfinish=()=>c.remove();}}
+function confetti(n=60){if(reduced)return;const cols=['#dbaf5e','#9bc37e','#c77a53','#7cadc1','#efe0c2','#bd93e5'];for(let i=0;i<n;i++){const c=document.createElement('div');c.className='conf';c.style.left=rnd(0,100)+'vw';c.style.background=pick(cols);fx.appendChild(c);const an=c.animate([{transform:'translate(0,0) rotate(0)'},{transform:`translate(${rnd(-80,80)}px,${innerHeight+40}px) rotate(${rnd(-720,720)}deg)`}],{duration:rnd(1400,2600),delay:rnd(0,400),easing:'cubic-bezier(.3,.2,.7,1)',fill:'forwards'});an.onfinish=()=>c.remove();}}
 function toast(msg){if(hush)return;const t=document.createElement('div');t.className='toast';t.textContent=msg;const box=$('#toasts');box.appendChild(t);while(box.children.length>3)box.firstChild.remove();setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),300);},2400);}
 let shownCoins=null,coinRAF=0,coinHold=0;
 function animateCoins(){const el=$('#coinTxt');if(shownCoins===null){shownCoins=S.coins;el.textContent=fmt(S.coins);return;}const from=shownCoins,to=S.coins,t0=performance.now(),dur=reduced?1:700;cancelAnimationFrame(coinRAF);const step=t=>{const k=Math.min(1,(t-t0)/dur);shownCoins=Math.round(from+(to-from)*(1-Math.pow(1-k,3)));el.textContent=fmt(shownCoins);if(k<1)coinRAF=requestAnimationFrame(step);else coinRAF=0;};coinRAF=requestAnimationFrame(step);}
@@ -2088,9 +2088,9 @@ function celebrate({eyebrow,title,body,reward,btn}){
 /* ============ Lakeshore Midway moments (Nov 10) ============ */
 function awningSVG(){
   const N=14,W=400,x0=56,x1=344,by=24,w=W/N;let st='',sc='';
-  for(let i=0;i<N;i+=2){const a=x0+(x1-x0)*i/N,b=x0+(x1-x0)*(i+1)/N;st+=`<path d="M${a.toFixed(1)} 2H${b.toFixed(1)}L${(w*(i+1)).toFixed(1)} ${by}H${(w*i).toFixed(1)}Z" fill="#f0443a"/>`;}
-  for(let i=0;i<N;i++)sc+=`<path d="M${(i*w).toFixed(1)} ${by}a${(w/2).toFixed(1)} 9 0 0 0 ${w.toFixed(1)} 0Z" fill="${i%2?'#fff7e3':'#f0443a'}" stroke="#2b1a10" stroke-width="2.4" vector-effect="non-scaling-stroke"/>`;
-  return `<svg viewBox="-2 -2 404 40" preserveAspectRatio="none"><path d="M${x0} 2H${x1}L${W} ${by}H0Z" fill="#fff7e3"/>${st}<path d="M${x0} 2H${x1}L${W} ${by}H0Z" fill="none" stroke="#2b1a10" stroke-width="2.6" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>${sc}</svg>`;
+  for(let i=0;i<N;i+=2){const a=x0+(x1-x0)*i/N,b=x0+(x1-x0)*(i+1)/N;st+=`<path d="M${a.toFixed(1)} 2H${b.toFixed(1)}L${(w*(i+1)).toFixed(1)} ${by}H${(w*i).toFixed(1)}Z" fill="#d9675c"/>`;}
+  for(let i=0;i<N;i++)sc+=`<path d="M${(i*w).toFixed(1)} ${by}a${(w/2).toFixed(1)} 9 0 0 0 ${w.toFixed(1)} 0Z" fill="${i%2?'#f5e6c4':'#d9675c'}" stroke="#3a2a22" stroke-width="2.4" vector-effect="non-scaling-stroke"/>`;
+  return `<svg viewBox="-2 -2 404 40" preserveAspectRatio="none"><path d="M${x0} 2H${x1}L${W} ${by}H0Z" fill="#f5e6c4"/>${st}<path d="M${x0} 2H${x1}L${W} ${by}H0Z" fill="none" stroke="#3a2a22" stroke-width="2.6" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>${sc}</svg>`;
 }
 /* Lights on: the goal that keeps the day lights the park. A full-screen layer of its own (like the Booth's, not a sheet),
    so saves and any queued celebration carry on underneath. No button: it ends by itself after 2.5 s or at any tap.
@@ -2443,9 +2443,9 @@ function mgSprite(){   // one hidden sprite for every prize; hidden by size, not
   const A=window.MERGE_ART;let defs='',syms='';
   if(A&&A.sym){defs=A.defs||'';for(const k in A.sym)syms+=`<symbol id="mg-${k}" viewBox="0 0 64 64">${A.sym[k]}</symbol>`;}
   if(!A||!A.sym||!A.sym['bear-1']){   // merge-art.js didn't load: plain tokens, so the Booth still works
-    const col={bear:'#c08447',balloon:'#e4472f',ribbon:'#2f7aa3'};
-    MG_CHAINS.forEach(ch=>{for(let t=1;t<=8;t++)syms+=`<symbol id="mg-${ch}-${t}" viewBox="0 0 64 64"><circle cx="32" cy="32" r="${10+t*2.6}" fill="${col[ch]}" stroke="#2b1a10" stroke-width="2.5"/></symbol>`;});
-    ['spark','jar','wagon','shelf','booth'].forEach(k=>{syms+=`<symbol id="mg-${k}" viewBox="0 0 64 64"><path d="M32 6L38 26L58 32L38 38L32 58L26 38L6 32L26 26Z" fill="#5fb0d6" stroke="#2b1a10" stroke-width="2.5"/></symbol>`;});
+    const col={bear:'#b88f64',balloon:'#cf6955',ribbon:'#5688a0'};
+    MG_CHAINS.forEach(ch=>{for(let t=1;t<=8;t++)syms+=`<symbol id="mg-${ch}-${t}" viewBox="0 0 64 64"><circle cx="32" cy="32" r="${10+t*2.6}" fill="${col[ch]}" stroke="#3a2a22" stroke-width="2.5"/></symbol>`;});
+    ['spark','jar','wagon','shelf','booth'].forEach(k=>{syms+=`<symbol id="mg-${k}" viewBox="0 0 64 64"><path d="M32 6L38 26L58 32L38 38L32 58L26 38L6 32L26 26Z" fill="#7cadc1" stroke="#3a2a22" stroke-width="2.5"/></symbol>`;});
   }
   document.body.insertAdjacentHTML('afterbegin',`<svg id="mgSprite" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">${defs?`<defs>${defs}</defs>`:''}${syms}</svg>`);
 }
@@ -2840,7 +2840,7 @@ function sceneHTML(cls){
     const m=moodOf(v.n),L=S.log[today()],kept=!!(L&&L.kept);
     const mood=kept&&(m.mood==='dawn'||m.mood==='day')?'golden':m.mood;   // daylight until the day is kept, then golden hour with the lights on
     const r=LAKE_ART.drawParkScene({n:v.n,levels:v.levels,damaged:v.damaged},{mood,season:m.season,turning:kept,lights:kept,reduce:reduced,fireworks:!!V.fireworks,crop:'full',id:cls==='mini-scene'?'pkm':'pkf'});
-    const sk=/stop offset="0" stop-color="([^"]+)"/.exec(r.svg);sceneHTML.sky=sk?sk[1]:'#8fd0f5';sceneHTML.kept=kept;
+    const sk=/stop offset="0" stop-color="([^"]+)"/.exec(r.svg);sceneHTML.sky=sk?sk[1]:'#99c6dd';sceneHTML.kept=kept;
     return `<div class="scene ${cls||''}"><svg class="land" viewBox="${r.viewBox}" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${esc(V.name)}: ${v.levels.filter(x=>x>=4).length} of 5 rides running">${r.svg}</svg>${particles(V,v.n)}</div>`;
   }
   const blds=slotsOf(V).map((p,i)=>`<div class="bld${v.levels[i]===0?' plot':''}${v.damaged[i]?' damaged':''}" data-i="${i}" style="left:${p.x}%;bottom:${p.y}%;width:${p.w}%;z-index:${p.z}">${bSVG(rideOf(V,i).a,v.levels[i],colorsFor(V,i))}</div>`).join('');
@@ -2871,7 +2871,7 @@ function dayRow(g,L,sub,past){
 function weekRow(g,wk,minus){
   if(g.limit){const c=weekCount(g.id,wk),over=c>g.target;const sub=over?`${c} logged this week · thanks for logging it`:`${g.target-c} left this week · +${rewardOf(g)} and a gold chest if you stay under, on a week with 4+ kept days`;return `<div class="row wk${over?'':' done'}"><span class="wkp"><span><b>${c}</b>/${g.target}</span></span><span class="nm">${esc(g.name)}<span class="tag">Limit</span><small>${sub}</small></span><span class="wk-btns">${minus&&c>0?`<button class="mini-btn" data-act="wuntap" data-id="${g.id}" aria-label="Undo one for ${esc(g.name)}">−</button>`:''}<button class="mini-btn plus" data-act="wtap" data-id="${g.id}" aria-label="Log one for ${esc(g.name)}">+1</button></span></div>`;}
   const c=weekCount(g.id,wk),done=c>=g.target;const sub=done?(c>g.target?`Done · ${c} this week`:'Done this week'):`${g.target-c} to go · +${rewardOf(g)} and a ${g.kind==='flex'?'gold':'silver'} chest`;return `<div class="row wk${done?' done':''}"><span class="wkp"><span><b>${c}</b>/${g.target}</span></span><span class="nm">${esc(g.name)}${g.kind==='flex'?'<span class="tag">Flex</span>':''}<small>${sub}</small></span><span class="wk-btns">${minus?`<button class="mini-btn" data-act="wuntap" data-id="${g.id}" aria-label="Undo one for ${esc(g.name)}">−</button>`:''}<button class="mini-btn plus" data-act="wtap" data-id="${g.id}" aria-label="Log one for ${esc(g.name)}">+1</button></span></div>`;}
-const HEART='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20S4 14.6 4 9.3A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 8 2.3C20 14.6 12 20 12 20z" fill="#f0443a" stroke="#2b1a10" stroke-width="2" stroke-linejoin="round"/></svg>';
+const HEART='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20S4 14.6 4 9.3A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 8 2.3C20 14.6 12 20 12 20z" fill="#d9675c" stroke="#3a2a22" stroke-width="2" stroke-linejoin="round"/></svg>';
 const KI=(k,fb)=>(window.KIT&&KIT.ICON&&KIT.ICON[k])||fb;
 const STAR_IC=()=>(window.KIT&&KIT.STAR)||IC.star;
 const isHB=g=>!!healthRule(g);   // goals Muse's Health brief checks off by itself
@@ -2909,14 +2909,14 @@ function renderTray(){
   $('#earn').innerHTML=`<div class="top"><span class="lbl">TODAY</span><span class="bulbs${core.length>10?' many':''}" role="img" aria-label="${done} of ${core.length} daily goals done; ${nd} keep the streak">${bulbsHTML(0,nd,done)}${core.length>nd?'<b></b>':''}${bulbsHTML(nd,core.length,done)}</span><button class="all" data-act="goto" data-tab="goals">All ${core.length} ›</button></div><p class="line">${todayLine()}</p>${rest}`;
 }
 function fixRingSVG(pct,afford){const R=31,c=2*Math.PI*R,d=(c*Math.min(1,Math.max(0,pct))).toFixed(1);
-  return `<svg viewBox="-2 -2 74 76" aria-hidden="true"><circle cx="35" cy="38" r="${R}" fill="#2b1a10"/><circle cx="35" cy="35" r="${R}" fill="#173a72" stroke="#2b1a10" stroke-width="2.6"/><circle cx="35" cy="35" r="${R}" fill="none" stroke="${afford?'#62d23c':'#ffcb2e'}" stroke-width="6" stroke-dasharray="${d} ${c.toFixed(1)}" transform="rotate(-90 35 35)"/><circle cx="35" cy="35" r="24" fill="${afford?'#8fe35c':'#fff7e3'}" stroke="#2b1a10" stroke-width="2.6"/>${afford?'<ellipse cx="33" cy="24" rx="15" ry="7" fill="#fff" opacity=".4"/>':''}${SYM.hammer.replace('<svg ','<svg x="17" y="17" width="36" height="36" ')}</svg>`;}
+  return `<svg viewBox="-2 -2 74 76" aria-hidden="true"><circle cx="35" cy="38" r="${R}" fill="#3a2a22"/><circle cx="35" cy="35" r="${R}" fill="#405981" stroke="#3a2a22" stroke-width="2.6"/><circle cx="35" cy="35" r="${R}" fill="none" stroke="${afford?'#7dc05d':'#e3be54'}" stroke-width="6" stroke-dasharray="${d} ${c.toFixed(1)}" transform="rotate(-90 35 35)"/><circle cx="35" cy="35" r="24" fill="${afford?'#9bcf72':'#f5e6c4'}" stroke="#3a2a22" stroke-width="2.6"/>${afford?'<ellipse cx="33" cy="24" rx="15" ry="7" fill="#fff" opacity=".4"/>':''}${SYM.hammer.replace('<svg ','<svg x="17" y="17" width="36" height="36" ')}</svg>`;}
 // the cheapest thing to do next in the park: a repair or the next fix-up
 function nextFix(){const v=S.village,V=villageDef(v.n);let best=null;v.levels.forEach((l,i)=>{const c=v.damaged[i]?repairCost(i):l<4?cost(v.n,i,l+1):null;if(c!=null&&(!best||c<best.c))best={i,c,name:V.b[i],repair:!!v.damaged[i],start:l===0};});return best;}
 function renderSpin(){
   const v=S.village,V=villageDef(v.n),ups=v.levels.reduce((a,b)=>a+b,0),tn=trailNeed(v.n);
   $('#pausedSpin').innerHTML=pausedNote();
   $('#villageStrip').innerHTML=sceneHTML('mini-scene');
-  const band=$('#parkBand');band.style.setProperty('--sky',sceneHTML.sky||'#8fd0f5');band.classList.toggle('kept',!!sceneHTML.kept);
+  const band=$('#parkBand');band.style.setProperty('--sky',sceneHTML.sky||'#99c6dd');band.classList.toggle('kept',!!sceneHTML.kept);
   $('#pbPhase').innerHTML=`${STAR_IC()}<span class="nm">${esc(V.name)}</span><span class="track"><i style="width:${ups/20*100}%"></i></span><span class="ct">${ups}/20</span>`;
   // chests waiting: a small stack on the lawn, no count; a tap opens the next one
   const pc=$('#pbChests');pc.hidden=!S.chests.length;
@@ -3009,7 +3009,7 @@ function renderGoals(){
   }else{
     const wkEnd=addDays(wk,6),row=g=>dayRow(g,L,`${last7(g.id)} of the last 7 days`);
     const here=core.filter(g=>!goalFold.ids.has(g.id)),folded=core.filter(g=>goalFold.ids.has(g.id)),fdone=folded.filter(g=>ids.includes(g.id));
-    const fold=folded.length?`<button class="row fold" data-act="fold" aria-expanded="${foldOpen}"><span class="check" style="border:2.5px solid #2b1a10;background:radial-gradient(circle at 38% 30%,#a6f07c,#62d23c 55%,#2fa52a)">${IC.check.replace('<svg ','<svg style="opacity:1;transform:none" ')}</span><span class="nm">${fdone.length} done · ${esc(folded.map(g=>g.name).join(', '))}</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>${foldOpen?folded.map(row).join(''):''}`:'';
+    const fold=folded.length?`<button class="row fold" data-act="fold" aria-expanded="${foldOpen}"><span class="check" style="border:2.5px solid #3a2a22;background:radial-gradient(circle at 38% 30%,#abdc86,#7dc05d 55%,#56a64a)">${IC.check.replace('<svg ','<svg style="opacity:1;transform:none" ')}</span><span class="nm">${fdone.length} done · ${esc(folded.map(g=>g.name).join(', '))}</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>${foldOpen?folded.map(row).join(''):''}`:'';
     const lw=latestWeight(),w=L.weighPaid&&lw;
     const weigh=`<button class="row${w?' done':''}" data-act="goto" data-tab="progress"><span class="check icon-check">${IC.check}</span><span class="nm">Weigh in<small>${w?`Logged ${fmtW(lw.w)} ${S.weight.unit}`:'Any number counts'}</small></span><span class="reward">${w?'Earned':`${SYM.bolt}+${WEIGH_REWARD}`}</span></button>`;
     body=`<div class="capline"><b>Daily · ${ids.length} of ${core.length}</b><span>tap to check</span></div>
@@ -3037,7 +3037,7 @@ function renderVillage(){
   const pines=tn<=40?`<div class="boardwalk" aria-hidden="true">${Array.from({length:tn},(_,k)=>PLANK_ICON(k<tr)).join('')}</div>`:`<div class="bar fern" style="margin:6px 0 10px"><span style="width:${tr/tn*100}%"></span></div>`;
   const prevSpins=v.n>1?Math.round(spinsFor(v.n-1)/10)*10:null;
   const hero=sceneHTML('');
-  $('#v-village').innerHTML=`<div class="pk-hero${sceneHTML.kept?' kept':''}" style="--sky:${sceneHTML.sky||'#8fd0f5'}"><div class="pk-ribbon"><span class="tag">Bay Beach · Phase ${v.n}</span><h2>${esc(V.name)}</h2><div class="sbar" role="img" aria-label="${ups} of 20 fix-ups done">${STAR_IC()}<span class="track"><i style="width:${ups/20*100}%"></i></span><span class="ct">${ups}/20</span></div></div>${hero}</div>
+  $('#v-village').innerHTML=`<div class="pk-hero${sceneHTML.kept?' kept':''}" style="--sky:${sceneHTML.sky||'#99c6dd'}"><div class="pk-ribbon"><span class="tag">Bay Beach · Phase ${v.n}</span><h2>${esc(V.name)}</h2><div class="sbar" role="img" aria-label="${ups} of 20 fix-ups done">${STAR_IC()}<span class="track"><i style="width:${ups/20*100}%"></i></span><span class="ct">${ups}/20</span></div></div>${hero}</div>
    <p class="sub pk-blurb">${V.blurb}</p>
    <div class="blist">${rows}</div>
    ${mgCardHTML()}
