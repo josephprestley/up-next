@@ -501,6 +501,169 @@ html.hb-gated body{overflow:hidden}
 .kept30{display:block;margin-top:4px;color:var(--muted);font-size:13px}
 .done-today{margin:10px 0 0;padding:12px 14px;border-radius:14px;background:var(--sunk);color:var(--ink);font-size:15px;line-height:1.4}
 </style>
+<style>
+/* Prize Booth (Nov 9): a full-screen layer over the app (above the tab bar, under sheets, toasts and effects). It never
+   scrolls, so a drag never fights the page. Board 5 × 6 hooks; tiles 56 px (52 px and no shelf strip on an iPhone SE). */
+:root{--mg-cell:56px;--mg-it:50px;--mg-gap:5px;--mg-peg:#d9b483;--mg-hole:#a5794a;--mg-frame:#2c241f;--mg-tile:#fffbf4;--mg-edge:#c9a26c;--mg-spark:#5fb0d6;--mg-ink:#2b1a10}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--mg-tile:#f6efe2;--mg-frame:#1b1315}}
+:root[data-theme="dark"]{--mg-tile:#f6efe2;--mg-frame:#1b1315}
+html.mg-open,html.mg-open body{overflow:hidden}
+.mg-layer{position:fixed;inset:0;z-index:45;display:flex;flex-direction:column;gap:10px;background:var(--bg);color:var(--ink);
+  padding:calc(env(safe-area-inset-top,0px) + 8px) max(16px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 10px) max(16px,env(safe-area-inset-left,0px));
+  touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;overflow:hidden;overscroll-behavior:contain}
+.mg-layer>*{width:100%;max-width:440px;margin-inline:auto}
+.mg-layer button{touch-action:none;-webkit-touch-callout:none}
+.mg-top{display:flex;align-items:center;gap:8px}
+.mg-done{height:44px;padding:0 18px;border-radius:999px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--soft);font:700 15px var(--body)}
+.mg-pill{display:inline-flex;align-items:center;gap:5px;height:44px;padding:0 12px 0 7px;border-radius:999px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--soft);font:700 16px var(--body);font-variant-numeric:tabular-nums;white-space:nowrap}
+.mg-pill svg{width:28px;height:28px;flex:none}
+.mg-pill.coins{flex:1 1 auto;justify-content:center}
+.mg-pill .of{font-weight:600;color:var(--muted)}
+.mg-pill.bump{animation:bump .5s}
+/* the booth: cabinet stripes and marquee, a pegboard wall, cream tiles */
+.mg-booth{position:relative;padding:8px 10px 10px;border-radius:24px;border:1px solid var(--red-d);background:repeating-linear-gradient(90deg,var(--red) 0 22px,#fbf3e6 22px 44px);box-shadow:inset 0 0 0 6px #fbf3e6,0 12px 30px -20px #0007}
+.mg-marquee{position:relative;height:36px;margin:0 6px;border-radius:12px;background:var(--red-d);box-shadow:inset 0 0 0 2px #fbf3e6;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.mg-marquee::before{content:"";position:absolute;left:8px;right:8px;top:3px;height:7px;background:radial-gradient(circle,var(--gold) 0 2.2px,transparent 2.8px) 0 50%/16px 7px repeat-x}
+.mg-marquee::after{content:"";position:absolute;left:8px;right:8px;bottom:3px;height:7px;background:radial-gradient(circle,#fff1c4 0 2.2px,transparent 2.8px) 8px 50%/16px 7px repeat-x}
+.mg-marquee span{font:400 20px var(--marquee-face,"Rye",serif);color:#fffaf0;letter-spacing:.06em;text-shadow:0 1px 0 #0005}
+.mg-wall{margin-top:8px;padding:7px;border-radius:16px;background:var(--mg-frame)}
+.mg-board{position:relative;width:max-content;margin:0 auto;display:grid;grid-template-columns:repeat(5,var(--mg-cell));grid-auto-rows:var(--mg-cell);gap:var(--mg-gap);padding:6px;border-radius:11px;
+  background-color:var(--mg-peg);background-image:radial-gradient(circle,var(--mg-hole) 0 1.5px,transparent 2px);background-size:12.6px 12.6px;background-position:3px 3px;box-shadow:inset 0 2px 6px rgba(43,26,16,.35)}
+.mg-hook{position:relative;width:var(--mg-cell);height:var(--mg-cell);border-radius:12px}
+.mg-hook.empty{border:1.5px dashed rgba(255,250,240,.75)}
+.mg-empty{position:absolute;inset:-1.5px;border:0;border-radius:12px;background:transparent;padding:0}
+.mg-hook.target.empty{background:rgba(255,250,240,.3);border:2px dashed #fffaf0}
+.mg-it{position:absolute;inset:0;border:0;padding:0;border-radius:12px;background:var(--mg-tile);color:var(--mg-ink);box-shadow:0 2px 0 var(--mg-edge),0 0 0 1px #c9a26c80;display:grid;place-items:center;transition:opacity .15s}
+.mg-it>svg{width:var(--mg-it);height:var(--mg-it);filter:drop-shadow(0 2px 1.4px rgba(43,26,16,.28));pointer-events:none}
+.mg-it.t6,.mg-it.t7{background:radial-gradient(circle at 50% 46%,#fff1c4 0 38%,var(--mg-tile) 75%)}
+.mg-it.t8{box-shadow:0 0 0 2.5px var(--gold),0 0 10px 2px rgba(242,179,61,.6)}
+.mg-pip{position:absolute;right:3px;bottom:3px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--mg-ink);color:#fffaf0;font:800 10px/16px var(--body);text-align:center;pointer-events:none}
+.mg-new{position:absolute;left:3px;top:3px;padding:0 4px;border-radius:5px;background:var(--red);color:#fffaf0;font:800 9.5px/14px var(--body);letter-spacing:.04em;pointer-events:none}
+.mg-ok{position:absolute;right:-8px;top:-8px;width:22px;height:22px;border-radius:50%;background:var(--mg-ink);color:#fffaf0;border:2px solid #fffaf0;display:grid;place-items:center;pointer-events:none}
+.mg-ok svg{width:13px;height:13px}
+.mg-it.sel{box-shadow:0 0 0 3px #fffaf0,0 0 0 6px var(--mg-ink),0 8px 12px -2px rgba(43,26,16,.5);transform:translateY(-3px) scale(1.04);z-index:2}
+.mg-it.match{background:#fff6dc;box-shadow:0 0 0 3px var(--gold),0 0 16px 4px rgba(242,179,61,.9);z-index:2}
+.mg-it.dim>svg,.mg-it.dim>.mg-pip,.mg-it.dim>.mg-new{opacity:.35}
+.mg-it.dim{background:#f3e8d6}
+.mg-hook.target>.mg-it{transform:scale(1.07);box-shadow:0 0 0 3.5px var(--gold),0 0 0 6px #fffaf0,0 0 22px 6px rgba(242,179,61,.9);z-index:3}
+.mg-it.lift{z-index:20;pointer-events:none;background:var(--mg-tile);box-shadow:0 0 0 3px var(--gold),0 16px 22px -8px rgba(43,26,16,.6);will-change:transform;transition:none}
+.mg-it:focus-visible{outline:3px solid var(--fjord);outline-offset:2px}
+.mg-empty:focus-visible{outline:3px solid var(--fjord);outline-offset:1px}
+/* the line under the board (like the slot's result line) */
+.mg-line{display:flex;align-items:center;gap:8px;margin-top:8px;min-height:34px;padding:4px 6px 4px 10px;border-radius:12px;background:#fbf3e6;color:#2c241f;font:600 14px/1.25 var(--body);box-shadow:inset 0 0 0 1px #e7cfbf}
+.mg-line.c{justify-content:center;text-align:center;padding:7px 12px}
+.mg-line .tx{flex:1 1 auto;min-width:0}
+.mg-line .tx small{font:600 12.5px var(--body);color:#6d5d50}
+.mg-line b{color:var(--red-d)}
+.mg-line .mini{width:26px;height:26px;flex:none}
+.mg-chipbtn::after{content:"";position:absolute;inset:-7px -3px}
+.mg-chipbtn{position:relative;display:inline-flex;align-items:center;gap:4px;min-height:30px;padding:0 10px 0 8px;border-radius:9px;background:#fffbf4;border:1px solid #d5c09f;font:700 13px var(--body);color:#2b1f19;white-space:nowrap;flex:none}
+.mg-chipbtn svg{width:17px;height:17px}
+.mg-chipbtn.gold{background:var(--gold);border-color:var(--gold-d);color:var(--gold-ink)}
+.mg-chipbtn.wagon{color:var(--red-d);border:1.5px solid var(--red-d);padding-left:4px}
+.mg-chipbtn.wagon svg{width:28px;height:28px}
+/* prize shelf strip */
+.mg-shelf{display:flex;align-items:center;gap:12px;padding:8px 12px 0;border-radius:16px;background:linear-gradient(var(--surface),var(--sunk));border:1px solid var(--line);overflow:hidden}
+.mg-shelf .lbl{flex:none;padding-bottom:8px}
+.mg-shelf .lbl b{display:block;font:400 16px/1.2 var(--display)}
+.mg-shelf .lbl small{font:600 12px var(--body);color:var(--muted)}
+.mg-shelf .row{flex:1;position:relative;display:flex;align-items:flex-end;gap:6px;height:56px;padding:0 6px}
+.mg-shelf .row::after{content:"";position:absolute;left:-4px;right:-16px;bottom:0;height:9px;background:linear-gradient(#b8763a,#8b5a2b);box-shadow:inset 0 2px 0 #d9a866}
+.mg-shelf .row svg{width:44px;height:44px;position:relative;z-index:1;margin-bottom:6px}
+.mg-shelf .row .slot{width:38px;height:40px;margin-bottom:9px;border:2px dashed var(--line-strong);border-radius:10px}
+.mg-shelf .mg-chipbtn{margin-bottom:8px}
+/* bottom row: Get sparks tag · pairs ready · Undo */
+.mg-brow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;margin-top:auto}
+.mg-get{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;width:88px;height:66px;padding:0 0 8px;border:0;background:var(--tag,#dcc6a1);color:#3a2a1e;
+  clip-path:polygon(0 12px,50% 0,100% 12px,100% 100%,0 100%);border-radius:0 0 10px 10px;filter:drop-shadow(0 3px 4px #0004);transform:rotate(-3deg)}
+.mg-get::before{content:"";position:absolute;top:10px;left:50%;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;background:#00000038}
+.mg-get small{font:700 10px var(--body);letter-spacing:.1em;text-transform:uppercase}
+.mg-get b{font:400 19px/1 var(--display);color:var(--red-d)}
+.mg-status{display:flex;flex-direction:column;align-items:center;text-align:center;font:600 13px/1.3 var(--body);color:var(--muted)}
+.mg-status b{font:400 24px/1 var(--display);color:var(--fjord);font-variant-numeric:tabular-nums}
+.mg-undo{display:inline-flex;align-items:center;gap:6px;height:48px;padding:0 16px 0 13px;border-radius:14px;background:var(--surface);border:1px solid var(--line-strong);box-shadow:0 2px 0 var(--line-strong);font:700 15px var(--body);color:var(--ink)}
+.mg-undo svg{width:20px;height:20px}
+.mg-undo.off{color:var(--muted);background:transparent;border-style:dashed;box-shadow:none}
+/* drag chip, name pop, payout chip */
+.mg-chip{position:fixed;left:0;top:0;z-index:62;display:inline-flex;align-items:center;gap:5px;padding:4px 11px 4px 8px;border-radius:999px;background:#2b1a10;color:#fffaf0;font:700 13.5px var(--body);white-space:nowrap;box-shadow:0 8px 16px -8px #000c;pointer-events:none}
+.mg-chip svg{width:20px;height:20px}
+.mg-pop{position:fixed;z-index:61;font:400 20px/1 var(--display);color:var(--gold);-webkit-text-stroke:5px #3a2a1e;paint-order:stroke fill;text-shadow:0 3px 0 rgba(0,0,0,.25);white-space:nowrap;pointer-events:none}
+.mg-gain{position:fixed;z-index:61;display:inline-flex;align-items:center;gap:4px;padding:3px 10px 3px 4px;border-radius:999px;background:var(--surface);border:2px solid var(--gold);font:800 15px var(--body);color:var(--honey-ink);box-shadow:0 6px 12px -6px #0008;pointer-events:none}
+.mg-gain svg{width:22px;height:22px}
+/* sheets: get sparks, chain, grand prize, Joker */
+.mg-trade{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;padding:10px;border-radius:16px;background:var(--bg);border:1px solid var(--line)}
+.mg-trade div{display:flex;flex-direction:column;align-items:center;gap:2px;font:700 14px var(--body)}
+.mg-trade div svg{width:42px;height:42px}
+.mg-trade .arr{width:26px;height:26px;color:var(--muted)}
+.mg-stepper{display:grid;grid-template-columns:56px 1fr 56px;align-items:center;gap:10px}
+.mg-step{width:56px;height:56px;border-radius:16px;background:var(--surface);border:1px solid var(--line-strong);box-shadow:0 2px 0 var(--line-strong);font:400 28px/1 var(--body);color:var(--ink)}
+.mg-step:disabled{opacity:.4}
+.mg-qty{display:flex;align-items:center;justify-content:center;gap:8px}
+.mg-qty svg{width:36px;height:36px}
+.mg-qty b{font:400 40px/1 var(--display);font-variant-numeric:tabular-nums}
+.mg-qty small{font:600 14px var(--body);color:var(--muted);align-self:flex-end;margin-bottom:5px}
+.mg-quick{display:flex;gap:8px;justify-content:center}
+.mg-quick button{min-width:64px;height:44px;padding:0 12px;border-radius:999px;border:1px solid var(--line-strong);background:var(--surface);font:700 14px var(--body);color:var(--ink)}
+.mg-quick button.on{background:var(--fjord-soft);border-color:var(--fjord);color:var(--fjord)}
+.mg-quick button:disabled{opacity:.4}
+.mg-ledger{border-radius:14px;background:var(--sunk);padding:10px 12px;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.mg-ledger .ln{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.mg-ledger .ln span{color:var(--muted);font-weight:600}
+.mg-ledger .ln b{display:inline-flex;align-items:center;gap:4px;font-variant-numeric:tabular-nums}
+.mg-ledger .ln b svg{width:18px;height:18px}
+.mg-ledger .bar{height:8px;border-radius:99px;background:var(--line-strong);overflow:hidden;margin:0}
+.mg-ledger .bar span{display:block;height:100%;background:var(--gold);border-radius:inherit}
+.mg-ladder{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px}
+.mg-rung{display:grid;grid-template-columns:46px minmax(0,1fr) auto;align-items:center;gap:10px;min-height:50px;padding:2px 8px 2px 3px;border-radius:14px;background:var(--bg);border:1px solid var(--line)}
+.mg-rung .ico{position:relative;width:46px;height:46px;border-radius:11px;background:var(--mg-tile);box-shadow:0 1.5px 0 var(--mg-edge)}
+.mg-rung .ico svg{width:44px;height:44px;margin:1px}
+.mg-rung .ico .mg-pip{right:-3px;bottom:-3px}
+.mg-rung .nm b{display:block;font:700 14px/1.2 var(--body)}
+.mg-rung .nm small{display:block;font:500 12.5px/1.25 var(--body);color:var(--muted)}
+.mg-rung .pay{display:flex;align-items:center;gap:3px;font:700 13px var(--body);color:var(--honey-ink);background:var(--honey-soft);padding:4px 8px 4px 5px;border-radius:999px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.mg-rung .pay svg{width:17px;height:17px}
+.mg-rung .pay.none{background:transparent;color:var(--muted);font-weight:600}
+.mg-rung.here{border:2px solid var(--gold);background:#fff7e3;color:#2b1f19}
+.mg-rung.locked .ico svg{filter:brightness(0) opacity(.2)}
+.mg-rung.locked .ico{background:var(--sunk)}
+.mg-rung.top{background:linear-gradient(90deg,#fff1c4,var(--surface));border-color:var(--gold)}
+.mg-tag{display:inline-block;padding:0 6px;border-radius:999px;background:var(--gold);color:var(--gold-ink);font:800 10.5px/1.6 var(--body)}
+.mg-gainrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mg-gainrow div{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;border-radius:14px;background:var(--bg);border:1px solid var(--line);text-align:center}
+.mg-gainrow svg{width:40px;height:40px}
+.mg-gainrow b{font:400 18px/1.1 var(--display);color:var(--honey-ink)}
+.mg-gainrow small{font:600 12px/1.25 var(--body);color:var(--muted)}
+.mg-shelfbig{position:relative;padding:10px 10px 0;border-radius:16px;background:linear-gradient(#fbf3e6,#f3e4c8)}
+.mg-shelfbig .r{display:grid;grid-template-columns:repeat(5,1fr);align-items:end;gap:6px;height:66px}
+.mg-shelfbig .s{position:relative;height:60px;display:grid;place-items:end center}
+.mg-shelfbig .s svg{position:relative;width:58px;height:58px}
+.mg-shelfbig .s.empty::before{content:"";position:absolute;left:50%;bottom:4px;width:44px;height:50px;margin-left:-22px;border-radius:12px;border:2px dashed #d5c09f}
+.mg-shelfbig .plank{height:12px;margin:0 -10px;border-radius:0 0 16px 16px;background:linear-gradient(#b8763a,#8b5a2b);box-shadow:inset 0 2px 0 #d9a866}
+.mg-shelfcap{display:flex;justify-content:space-between;font:600 12.5px var(--body);color:var(--muted)}
+.mg-picks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-height:52vh;overflow:auto;padding:4px;touch-action:pan-y}
+.mg-picks button{display:block;border:0;padding:0;background:none;text-align:inherit}
+/* entries: the Park card and the Spin screen's row */
+.mg-card{display:grid;grid-template-columns:76px minmax(0,1fr) auto;gap:12px;align-items:center;width:100%;padding:10px 12px 10px 10px;border-radius:18px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--soft);text-align:left;color:var(--ink)}
+.mg-card .art{position:relative;width:76px;height:76px;border-radius:14px;background:repeating-linear-gradient(90deg,var(--red) 0 9px,#fbf3e6 9px 18px);box-shadow:inset 0 0 0 3px #fbf3e6;display:grid;place-items:center;overflow:hidden}
+.mg-card .art::before{content:"";position:absolute;left:8px;right:8px;top:8px;bottom:8px;border-radius:8px;background-color:var(--mg-peg);background-image:radial-gradient(circle,var(--mg-hole) 0 1.2px,transparent 1.6px);background-size:9px 9px}
+.mg-card .art svg{position:relative;width:52px;height:52px;filter:drop-shadow(0 2px 1px #0004)}
+.mg-card b{display:block;font:400 19px/1.2 var(--display)}
+.mg-card small{display:block;font:600 13.5px/1.3 var(--body);color:var(--muted);margin-top:2px}
+.mg-card .minis{display:flex;gap:2px;margin-top:5px;min-height:0}
+.mg-card .minis svg{width:24px;height:24px}
+.mg-card .open,.mg-row .go{display:inline-flex;align-items:center;gap:2px;height:40px;padding:0 12px;border-radius:12px;background:var(--gold);color:var(--gold-ink);font:700 14px var(--body)}
+.mg-donecard h3{margin:0 0 8px;font:400 21px/1.2 var(--display)}
+.mg-row{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;width:100%;padding:8px 10px;border-radius:14px;background:var(--bg);border:1px solid var(--line);text-align:left;color:var(--ink)}
+.mg-row>svg{width:44px;height:44px}
+.mg-row b{display:block;font:700 15px var(--body)}
+.mg-row small{display:block;font:600 13px var(--body);color:var(--muted)}
+.reward .mg-mini{width:18px;height:18px}
+.reward .mg-dot{width:3px;height:3px;border-radius:50%;background:currentColor;margin:0 2px;display:inline-block}
+.mg-pressure{margin-top:8px}
+@media (max-height:780px){:root{--mg-cell:52px;--mg-it:46px}.mg-shelf{display:none}}
+@media (max-height:640px){:root{--mg-cell:46px;--mg-it:41px}.mg-marquee{height:30px}.mg-get{height:58px}}
+@media (prefers-reduced-motion: reduce){.mg-it{transition:none}}
+</style>
 </head><body>
 <div id="hb-gate" hidden><div class="card" data-state="form" role="dialog" aria-modal="true" aria-labelledby="hb-title">
   <p class="logo" aria-hidden="true">Daily Spin</p>
@@ -547,6 +710,7 @@ html.hb-gated body{overflow:hidden}
         <button class="spin-btn" id="btnSpin" aria-label="Spin"><span>Spin</span><small id="autoLbl">Hold: auto</small></button>
         <div class="spins-box" id="spinsBox"><span class="n"><span id="boltIcon"></span><span id="spinTxt">0</span></span><small>spins</small><small id="regenTxt"></small></div>
       </div>
+      <div id="mgDone"></div>
       <div class="card" id="earn"></div>
     </section>
     <section class="view" id="v-goals" data-view="goals" hidden></section>
@@ -557,6 +721,7 @@ html.hb-gated body{overflow:hidden}
 
   <nav class="tabs" aria-label="Sections"><div class="tabs-in" id="tabs"></div></nav>
 </div>
+<div class="mg-layer" id="booth" role="dialog" aria-modal="true" aria-label="Prize Booth" hidden></div>
 <div class="overlay" id="overlay" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
 <div class="toasts" id="toasts" aria-live="polite"></div>
 <div class="fx" id="fx" aria-hidden="true"></div>
@@ -565,6 +730,7 @@ html.hb-gated body{overflow:hidden}
 <script src="art_rooms_b.js"></script>
 <script src="gb.js"></script>
 <script src="rewards.js"></script>
+<script src="merge-art.js"></script>
 <script>
 (function(){
 "use strict";
@@ -789,6 +955,8 @@ const GOB_ART=(()=>{
   return {svg};
 })();
 function gobSVG(v,i){return GOB_ART.svg(v,i);}
+const MOUND='<svg viewBox="0 0 64 40"><g stroke="#2b1a10" stroke-width="2" stroke-linejoin="round"><ellipse cx="32" cy="33" rx="28" ry="6" fill="#c9a868"/><path d="M5 33c4-15 14-23 27-23s23 8 27 23z" fill="#ead39c"/><path d="M42 24l3-4 3 4z" fill="#f39a8a" stroke-width="1.4"/></g><path d="M15 26c4-7 10-10 17-10" stroke="#f8e8bf" stroke-width="3" fill="none" stroke-linecap="round"/></svg>';
+const HOLE='<svg viewBox="0 0 64 40"><g stroke="#2b1a10" stroke-width="2"><ellipse cx="32" cy="30" rx="27" ry="8" fill="#e3c88d"/><ellipse cx="32" cy="29" rx="19" ry="5" fill="#7a5a32"/></g></svg>';
 function chestSVG(t){t=String(t||'wood').split('*')[0];const c={wood:['#a5652a','#7a4416','#e6aa52'],silver:['#a3b4cf','#5f708d','#eef3fb'],gold:['#f2b33d','#b97300','#fff1b8']}[t]||['#a5652a','#7a4416','#e6aa52'];
 return `<svg viewBox="0 0 64 64"><g stroke="#2b1a10" stroke-width="2.6" stroke-linejoin="round"><rect x="8" y="28" width="48" height="27" rx="4" fill="${c[0]}"/><path d="M8 31v-7a12 12 0 0 1 12-12h24a12 12 0 0 1 12 12v7z" fill="${c[1]}"/><rect x="8" y="27" width="48" height="5" fill="${c[2]}"/><rect x="14" y="13" width="4" height="42" fill="${c[2]}" stroke-width="1.6"/><rect x="46" y="13" width="4" height="42" fill="${c[2]}" stroke-width="1.6"/><rect x="27" y="23" width="10" height="13" rx="2.5" fill="${c[2]}"/></g><circle cx="32" cy="29" r="2" fill="#2b1a10"/></svg>`;}
 
@@ -1251,6 +1419,153 @@ const LF=[1,1.6,2.4,3.4];
 function cost(n,b,l){return nice(2.5*unitFor(n)*spinsFor(n)/63*(1+.25*b)*LF[l-1]);}
 const repairCost=i=>nice(cost(S.village.n,i,Math.max(1,S.village.levels[i]))*.4);
 
+/* ============ Prize Booth: the merge board's save and sync (Nov 9) ============
+   Habits drop prizes (a daily goal: a Bear Charm; a weigh-in or the Health brief: a Balloon; a weekly session or a Trello
+   card: a Balloon Pair, a Rosette from phase 3), coins buy sparks, and a spark merges two matching prizes into the next
+   tier, which pays coins and, from tier 6, a chest. Tier 8 goes up on the Prize Shelf with a Joker sticker.
+   Saved in S.mg: 30 hooks (5 × 6; '' or '<chain><tier>.<id>'), the Wagon (prizes waiting for a free hook), the shelf,
+   unpicked Jokers, and every change as an op with an id and what it paid (d: co coins, sk sparks, ch chests added,
+   cr chests removed, cd stickers added). Two devices' saves meet by replaying this device's unseen ops on the other's
+   board: an op whose prizes are already gone is undone and its payout and spark come back off (coins never below zero),
+   and the same op from both devices (a drop named after its reward's credit id, the starter gift) counts once. */
+const MG_W=5,MG_H=6,MG_N=MG_W*MG_H,MG_TOP=8,MG_OPS_DAYS=7,MG_OPS_MAX=250,MG_GOT_DAYS=21,MG_JAR=30,MG_START_SPARKS=3;
+const MG_CHAINS=['bear','balloon','ribbon'];
+// made tier -> [coins in units of unit(), chest]; tier 8 also brings a Joker sticker (Joey's picks, Nov 9)
+const MG_PAY={2:[1],3:[3],4:[8],5:[15],6:[30,'wood'],7:[70,'silver'],8:[150,'gold']};
+const MG_NAMES={bear:['Bear Charm','Pocket Bear','Bow-Tie Bear','Sweetheart Bear','Midway Bear','Blue Ribbon Bear','Jumbo Bear','Grand Prize Bear'],
+  balloon:['Balloon','Balloon Pair','Balloon Trio','Balloon Dog','Balloon Bunch','Party Bunch','Sky Basket','Hot-Air Balloon'],
+  ribbon:['Prize Ribbon','Rosette','Big Rosette','Gold Medal','Little Trophy','Loving Cup','Star Trophy','Grand Trophy']};   // used when merge-art.js hasn't loaded
+const mgFresh=()=>({v:1,since:dayKey(),cells:Array(MG_N).fill(''),wagon:[],shelf:[],jk:0,ops:[],got:{},seen:0,life:{merges:0,bought:0,best:{}}});
+const mgParse=x=>{const m=/^([a-z]+)([1-8])\.([a-z0-9]+)$/.exec(x||'');return m&&MG_CHAINS.includes(m[1])?{ch:m[1],t:+m[2],id:m[3]}:null;};
+const mgId=()=>Math.random().toString(36).slice(2,8);
+function mgHash(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return (h>>>0).toString(36);}
+const mgNum=v=>typeof v==='number'&&isFinite(v)?v:0;
+function mgNorm(m){
+  const d=mgFresh();if(!m||typeof m!=='object'||Array.isArray(m))return d;
+  const o={...d,...m},seen=new Set();
+  const keep=x=>{const p=mgParse(x);if(!p||seen.has(p.id))return false;seen.add(p.id);return true;};
+  o.cells=(Array.isArray(o.cells)&&o.cells.length===MG_N?o.cells:d.cells).map(x=>keep(x)?x:'');
+  o.wagon=(Array.isArray(o.wagon)?o.wagon:[]).filter(keep);
+  o.shelf=(Array.isArray(o.shelf)?o.shelf:[]).filter(x=>x&&typeof x==='object'&&keep(x.c));
+  o.jk=Math.max(0,Math.floor(mgNum(o.jk)));o.seen=mgNum(o.seen);if(typeof o.since!=='string')o.since=d.since;
+  const cut=Date.now()-MG_OPS_DAYS*864e5;o.ops=(Array.isArray(o.ops)?o.ops:[]).filter(x=>x&&typeof x==='object'&&x.i&&mgNum(x.t)>=cut).slice(-MG_OPS_MAX);
+  const gc=addDays(dayKey(),-MG_GOT_DAYS),got={};if(o.got&&typeof o.got==='object')for(const k in o.got)if(typeof o.got[k]==='string'&&o.got[k]>=gc)got[k]=o.got[k];o.got=got;
+  const L=o.life&&typeof o.life==='object'?o.life:{};o.life={merges:mgNum(L.merges),bought:mgNum(L.bought),best:L.best&&typeof L.best==='object'&&!Array.isArray(L.best)?{...L.best}:{}};
+  return o;
+}
+// ---- one op on a board state {cells, wagon, shelf, jk} (pure: used live and when replaying); false when it can't apply
+const mgAt=(st,id)=>{const s='.'+id;for(let i=0;i<st.cells.length;i++)if(st.cells[i]&&st.cells[i].endsWith(s))return i;return -1;};
+const mgHas=(st,id)=>mgAt(st,id)>=0||st.wagon.some(x=>x.endsWith('.'+id))||st.shelf.some(x=>x.c.endsWith('.'+id));
+function mgPut(st,c,at){if(at!=null&&at>=0&&at<MG_N&&!st.cells[at]){st.cells[at]=c;return at;}const f=st.cells.indexOf('');if(f>=0){st.cells[f]=c;return f;}st.wagon.push(c);return -1;}
+function mgApply(st,op){
+  if(!op||typeof op!=='object')return false;
+  if(op.k==='b')return true;                                                    // sparks bought: no board part
+  if(op.k==='d'){const p=mgParse(op.c);if(!p)return false;if(!mgHas(st,p.id))mgPut(st,op.c,op.at);return true;}   // a drop never fails
+  if(op.k==='g'){(op.items||[]).forEach((c,j)=>{const p=mgParse(c);if(p&&!mgHas(st,p.id))mgPut(st,c,(op.at||[])[j]);});return true;}
+  if(op.k==='m'){const ia=mgAt(st,op.a),ib=mgAt(st,op.b);if(ia<0||ib<0||ia===ib)return false;
+    const A=mgParse(st.cells[ia]),B=mgParse(st.cells[ib]),C=mgParse(op.c);
+    if(!C||A.ch!==B.ch||A.t!==B.t||C.ch!==A.ch||C.t!==A.t+1)return false;
+    st.cells[ia]='';if(C.t>=MG_TOP){st.cells[ib]='';st.shelf.push({c:op.c,d:op.day||dayKey()});st.jk++;}else st.cells[ib]=op.c;return true;}
+  if(op.k==='v'){const ia=mgAt(st,op.a);if(ia<0||!(op.to>=0&&op.to<MG_N)||st.cells[op.to])return false;st.cells[op.to]=st.cells[ia];st.cells[ia]='';return true;}
+  if(op.k==='x'){const ia=mgAt(st,op.a),ib=mgAt(st,op.b);if(ia<0||ib<0||ia===ib)return false;const t=st.cells[ia];st.cells[ia]=st.cells[ib];st.cells[ib]=t;return true;}
+  if(op.k==='p'){const w=st.wagon.findIndex(x=>x.endsWith('.'+op.a));if(w<0)return false;const at=op.to>=0&&op.to<MG_N&&!st.cells[op.to]?op.to:st.cells.indexOf('');if(at<0)return false;st.cells[at]=st.wagon.splice(w,1)[0];return true;}
+  if(op.k==='j'){if(st.jk<1)return false;st.jk--;return true;}                  // a Joker sticker picked
+  if(op.k==='u'){                                                               // undo a merge: the made prize goes, its two come back
+    const C=mgParse(op.c);if(!C||!mgParse(op.fa)||!mgParse(op.fb))return false;let ic=-1;
+    if(C.t>=MG_TOP){const si=st.shelf.findIndex(x=>x.c===op.c);if(si<0||st.jk<1)return false;st.shelf.splice(si,1);st.jk--;}
+    else{ic=mgAt(st,C.id);if(ic<0)return false;st.cells[ic]='';}
+    mgPut(st,op.fb,ic>=0?ic:op.ib);mgPut(st,op.fa,op.ia);return true;}
+  return false;
+}
+/* Saves from two devices: replay this device's ops that the other device hasn't seen, oldest first, on its board.
+   Returns the merged board and what to take back off the counters (vd). */
+function mgRebase(b,l,r){
+  b=mgNorm(b);l=mgNorm(l);r=mgNorm(r);
+  const inB=new Set(b.ops.map(o=>o.i)),inR=new Set(r.ops.map(o=>o.i));
+  const st={cells:r.cells.slice(),wagon:r.wagon.slice(),shelf:r.shelf.map(x=>({...x})),jk:r.jk},kept=[];
+  const vd={co:0,sk:0,ch:[],cr:[],cd:[],n:0};
+  const back=o=>{const d=o.d||{};vd.co+=mgNum(d.co);vd.sk+=mgNum(d.sk);['ch','cr','cd'].forEach(k=>{if(Array.isArray(d[k]))d[k].forEach(x=>vd[k].push(x));});};
+  l.ops.filter(o=>!inB.has(o.i)).sort((x,y)=>mgNum(x.t)-mgNum(y.t)).forEach(o=>{
+    if(inR.has(o.i)){back(o);return;}              // the same step already came from the other device (a drop, the starter gift)
+    if(mgApply(st,o)){kept.push(o);return;}
+    back(o);if(o.k==='m')vd.n++;                    // a merge whose prizes were already used there: undone, paid back
+  });
+  const best={...(r.life.best||{})};Object.keys(l.life.best||{}).forEach(k=>{best[k]=Math.max(mgNum(best[k]),mgNum(l.life.best[k]));});
+  const add=k=>Math.max(0,r.life[k]+l.life[k]-b.life[k]);
+  return {vd,mg:{...r,...st,since:r.since<l.since?r.since:l.since,ops:r.ops.concat(kept).sort((x,y)=>mgNum(x.t)-mgNum(y.t)).slice(-MG_OPS_MAX),
+    got:{...l.got,...r.got},seen:Math.max(r.seen,l.seen),life:{merges:Math.max(0,add('merges')-vd.n),bought:add('bought'),best}}};
+}
+let mgVoided=0;
+const mgDevice=()=>/iPhone|iPad|iPod/.test(navigator.userAgent)?'iPhone':/Macintosh|Mac OS/.test(navigator.userAgent)?'Mac':'other device';
+function mgNoteVoid(n){if(!n)return;const me=mgDevice(),other=me==='iPhone'?'Mac':me==='Mac'?'iPhone':'other device';
+  setTimeout(()=>toast(`${plural(n,'merge')} from your ${me} ${n===1?'was':'were'} already made on your ${other}, so ${n===1?'it':'they'} counted once.`),600);}
+// ---- live actions on S (no drawing): each records an op; the Booth's UI and the drop hooks call these
+const mgPrice=()=>nice(10*unit());
+// payouts round DOWN to the same tidy steps as prices (Opening Day's are exact): rounding up made a whole ladder in phase 5
+// return 0.9501 coins per spark coin, just over the 0.95 line; rounded down every phase stays at about 0.94
+const niceDown=x=>{if(x<100)return Math.floor(x);const p=Math.pow(10,Math.floor(Math.log10(x))-1);return Math.floor(x/p+1e-9)*p;};
+function mgPayFor(t){const r=MG_PAY[t]||[0];return{co:niceDown(r[0]*unit()),ch:r[1]||null,jk:t>=MG_TOP};}
+const mgName=(ch,t)=>{const A=window.MERGE_ART,c=A&&A.chains&&A.chains[ch],x=c&&c.tiers&&c.tiers[t-1];return (x&&x.name)||(MG_NAMES[ch]||[])[t-1]||'Prize';};
+const mgOn=()=>!S.settings||S.settings.booth!==false;
+function mgState(){return{cells:S.mg.cells.slice(),wagon:S.mg.wagon.slice(),shelf:S.mg.shelf.map(x=>({...x})),jk:S.mg.jk};}
+function mgCommit(op){
+  if(!op.i)op.i='o'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);op.t=Date.now();
+  const st=mgState();if(!mgApply(st,op))return false;
+  Object.assign(S.mg,st);S.mg.ops.push(op);if(S.mg.ops.length>MG_OPS_MAX)S.mg.ops.splice(0,S.mg.ops.length-MG_OPS_MAX);return true;
+}
+/* A habit drops a prize, named after its reward's credit id (key), so a goal checked on two devices drops one prize and
+   a reward that can't pay twice can't drop twice. Nothing drops for days before the Booth existed or while it's off. */
+function mgDrop(key,ch,t,day){
+  if(!mgOn()||!S.mg||S.mg.got[key])return null;day=day||dayKey();if(day<S.mg.since)return null;
+  const c=ch+t+'.h'+mgHash(key),op={i:'d:'+key,k:'d',c,at:-1,d:{}};
+  S.mg.got[key]=dayKey();if(!mgCommit(op))return null;return c;
+}
+const mgT2=()=>S.village.n>=3?'ribbon':'balloon';   // weekly sessions and Trello cards drop Rosettes from phase 3
+function mgStarter(){   // the first visit: two Bear Charms side by side and 3 starter sparks, once (on either device)
+  if(S.mg.got.start)return false;const c=S.mg.cells;let at=[-1,-1];
+  for(let i=0;i<MG_N-1;i++)if(i%MG_W<MG_W-1&&!c[i]&&!c[i+1]){at=[i,i+1];break;}
+  const op={i:'g:start',k:'g',items:['bear1.hstart1','bear1.hstart2'],at,d:{sk:MG_START_SPARKS}};
+  S.mg.got.start=dayKey();if(!mgCommit(op))return false;S.sparks+=MG_START_SPARKS;return true;
+}
+function mgBuy(n){
+  n=Math.floor(n);const price=mgPrice()*n;
+  if(!(n>=1))return 'none';if(S.sparks+n>MG_JAR)return 'jar';if(S.coins<price)return 'coins';
+  S.coins-=price;S.sparks+=n;mgCommit({k:'b',n,d:{co:-price,sk:n}});S.mg.life.bought+=n;return 'ok';
+}
+function mgMergeCore(idA,idB){   // drag A onto B: the made prize sits where B was
+  const st=S.mg,ia=mgAt(st,idA),ib=mgAt(st,idB);if(ia<0||ib<0||ia===ib)return null;
+  const A=mgParse(st.cells[ia]),B=mgParse(st.cells[ib]);if(A.ch!==B.ch||A.t!==B.t||A.t>=MG_TOP)return null;
+  if(S.sparks<1)return 'nospark';
+  const t=A.t+1,p=mgPayFor(t);
+  const op={k:'m',a:idA,b:idB,c:A.ch+t+'.'+mgId(),fa:st.cells[ia],fb:st.cells[ib],ia,ib,day:dayKey(),d:{sk:-1,co:p.co,ch:p.ch?[p.ch]:[]}};
+  if(!mgCommit(op))return null;
+  S.sparks-=1;S.coins+=p.co;if(p.ch)S.chests.push(p.ch);
+  S.mg.life.merges++;S.mg.life.best[A.ch]=Math.max(mgNum(S.mg.life.best[A.ch]),t);
+  return op;
+}
+function mgMoveCore(id,to){const ib=to>=0&&to<MG_N&&S.mg.cells[to]?mgParse(S.mg.cells[to]):null;
+  const op=ib?{k:'x',a:id,b:ib.id,d:{}}:{k:'v',a:id,to,d:{}};return mgCommit(op)?op:null;}
+function mgPlaceCore(to){const w=S.mg.wagon[0],p=mgParse(w);if(!p)return null;const op={k:'p',a:p.id,to:to==null?-1:to,d:{}};return mgCommit(op)?op:null;}
+function mgUndoCore(mergeId){   // exactly reverses a merge: the spark back, the coins and the unopened chest taken back
+  const m=S.mg.ops.find(o=>o.i===mergeId);if(!m||m.k!=='m')return null;
+  const md=m.d||{},take=Math.min(mgNum(md.co),Math.max(0,S.coins)),cr=[],left=S.chests.slice();
+  (md.ch||[]).forEach(c=>{const j=left.lastIndexOf(c);if(j>=0){left.splice(j,1);cr.push(c);}});
+  const op={k:'u',of:m.i,c:m.c,fa:m.fa,fb:m.fb,ia:m.ia,ib:m.ib,d:{sk:1,co:-take,cr}};
+  if(!mgCommit(op))return null;
+  S.sparks+=1;S.coins-=take;S.chests=left;S.mg.life.merges=Math.max(0,S.mg.life.merges-1);
+  return op;
+}
+function mgJokerCore(cardId){   // a Joker sticker: the missing sticker he picks, or a gold chest when nothing's missing
+  if(S.mg.jk<1)return null;const c=cardId&&cardById(cardId);
+  const op=c&&!(S.cards[c.id]>0)?{k:'j',card:c.id,d:{cd:[c.id]}}:{k:'j',d:{ch:['gold']}};
+  if(!mgCommit(op))return null;
+  if(op.card)S.cards[op.card]=(S.cards[op.card]||0)+1;else S.chests.push('gold');
+  return op;
+}
+const mgPairs=()=>{const n={};S.mg.cells.forEach(x=>{const p=mgParse(x);if(p&&p.t<MG_TOP){const k=p.ch+p.t;n[k]=(n[k]||0)+1;}});return Object.values(n).reduce((a,c)=>a+Math.floor(c/2),0);};
+const mgNewIds=since=>{const s=new Set();S.mg.ops.forEach(o=>{if(o.k==='d'&&o.t>since){const p=mgParse(o.c);if(p)s.add(p.id);}});return s;};
+const mgOnBoard=id=>mgHas(S.mg,id);
+
 /* ============ State ============ */
 const KEY='lucky-streak-v1';
 const CR_KEEP_DAYS=30,CR_DUP_DAYS=21;   // credit ids kept 30 days; only the last 21 count as possible duplicates
@@ -1261,7 +1576,7 @@ function freshState(){
     goals:DEFAULT_GOALS.concat(EXTRA_GOALS).map(g=>({...g,id:uid(),created:t})),
     log:{},weeks:{},streak:0,best:0,runAwards:[],weekStreak:0,weekBest:0,lastProcessed:addDays(t,-1),lastWeek:addDays(weekOf(t,1),-7),lastDaily:null,pauses:[],
     weight:{unit:'lb',start:null,goal:null,entries:[],milestone:0,goalHit:false},
-    cards:{},setsDone:[],chests:['wood'],settings:{sound:true,weekStart:1},seenIntro:false,stats:{spins:0,attacks:0,raids:0}};
+    cards:{},setsDone:[],chests:['wood'],settings:{sound:true,weekStart:1,booth:true},seenIntro:false,stats:{spins:0,attacks:0,raids:0},sparks:0,mg:mgFresh()};
 }
 function normalize(src){
   const d=freshState();if(!src||typeof src!=='object')return d;
@@ -1285,6 +1600,7 @@ function normalize(src){
   if(!o.lastWeek)o.lastWeek=addDays(weekOf(today(),o.settings.weekStart),-7);
   if(typeof o.weekStreak!=='number')o.weekStreak=0;if(typeof o.weekBest!=='number')o.weekBest=0;
   o.cr=trimCr(o.cr);   // credit ids (Nov 4); an older save simply starts with none
+  o.mg=mgNorm(s.mg);o.sparks=Math.max(0,Math.floor(mgNum(s.sparks)));   // the Prize Booth (Nov 9); an older save starts with an empty board
   o.v=2;return o;
 }
 try{S=normalize(JSON.parse(localStorage.getItem(KEY)||'null'));}catch(e){S=freshState();}
@@ -1367,7 +1683,7 @@ function mergePay(a,c){
   const o={t:Math.max(0,numv(a.t)-ka.length,numv(c.t)-kc.length)+k.length,d:!!(a.d||c.d)};if(k.length)o.k=k;return o;
 }
 function merge3(base,loc,rem){
-  base=base||{};loc=loc||{};rem=rem||{};
+  base=base||{};loc=loc||{};rem=rem||{};let vd={co:0,sk:0,ch:[],cr:[],cd:[],n:0};
   const out=clone(rem);
   const keys=new Set([...Object.keys(base||{}),...Object.keys(loc||{}),...Object.keys(rem||{})]);
   keys.forEach(k=>{
@@ -1383,6 +1699,8 @@ function merge3(base,loc,rem){
     if(k==='claimed'||k==='spent'||k==='runAwards'||k==='setsDone'||k==='trailCredited'){out[k]=[...new Set([...(r||[]),...(l||[])])];return;}
     if(k==='villagesDone'){const o=(r||[]).slice(),seen=new Set(o.map(x=>x&&x.n));(l||[]).forEach(x=>{if(x&&!seen.has(x.n)){seen.add(x.n);o.push(x);}});out[k]=o;return;}
     if(k==='cr'){out[k]=Object.assign({},l||{},r||{});return;}
+    if(k==='mg'){const R=mgRebase(b,l,r);out.mg=R.mg;vd=R.vd;return;}   // the Prize Booth: replay this device's unseen steps
+    if(k==='sparks')return;                        // counted below, with the other counters
     if(k==='chests'){const bc=b||[],lc=l||[];out[k]=(r||[]).concat(lc.length>bc.length?lc.slice(bc.length):[]);return;}
     if(k==='cards'||k==='stats'){out[k]=Object.assign({},r||{});Object.keys(l||{}).forEach(id=>{if(typeof (l||{})[id]==='number')out[k][id]=Math.max(0,numv((r||{})[id])+numv(l[id])-numv((b||{})[id]));});return;}
     if(k==='weeks'){const o=clone(r||{});Object.keys(l||{}).forEach(wk=>{const L=l[wk],R=o[wk];if(!R){o[wk]=clone(L);return;}const pay=Object.assign({},R.pay||{});Object.keys(L.pay||{}).forEach(id=>{const a=L.pay[id]||{},c=pay[id]||{};pay[id]=mergePay(a,c);});o[wk]={...R,pay,allCore:!!(R.allCore||L.allCore),result:R.result||L.result};});out.weeks=o;return;}
@@ -1397,9 +1715,12 @@ function merge3(base,loc,rem){
   const dup={sp:0,co:0,sh:0,tr:0,ch:[]};
   Object.keys(lc).forEach(id=>{if(!rc[id]||bc[id]||!crRecent(id,lc[id]))return;const c=lc[id];dup.sp+=numv(c.sp);dup.co+=numv(c.co);dup.sh+=numv(c.sh);dup.tr+=numv(c.tr);(Array.isArray(c.ch)?c.ch:[]).forEach(x=>dup.ch.push(x));});
   out.spins=Math.max(0,numv(rem.spins)+numv(loc.spins)-numv(base.spins)-dup.sp);
-  out.coins=Math.max(0,numv(rem.coins)+numv(loc.coins)-numv(base.coins)-dup.co);
+  out.coins=Math.max(0,numv(rem.coins)+numv(loc.coins)-numv(base.coins)-dup.co-vd.co);
+  out.sparks=Math.max(0,numv(rem.sparks)+numv(loc.sparks)-numv(base.sparks)-vd.sk);
   out.shields=Math.min(MAXSH,Math.max(0,numv(rem.shields)+numv(loc.shields)-numv(base.shields)-dup.sh));
-  out.chests=mergeChests(base.chests,loc.chests,rem.chests,dup.ch);
+  out.chests=mergeChests(base.chests,loc.chests,rem.chests,dup.ch.concat(vd.ch)).concat(vd.cr);
+  if(vd.cd.length&&out.cards)vd.cd.forEach(id=>{if(out.cards[id]>0)out.cards[id]--;});
+  mgVoided=vd.n;mgNoteVoid(vd.n);
   const bv=base.village||{},lv=loc.village||{},rv=rem.village||{};
   if(out.village&&numv(bv.n)===numv(lv.n)&&numv(lv.n)===numv(rv.n)&&numv(out.village.n)===numv(rv.n))
     out.village.trail=Math.max(0,numv(rv.trail)+numv(lv.trail)-numv(bv.trail)-dup.tr);
@@ -1455,7 +1776,7 @@ function reconcilePast(day){
     recountStreak();
   }
 }
-function persist(){S.updatedAt=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}lsSet(UNSYNC,'1');dirty=true;clearTimeout(saveTimer);saveTimer=setTimeout(flush,1200);}
+function persist(ms){S.updatedAt=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}lsSet(UNSYNC,'1');dirty=true;clearTimeout(saveTimer);saveTimer=setTimeout(flush,ms||1200);}
 /* Versions this page has seen or written, keyed by updatedAt. A save built on an older version than ours (two devices
    writing at the same moment) is merged against that older ancestor instead of quietly winning; a version already seen
    (our own write coming back, a repeated snapshot) is never merged twice. */
@@ -1524,7 +1845,7 @@ function subscribe(col){
     const g=ds.find(d=>d.id==='game');if(!g)return;const gu=g.data.updatedAt||0,b0=getBase();
     if(gu===((b0&&b0.updatedAt)||0)||gu===inflightAt||gu===(S.updatedAt||0)||hist.has(gu))return;   // nothing new, or our own write landing
     const r=remoteFrom(ds.map(d=>({id:d.id,data:clone(d.data)})));if(!r)return;
-    if(busy||overlayOpen)pendingRemote=r;else takeRemote(r);
+    if(busy||overlayOpen||mgDrag)pendingRemote=r;else takeRemote(r);
   },e=>{
     subscribed=false;const code=e&&e.code;
     if(TERMINAL.has(code)){syncFail(e,()=>{});return;}
@@ -1564,7 +1885,7 @@ const TRAIL_GOAL='Trail run (10K plan)';
 function trailGoal(){return S.trailGoalId?goalById(S.trailGoalId):S.goals.find(g=>g.trail&&!g.archived);}
 function trailSync(){
   if(!cloudOn||!booted)return;
-  if(busy||overlayOpen||pendingRemote){clearTimeout(trailT);trailT=setTimeout(trailSync,1500);return;}
+  if(busy||overlayOpen||mgDrag||pendingRemote){clearTimeout(trailT);trailT=setTimeout(trailSync,1500);return;}
   let changed=false;
   if(trailPlan&&trailPlan.active!==false&&!trailGoal()){
     const g={id:uid(),name:TRAIL_GOAL,reward:12,period:'day',kind:'flex',target:1,created:today(),trail:true};
@@ -1639,11 +1960,12 @@ function healthRule(g){
 const meets=(r,x)=>x!=null&&(r.op==='>='?x>=r.v:r.op==='<'?x<r.v:x<=r.v);
 let hush=false;
 function healthApply(briefs){
-  const t=today(),y=addDays(t,-1),got=[];let seen=S.healthSeen||'';
+  const t=today(),y=addDays(t,-1),got=[];let seen=S.healthSeen||'',dropped=0;
   for(const b of briefs){
     if(b.date>seen&&b.date<=t)seen=b.date;
     if(b.date!==t&&!canFixDay(b.date))continue;      // any day in the 14-day strip (a late open never costs a day)
     if(b.date<S.startDay||isPaused(b.date))continue;
+    if(mgDrop('hb:'+b.date,'balloon',1,b.date))dropped++;   // the brief itself is a habit: a Balloon for the Prize Booth
     const L=logFor(b.date);L.hc=Array.isArray(L.hc)?L.hc:[];L.done=L.done||[];
     for(const g of activeGoals('day')){
       if(L.hc.includes(g.id))continue;
@@ -1655,7 +1977,7 @@ function healthApply(briefs){
       got.push({name:g.name,day:b.date});
     }
   }
-  const changed=got.length||seen!==(S.healthSeen||'');
+  const changed=got.length||dropped||seen!==(S.healthSeen||'');
   S.healthSeen=seen;
   if(changed){persist();renderAll();}
   if(got.length){
@@ -1668,7 +1990,7 @@ function healthApply(briefs){
 }
 async function healthPull(){
   if(!cloudOn||!booted)return;
-  if(busy||overlayOpen||pendingRemote){clearTimeout(healthT);healthT=setTimeout(healthPull,2000);return;}
+  if(busy||overlayOpen||mgDrag||pendingRemote){clearTimeout(healthT);healthT=setTimeout(healthPull,2000);return;}
   const C=window.__wc;if(!C||typeof C.use!=='function')return;
   healthAt=Date.now();
   try{
@@ -1676,7 +1998,7 @@ async function healthPull(){
     const p=await MCP.read('health');
     const briefs=((p&&p.comments)||[]).map(c=>parseHealth(c.text)).filter(Boolean);
     healthNote='';
-    if(busy||overlayOpen||pendingRemote){clearTimeout(healthT);healthT=setTimeout(healthPull,2000);return;}
+    if(busy||overlayOpen||mgDrag||pendingRemote){clearTimeout(healthT);healthT=setTimeout(healthPull,2000);return;}
     healthApply(briefs);
   }catch(e){healthNote=(e&&e.code)||'error';}
 }
@@ -1697,14 +2019,15 @@ function lakeSetup(db,id){
 }
 function lakeClaim(){
   if(!cloudOn||!lakeGrants.length)return;
-  if(busy||overlayOpen||pendingRemote){clearTimeout(lakeT);lakeT=setTimeout(lakeClaim,1500);return;}
+  if(busy||overlayOpen||mgDrag||pendingRemote){clearTimeout(lakeT);lakeT=setTimeout(lakeClaim,1500);return;}
   S.claimed=Array.isArray(S.claimed)?S.claimed:[];
   const have=new Set(S.claimed);
   const fresh=lakeGrants.filter(g=>g&&g.id&&!have.has(g.id)&&!hasCr('g:'+g.id)&&!(S.restartedAt&&(g.at||0)&&g.at<S.restartedAt));
   if(!fresh.length){lakeWriteClaims();return;}
   let sp=0,co=0;const ch=[];
   fresh.forEach(g=>{const gs=Math.max(0,Math.min(500,g.spins|0)),gc=Math.max(0,Math.min(20,g.units|0))*unit(),gch=['wood','silver','gold'].includes(g.chest)?[g.chest]:[];
-    sp+=gs;co+=gc;gch.forEach(c=>ch.push(c));S.claimed.push(g.id);note('g:'+g.id,{sp:gs,co:gc,ch:gch});});
+    sp+=gs;co+=gc;gch.forEach(c=>ch.push(c));S.claimed.push(g.id);note('g:'+g.id,{sp:gs,co:gc,ch:gch});
+    if(g.kind==='card'&&gs>0)mgDrop('g:'+g.id,mgT2(),2,g.at?dayKey(new Date(g.at)):dayKey());});
   S.claimed=S.claimed.slice(-600);
   S.spins+=sp;S.coins+=co;ch.forEach(c=>S.chests.push(c));
   persist();renderAll();
@@ -1717,7 +2040,7 @@ function lakeClaim(){
 }
 function lakeSpend(){
   if(!cloudOn||!lakeSpends.length)return;
-  if(busy||overlayOpen||pendingRemote){clearTimeout(lakeSpT);lakeSpT=setTimeout(lakeSpend,1500);return;}
+  if(busy||overlayOpen||mgDrag||pendingRemote){clearTimeout(lakeSpT);lakeSpT=setTimeout(lakeSpend,1500);return;}
   S.spent=Array.isArray(S.spent)?S.spent:[];
   const have=new Set(S.spent);
   const fresh=lakeSpends.filter(x=>x&&x.id&&!have.has(x.id)&&!hasCr('s:'+x.id));
@@ -1781,7 +2104,9 @@ const SFX={
  smash:()=>{noise(.08,700);tone(520,.3,'sine',.16,0,150);tone(1500,.07,'triangle',.05,.32);tone(1800,.07,'triangle',.05,.44);tone(1500,.07,'triangle',.05,.56);},
  click:()=>tone(520,.03,'square',.03),
  sad:()=>{tone(392,.18,'triangle',.07,0,330);tone(311,.26,'triangle',.07,.15,233);},
- dig:()=>noise(.12,600)
+ dig:()=>noise(.12,600),
+ merge:t=>{const f=330*Math.pow(2,(t-1)/5);tone(f,.1,'triangle',.08);tone(f*1.5,.16,'triangle',.07,.07);if(t>=5)tone(f*2,.22,'triangle',.06,.15);},
+ spark:()=>{tone(1568,.06,'sine',.06);tone(2349,.12,'sine',.05,.05);}
 };
 const buzz=ms=>{try{navigator.vibrate&&navigator.vibrate(ms);}catch(e){}};
 
@@ -1917,7 +2242,7 @@ function toggleDay(id,fromEl,day){
   if(L.done.includes(id)){L.done=L.done.filter(x=>x!==id);SFX.click();}
   else{
     L.done.push(id);SFX.check();buzz(12);
-    if(!L.paid.includes(id)){L.paid.push(id);addTrail();{const rw=rewardOf(g);gainSpins(rw,fromEl);note('pd:'+day+':'+id,{sp:rw,tr:1});toast(`+${rw} spins: ${g.name}`);}firstGoalBonus(day,fromEl);}
+    if(!L.paid.includes(id)){L.paid.push(id);addTrail();{const rw=rewardOf(g);gainSpins(rw,fromEl);note('pd:'+day+':'+id,{sp:rw,tr:1});const dr=mgDrop('pd:'+day+':'+id,'bear',1,day);if(dr)mgFly(fromEl,dr);toast(dr?`+${rw} spins · ${mgName('bear',1)} → Prize Booth`:`+${rw} spins: ${g.name}`);}firstGoalBonus(day,fromEl);}
   }
   if(day===today())reconcileToday();else reconcilePast(day);
   checkPerfect(L,day);
@@ -1931,7 +2256,7 @@ function tapDay(id,delta,fromEl,day){
   const t=g.target||1,c=Math.max(0,(L.c[id]||0)+delta);
   if(c)L.c[id]=c;else delete L.c[id];
   if(delta>0){SFX.check();buzz(12);}else SFX.click();
-  if(c>=t&&!L.done.includes(id)){L.done.push(id);if(!L.paid.includes(id)){L.paid.push(id);addTrail();{const rw=rewardOf(g);gainSpins(rw,fromEl);note('pd:'+day+':'+id,{sp:rw,tr:1});toast(`+${rw} spins: ${g.name}`);}firstGoalBonus(day,fromEl);}else toast(`${g.name}: done`);}
+  if(c>=t&&!L.done.includes(id)){L.done.push(id);if(!L.paid.includes(id)){L.paid.push(id);addTrail();{const rw=rewardOf(g);gainSpins(rw,fromEl);note('pd:'+day+':'+id,{sp:rw,tr:1});const dr=mgDrop('pd:'+day+':'+id,'bear',1,day);if(dr)mgFly(fromEl,dr);toast(dr?`+${rw} spins · ${mgName('bear',1)} → Prize Booth`:`+${rw} spins: ${g.name}`);}firstGoalBonus(day,fromEl);}else toast(`${g.name}: done`);}
   else if(c<t&&L.done.includes(id))L.done=L.done.filter(x=>x!==id);
   else if(delta>0)toast(`${g.name}: ${c} of ${t}`);
   if(day===today())reconcileToday();else reconcilePast(day);
@@ -1952,7 +2277,7 @@ function tapWeek(id,delta,fromEl){
   if(g.limit){L.w[id]=(L.w[id]||0)+1;SFX.click();const n=weekCount(id,wk);toast(`Logged: ${g.name} (${n} this week)`);persist();renderAll();return;}
   L.w[id]=(L.w[id]||0)+1;SFX.check();buzz(12);
   const W=weekRec(wk),P=W.pay[id]||(W.pay[id]={t:0,d:false});const cnt=weekCount(id,wk);
-  if(cnt>P.t&&P.t<g.target){P.t++;const tk=tapKey();P.k=(Array.isArray(P.k)?P.k:[]).concat(tk);addTrail();gainSpins(TAP_REWARD,fromEl);note('wt:'+wk+':'+id+':'+tk,{sp:TAP_REWARD,tr:1});toast(`+${TAP_REWARD} spins: ${g.name} (${Math.min(cnt,g.target)}/${g.target})`);}
+  if(cnt>P.t&&P.t<g.target){P.t++;const tk=tapKey();P.k=(Array.isArray(P.k)?P.k:[]).concat(tk);addTrail();gainSpins(TAP_REWARD,fromEl);note('wt:'+wk+':'+id+':'+tk,{sp:TAP_REWARD,tr:1});const dr=mgDrop('wt:'+wk+':'+id+':'+tk,mgT2(),2);if(dr)mgFly(fromEl,dr);toast(`+${TAP_REWARD} spins: ${g.name} (${Math.min(cnt,g.target)}/${g.target})${dr?` · ${mgName(mgT2(),2)} → Prize Booth`:''}`);}
   else toast(`${g.name}: ${cnt} this week`);
   if(cnt>=g.target&&!P.d){P.d=true;const ch=g.kind==='flex'?'gold':'silver',rw=rewardOf(g);S.spins+=rw;S.chests.push(ch);note('wp:'+wk+':'+id,{sp:rw,ch:[ch]});
     celebrate({eyebrow:g.kind==='flex'?'Weekly flex goal':'Weekly goal',title:g.name,body:`${g.target} of ${g.target} this week.`,reward:`+${rw} spins · ${ch} chest`});checkWeekCore(wk);}
@@ -2141,6 +2466,343 @@ function completeVillage(){
   setTimeout(()=>{celebrate({eyebrow:`Phase ${v.n} complete`,title:V.name,body:`Every ride is running and the boardwalk is done. Next up: ${nx.name}, with a boardwalk of ${trailNeed(v.n+1)} goals and pricier fix-ups.${unlocked?` New sticker set unlocked: ${unlocked.name}.`:''}`,reward:'+75 spins · gold chest',btn:`On to ${nx.name}`});renderAll();},reduced?0:700);
 }
 
+/* ============ Prize Booth: the full-screen layer (Nov 9) ============
+   Opened from the Park tab's card or the Spin screen's "Done for today" row; Done closes it. Not built on openOverlay(),
+   so remote saves, Trello rewards and celebrate() keep working while it's open; a drag holds incoming saves until the
+   drop. Prizes are buttons: drag one onto its twin (or tap one, then the other; or Enter on each) to merge for a spark;
+   a drop on an empty hook moves it and on another prize swaps the two. One Undo until the next move. */
+let mgOpen=false,mgSel=null,mgDrag=null,mgLast=null,mgFlash=null,mgSeenAt=0,mgDirty=false,mgFocus=0,mgJust=false,mgNoSpark=false,mgOpener=null;
+const mgEls=new Map();
+const MG_UNDO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7L4 12l5 5"/><path d="M4 12h10a6 6 0 0 1 0 12h-2" transform="translate(0 -6)"/></svg>';
+const MG_ARROW='<svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+const MG_INFO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>';
+const MG_CHEV='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+const MG_SRC={bear:['Drops when you finish a daily goal'],balloon:['Drops with a weigh-in or the Health brief','Drops with a weekly session or a Trello card, or from 2 Balloons'],
+  ribbon:['Ribbons start as Rosettes','Drops with a weekly session or a Trello card (phase 3 on)']};
+const mgUse=(k,cls)=>`<svg class="${cls||''}" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="#mg-${k}"/></svg>`;
+function mgSprite(){   // one hidden sprite for every prize; hidden by size, not display:none, so its clip paths and gradients draw
+  if(document.getElementById('mgSprite'))return;
+  const A=window.MERGE_ART;let defs='',syms='';
+  if(A&&A.sym){defs=A.defs||'';for(const k in A.sym)syms+=`<symbol id="mg-${k}" viewBox="0 0 64 64">${A.sym[k]}</symbol>`;}
+  if(!A||!A.sym||!A.sym['bear-1']){   // merge-art.js didn't load: plain tokens, so the Booth still works
+    const col={bear:'#c08447',balloon:'#e4472f',ribbon:'#2f7aa3'};
+    MG_CHAINS.forEach(ch=>{for(let t=1;t<=8;t++)syms+=`<symbol id="mg-${ch}-${t}" viewBox="0 0 64 64"><circle cx="32" cy="32" r="${10+t*2.6}" fill="${col[ch]}" stroke="#2b1a10" stroke-width="2.5"/></symbol>`;});
+    ['spark','jar','wagon','shelf','booth'].forEach(k=>{syms+=`<symbol id="mg-${k}" viewBox="0 0 64 64"><path d="M32 6L38 26L58 32L38 38L32 58L26 38L6 32L26 26Z" fill="#5fb0d6" stroke="#2b1a10" stroke-width="2.5"/></symbol>`;});
+  }
+  document.body.insertAdjacentHTML('afterbegin',`<svg id="mgSprite" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">${defs?`<defs>${defs}</defs>`:''}${syms}</svg>`);
+}
+const mgCellOf=id=>{const i=mgAt(S.mg,id);return i>=0?mgParse(S.mg.cells[i]):null;};
+const mgUndoable=()=>{const ops=S.mg.ops,o=ops[ops.length-1];return !!(mgLast&&o&&o.i===mgLast&&o.k==='m');};
+function mgSay(t){const el=document.getElementById('mgLive');if(el){el.textContent='';setTimeout(()=>{el.textContent=t;},30);}}
+const mgHintOn=()=>{let v=null;try{v=localStorage.getItem(KEY+'-mghint');}catch(e){}return v!=='off'&&S.mg.life.merges===0;};
+function mgHintOff(){try{localStorage.setItem(KEY+'-mghint','off');}catch(e){}}
+function mgShell(){
+  const L=document.getElementById('booth');if(L.dataset.built)return;L.dataset.built='1';
+  let hooks='';for(let i=0;i<MG_N;i++)hooks+=`<div class="mg-hook" data-i="${i}"></div>`;
+  L.innerHTML=`<div class="mg-top"><button class="mg-done" data-mg="done">Done</button><span class="mg-pill coins" id="mgCoins" aria-label="Coins">${SYM.coin}<b></b></span><button class="mg-pill jar" id="mgJar" data-mg="get">${mgUse('jar')}<b></b><span class="of">/ ${MG_JAR}</span></button></div>
+   <div class="mg-booth"><div class="mg-marquee" aria-hidden="true"><span>Prize Booth</span></div><div class="mg-wall"><div class="mg-board" id="mgBoard" role="group" aria-label="Prize board, 5 hooks across and 6 down">${hooks}</div></div><div class="mg-line" id="mgLine"></div></div>
+   <div class="mg-shelf" id="mgShelf"></div>
+   <div class="mg-brow"><button class="mg-get" data-mg="get" aria-label="Get sparks"><small>Get</small><b>Sparks</b></button><div class="mg-status" id="mgStatus"></div><button class="mg-undo off" id="mgUndo" data-mg="undo" aria-disabled="true">${MG_UNDO}Undo</button></div>
+   <div class="mg-chip" id="mgChip" hidden></div><p class="sr" id="mgLive" aria-live="polite"></p>`;
+  L.addEventListener('click',e=>{const b=e.target.closest('[data-mg]');if(!b||!L.contains(b))return;mgCmd(b.dataset.mg,b);});
+  const B=document.getElementById('mgBoard');
+  B.addEventListener('click',mgTap);
+  B.addEventListener('keydown',mgKeys);
+  B.addEventListener('pointerdown',mgDown);
+  B.addEventListener('pointermove',mgMove);
+  B.addEventListener('pointerup',e=>{if(mgDrag&&e.pointerId===mgDrag.pid)mgEnd('up',e);});
+  B.addEventListener('pointercancel',e=>{if(mgDrag&&e.pointerId===mgDrag.pid)mgEnd('cancel',e);});
+  B.addEventListener('lostpointercapture',e=>{if(mgDrag&&e.pointerId===mgDrag.pid&&mgDrag.on)mgEnd('cancel',e);});
+  L.addEventListener('touchmove',e=>{e.preventDefault();},{passive:false});   // belt and braces for iPhone Safari: this layer never scrolls
+  L.addEventListener('contextmenu',e=>e.preventDefault());
+}
+function mgCmd(c,el){
+  unlockAudio();
+  if(c==='done')closeBooth();
+  else if(c==='get')mgGetSheet();
+  else if(c==='undo')mgDoUndo();
+  else if(c==='chain')mgChainSheet(el.dataset.ch);
+  else if(c==='wagon')mgPlaceNext();
+  else if(c==='park'){closeBooth();setTab('village');}
+  else if(c==='skip'){mgHintOff();renderBooth();}
+  else if(c==='joker')mgJokerSheet();
+}
+function openBooth(from){
+  if(!mgOn())return;mgSprite();mgShell();mgOpener=from||document.activeElement;
+  if(!S.mg.got.start&&mgStarter())persist();
+  mgSeenAt=S.mg.seen;mgSel=null;mgLast=null;mgFlash=null;mgNoSpark=false;mgOpen=true;
+  const L=document.getElementById('booth');L.hidden=false;document.documentElement.classList.add('mg-open');
+  renderBooth();
+  requestAnimationFrame(()=>{const f=L.querySelector('.mg-board [tabindex="0"]')||L.querySelector('.mg-done');if(f)f.focus({preventScroll:true});});
+}
+function closeBooth(){
+  if(!mgOpen)return;if(mgDrag)mgEnd('cancel',null);
+  mgOpen=false;mgSel=null;mgLast=null;mgFlash=null;
+  document.getElementById('booth').hidden=true;document.documentElement.classList.remove('mg-open');
+  S.mg.seen=Date.now();persist();renderAll();
+  if(mgOpener&&mgOpener.isConnected)try{mgOpener.focus({preventScroll:true});}catch(e){}
+  mgRelease();
+}
+function mgRelease(){if(pendingRemote&&!overlayOpen&&!busy&&!mgDrag){const d=pendingRemote;pendingRemote=null;takeRemote(d);}}
+// ---- drawing
+function renderBooth(){
+  if(!mgOpen)return;if(mgDrag){mgDirty=true;return;}mgDirty=false;
+  document.querySelector('#mgCoins b').textContent=fmt(S.coins);
+  const jar=document.getElementById('mgJar');jar.querySelector('b').textContent=S.sparks;jar.setAttribute('aria-label',`Spark jar: ${S.sparks} of ${MG_JAR}. Get sparks`);
+  mgBoardDraw();mgLineDraw();mgShelfDraw();
+  const pr=mgPairs();document.getElementById('mgStatus').innerHTML=`<b>${pr}</b>${pr===1?'pair':'pairs'} ready`;
+  const u=document.getElementById('mgUndo'),can=mgUndoable();u.classList.toggle('off',!can);u.setAttribute('aria-disabled',String(!can));
+}
+function mgBoardDraw(){
+  const B=document.getElementById('mgBoard'),cells=S.mg.cells,seen=new Set(),nw=mgNewIds(mgSeenAt);
+  const sel=mgSel?mgCellOf(mgSel):null;if(mgSel&&!sel)mgSel=null;
+  if(mgFocus<0||mgFocus>=MG_N)mgFocus=0;
+  for(let i=0;i<MG_N;i++){
+    const hook=B.children[i],x=cells[i],p=mgParse(x),r=Math.floor(i/MG_W)+1,c=i%MG_W+1;
+    if(p){
+      let el=mgEls.get(p.id);
+      if(!el){el=document.createElement('button');el.className='mg-it';el.dataset.id=p.id;mgEls.set(p.id,el);}
+      const isSel=!!sel&&sel.id===p.id,match=!!sel&&!isSel&&sel.ch===p.ch&&sel.t===p.t&&p.t<MG_TOP,isNew=nw.has(p.id);
+      const key=x+(isNew?'n':'')+(isSel?'s':'');
+      if(el.dataset.k!==key){el.dataset.k=key;el.innerHTML=mgUse(p.ch+'-'+p.t)+`<span class="mg-pip">${p.t}</span>${isNew?'<span class="mg-new">NEW</span>':''}${isSel?`<span class="mg-ok">${IC.check}</span>`:''}`;}
+      el.className='mg-it t'+p.t+(isSel?' sel':'')+(match?' match':'')+(sel&&!isSel&&!match?' dim':'');
+      el.setAttribute('aria-label',`Row ${r}, column ${c}: ${mgName(p.ch,p.t)}, tier ${p.t} of 8${isNew?', new':''}${isSel?', selected':''}${match?', matches':''}`);
+      el.setAttribute('aria-pressed',String(isSel));el.tabIndex=i===mgFocus?0:-1;
+      if(el.parentNode!==hook){hook.textContent='';hook.appendChild(el);}
+      hook.classList.remove('empty');seen.add(p.id);
+    }else{
+      let b=hook.firstElementChild;
+      if(!b||!b.classList.contains('mg-empty')){hook.textContent='';b=document.createElement('button');b.className='mg-empty';hook.appendChild(b);}
+      b.setAttribute('aria-label',`Row ${r}, column ${c}: empty hook${sel?', move here':''}`);b.tabIndex=i===mgFocus?0:-1;
+      hook.classList.add('empty');
+    }
+  }
+  for(const [id,el] of mgEls)if(!seen.has(id)){el.remove();mgEls.delete(id);}
+}
+function mgLineDraw(){
+  const el=document.getElementById('mgLine'),m=S.mg,free=m.cells.indexOf('')>=0,pr=mgPairs(),sel=mgSel?mgCellOf(mgSel):null;
+  const chainBtn=ch=>`<button class="mg-chipbtn" data-mg="chain" data-ch="${ch}">${MG_INFO}Chain</button>`;
+  const wag=`<button class="mg-chipbtn wagon" data-mg="wagon" aria-label="Wagon: ${plural(m.wagon.length,'prize')} waiting, tap to place">${mgUse('wagon')}Wagon · ${m.wagon.length}</button>`;
+  let h,c=false;
+  if(sel)h=`${mgUse(sel.ch+'-'+sel.t,'mini')}<span class="tx">${mgName(sel.ch,sel.t)} <small>· tier ${sel.t} of 8</small></span>${chainBtn(sel.ch)}`;
+  else if(mgFlash&&mgCellOf(mgFlash.id))h=`${mgUse(mgFlash.ch+'-'+mgFlash.t,'mini')}<span class="tx">${mgName(mgFlash.ch,mgFlash.t)} <small>· tier ${mgFlash.t}</small> <b>+${fmt(mgFlash.co)}</b></span>${chainBtn(mgFlash.ch)}`;
+  else if(mgNoSpark&&pr)h=`${mgUse('jar','mini')}<span class="tx">0 sparks. Merging takes 1; they're ${fmt(mgPrice())} coins each.</span><button class="mg-chipbtn" data-mg="get">Get sparks</button>`;
+  else if(mgHintOn()&&m.cells.filter(Boolean).length)h=`<span class="tx">Drag one Bear Charm onto the other, or tap one, then the other. <small>${plural(MG_START_SPARKS,'starter spark')}</small></span><button class="mg-chipbtn" data-mg="skip">Skip</button>`;
+  else if(m.wagon.length&&!free)h=`<span class="tx">Board full. New prizes wait in the Wagon.</span>${wag}`;
+  else if(m.wagon.length)h=`<span class="tx">${plural(m.wagon.length,'prize')} in the Wagon.</span>${wag}`;
+  else if(!m.cells.some(Boolean)){h='Prizes come from your goals: a Bear Charm for each daily goal, Balloons for weigh-ins, weekly sessions and Trello cards.';c=true;}
+  else if(!pr)h=`${mgUse('jar','mini')}<span class="tx">All merged. New prizes come with tomorrow's goals.</span><button class="mg-chipbtn gold" data-mg="park">Back to the park</button>`;
+  else if(!S.sparks)h=`${mgUse('jar','mini')}<span class="tx">0 sparks. Merging takes 1; they're ${fmt(mgPrice())} coins each.</span><button class="mg-chipbtn" data-mg="get">Get sparks</button>`;
+  else{h='Pick a prize, then its twin.';c=true;}
+  el.className='mg-line'+(c?' c':'');el.innerHTML=h;
+}
+function mgShelfDraw(){
+  const sh=S.mg.shelf,el=document.getElementById('mgShelf'),last=sh.slice(-4);let row='';
+  last.forEach(x=>{const p=mgParse(x.c);if(p)row+=mgUse(p.ch+'-8');});for(let i=last.length;i<4;i++)row+='<span class="slot"></span>';
+  el.innerHTML=`<div class="lbl"><b>Prize Shelf</b><small>${sh.length?plural(sh.length,'grand prize'):'Tier 8 goes here'}</small></div><div class="row">${row}</div>${S.mg.jk>0?`<button class="mg-chipbtn gold" data-mg="joker">Pick your Joker</button>`:''}`;
+}
+// ---- actions with feedback
+function mgDoMerge(a,b){
+  if(S.sparks<1){mgNoSpark=true;SFX.sad();renderBooth();mgSay(`No sparks left. Merging takes 1; they're ${fmt(mgPrice())} coins each.`);return false;}
+  const op=mgMergeCore(a,b);if(!op||op==='nospark'){renderBooth();return false;}
+  const C=mgParse(op.c);mgLast=op.i;mgSel=null;mgNoSpark=false;mgHintOff();
+  mgFlash=C.t<MG_TOP?{id:C.id,ch:C.ch,t:C.t,co:op.d.co}:null;
+  persist(4000);renderHUD();renderBadges();renderBooth();
+  mgSay(`Merged two ${mgName(C.ch,C.t-1)}s into a ${mgName(C.ch,C.t)}: ${fmt(op.d.co)} coins${(op.d.ch||[]).length?' and a '+op.d.ch[0]+' chest':''}. ${plural(S.sparks,'spark')} left.`);
+  if(C.t>=MG_TOP){SFX.jackpot();mgGrand(op);return true;}
+  SFX.merge(C.t);
+  const el=mgEls.get(C.id),coinsEl=document.getElementById('mgCoins');
+  if(el&&!reduced){
+    el.animate([{transform:'scale(.6)'},{transform:'scale(1.32)',offset:.55},{transform:'scale(1)'}],{duration:360,easing:'cubic-bezier(.2,1.4,.4,1)'});
+    const r=el.getBoundingClientRect();
+    const pop=document.createElement('div');pop.className='mg-pop';pop.textContent=mgName(C.ch,C.t)+'!';fx.appendChild(pop);
+    pop.style.left=Math.max(8,Math.min(innerWidth-pop.offsetWidth-8,r.left+r.width/2-pop.offsetWidth/2))+'px';pop.style.top=(r.top-30)+'px';
+    pop.animate([{transform:'translateY(8px) rotate(-4deg) scale(.7)',opacity:0},{transform:'translateY(0) rotate(-4deg) scale(1.05)',opacity:1,offset:.25},{transform:'translateY(-14px) rotate(-4deg)',opacity:0}],{duration:1100,easing:'ease-out',fill:'forwards'}).onfinish=()=>pop.remove();
+    const g=document.createElement('div');g.className='mg-gain';g.innerHTML=SYM.coin+'+'+fmt(op.d.co);fx.appendChild(g);g.style.left=(r.right-18)+'px';g.style.top=(r.top+r.height/2)+'px';
+    g.animate([{opacity:0,transform:'scale(.6)'},{opacity:1,transform:'scale(1)',offset:.2},{opacity:1,offset:.7},{opacity:0,transform:'translateY(-10px)'}],{duration:1200,fill:'forwards'}).onfinish=()=>g.remove();
+    fly(el,coinsEl,'coin',5);
+  }else if(coinsEl){coinsEl.classList.remove('bump');void coinsEl.offsetWidth;coinsEl.classList.add('bump');}
+  return true;
+}
+function mgDoMove(id,to){
+  const from=mgAt(S.mg,id),other=mgParse(S.mg.cells[to]);
+  const first=new Map();[id,other&&other.id].filter(Boolean).forEach(k=>{const e=mgEls.get(k);if(e)first.set(k,e.getBoundingClientRect());});
+  const op=mgMoveCore(id,to);if(!op){renderBooth();return false;}
+  mgLast=null;mgFlash=null;mgSel=null;persist(4000);SFX.click();renderBooth();
+  if(!reduced)first.forEach((r0,k)=>{const e=mgEls.get(k);if(!e)return;const r1=e.getBoundingClientRect(),dx=r0.left-r1.left,dy=r0.top-r1.top;if(dx||dy)e.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:'none'}],{duration:170,easing:'cubic-bezier(.2,.8,.3,1)'});});
+  mgSay(other?`Swapped ${mgName(other.ch,other.t)} and the other prize.`:`Moved to row ${Math.floor(to/MG_W)+1}, column ${to%MG_W+1}.`);
+  return from>=0;
+}
+function mgPlaceNext(){
+  const w=S.mg.wagon[0],p=mgParse(w);if(!p)return;
+  if(S.mg.cells.indexOf('')<0){toast('Board full. Merge a pair first.');SFX.sad();return;}
+  const op=mgPlaceCore(-1);if(!op)return;mgLast=null;mgFlash=null;persist(4000);SFX.click();renderBooth();
+  const el=mgEls.get(p.id);if(el&&!reduced)el.animate([{transform:'scale(0)'},{transform:'scale(1.16)',offset:.6},{transform:'scale(1)'}],{duration:320});
+  mgSay(`${mgName(p.ch,p.t)} placed from the Wagon.`);
+}
+function mgDoUndo(){
+  if(!mgUndoable()){mgSay('Nothing to undo.');return;}
+  const op=mgUndoCore(mgLast);mgLast=null;mgFlash=null;
+  if(!op){renderBooth();return;}
+  persist(4000);SFX.click();renderHUD();renderBadges();renderBooth();
+  mgSay(`Undone: the spark is back and ${fmt(-op.d.co)} coins went back.`);
+}
+// ---- dragging: Pointer Events (touch, mouse and pen alike), geometry hit-testing, nothing scrolls under it
+function mgGeom(){const hs=document.getElementById('mgBoard').children,a=hs[0].getBoundingClientRect(),b=hs[1].getBoundingClientRect(),c=hs[MG_W].getBoundingClientRect();return{x0:a.left,y0:a.top,w:a.width,h:a.height,px:(b.left-a.left)||a.width,py:(c.top-a.top)||a.height};}
+function mgCellAt(x,y,g){if(!(g.px>0&&g.py>0&&isFinite(x)&&isFinite(y)))return -1;const c=Math.floor((x-g.x0+(g.px-g.w)/2)/g.px),r=Math.floor((y-g.y0+(g.py-g.h)/2)/g.py);return c<0||c>=MG_W||r<0||r>=MG_H?-1:r*MG_W+c;}
+function mgDown(e){
+  const el=e.target.closest('.mg-it');if(!el||mgDrag||(e.pointerType==='mouse'&&e.button!==0))return;
+  mgDrag={id:el.dataset.id,el,pid:e.pointerId,x0:e.clientX,y0:e.clientY,on:false,g:mgGeom(),to:-1,raf:0};
+  try{el.setPointerCapture(e.pointerId);}catch(_){}
+}
+function mgMove(e){
+  const d=mgDrag;if(!d||e.pointerId!==d.pid)return;
+  const dx=e.clientX-d.x0,dy=e.clientY-d.y0;
+  if(!d.on){if(Math.hypot(dx,dy)<6)return;d.on=true;mgSel=null;mgFlash=null;
+    const me=mgCellOf(d.id);document.querySelectorAll('#mgBoard .mg-it').forEach(x=>{if(x===d.el)return;const p=mgCellOf(x.dataset.id);const tw=me&&p&&p.ch===me.ch&&p.t===me.t&&me.t<MG_TOP;x.classList.remove('sel');x.classList.toggle('match',!!tw);x.classList.toggle('dim',!tw);});
+    d.el.classList.remove('sel','match','dim');d.el.classList.add('lift');
+    const ln=document.getElementById('mgLine');ln.className='mg-line c';ln.textContent='Drop on the twin to merge them.';}
+  d.x=e.clientX;d.y=e.clientY;
+  if(!d.raf)d.raf=requestAnimationFrame(()=>{d.raf=0;if(mgDrag!==d)return;
+    d.el.style.transform=`translate3d(${d.x-d.x0}px,${d.y-d.y0-24}px,0) scale(1.15) rotate(-6deg)`;   // lifted above the finger
+    const to=mgCellAt(d.x,d.y,d.g);if(to!==d.to){const B=document.getElementById('mgBoard');if(d.to>=0)B.children[d.to].classList.remove('target');d.to=to;if(to>=0&&B.children[to]!==d.el.parentNode)B.children[to].classList.add('target');mgChip(d);}});
+}
+function mgChip(d){
+  const chip=document.getElementById('mgChip'),me=mgCellOf(d.id),i=d.to,from=mgAt(S.mg,d.id);
+  if(!me||i<0||i===from){chip.hidden=true;return;}
+  const p=mgParse(S.mg.cells[i]);let h;
+  if(p&&p.ch===me.ch&&p.t===me.t&&me.t<MG_TOP)h=`→ ${mgName(me.ch,me.t+1)} · ${mgUse('spark')} ${S.sparks>0?'1 spark':'needs a spark'}`;
+  else if(p)h='Swap';else h='Move here';
+  chip.innerHTML=h;chip.hidden=false;
+  const r=document.getElementById('mgBoard').children[i].getBoundingClientRect(),w=chip.offsetWidth;
+  chip.style.transform=`translate(${Math.max(6,Math.min(innerWidth-w-6,r.left+r.width/2-w/2))}px,${Math.max(6,r.top-40)}px)`;
+}
+function mgEnd(how,e){
+  const d=mgDrag;if(!d)return;mgDrag=null;cancelAnimationFrame(d.raf);
+  const B=document.getElementById('mgBoard');if(d.to>=0&&B.children[d.to])B.children[d.to].classList.remove('target');
+  document.getElementById('mgChip').hidden=true;
+  const el=d.el,moved=el.style.transform,r0=el.getBoundingClientRect();el.classList.remove('lift');el.style.transform='';
+  document.querySelectorAll('#mgBoard .mg-it').forEach(x=>x.classList.remove('match','dim'));
+  if(!d.on){renderBooth();mgRelease();return;}           // never left the 6 px threshold: the click that follows is a tap
+  mgJust=true;setTimeout(()=>{mgJust=false;},0);          // a mouse's click after a captured drag isn't a tap
+  unlockAudio();
+  const from=mgAt(S.mg,d.id),to=how==='up'&&e?mgCellAt(e.clientX,e.clientY,d.g):-1;
+  const me=mgCellOf(d.id),p=to>=0?mgParse(S.mg.cells[to]):null;
+  let done=false;
+  if(how==='up'&&me&&to>=0&&to!==from){
+    if(p&&p.ch===me.ch&&p.t===me.t&&me.t<MG_TOP)done=mgDoMerge(d.id,p.id);
+    else{done=mgDoMove(d.id,to);   // the FLIP inside starts from the home square; start from where it was let go instead
+      if(done&&!reduced){const r1=el.getBoundingClientRect();el.getAnimations().forEach(a=>a.cancel());el.animate([{transform:`translate(${r0.left-r1.left}px,${r0.top-r1.top}px)`},{transform:'none'}],{duration:170,easing:'cubic-bezier(.2,.8,.3,1)'});}}
+  }
+  if(!done){renderBooth();if(!reduced&&moved&&el.isConnected)el.animate([{transform:moved},{transform:'none'}],{duration:190,easing:'cubic-bezier(.2,.8,.3,1)'});}
+  if(mgDirty)renderBooth();
+  mgRelease();
+}
+// ---- tap-tap and the keyboard
+function mgTap(e){
+  if(mgJust){e.preventDefault();e.stopPropagation();return;}
+  const btn=e.target.closest('button');if(!btn)return;const hook=btn.closest('.mg-hook');if(!hook)return;
+  unlockAudio();const i=+hook.dataset.i,p=mgParse(S.mg.cells[i]);mgFocus=i;
+  const sel=mgSel?mgCellOf(mgSel):null;
+  if(!sel){if(p){mgSel=p.id;mgFlash=null;SFX.click();mgSay(`${mgName(p.ch,p.t)} selected. ${mgPairsOf(p)?'Now pick its twin.':'It has no twin on the board yet.'}`);}renderBooth();return;}
+  if(p&&p.id===sel.id){mgSel=null;renderBooth();return;}
+  const refocus=()=>{const f=document.getElementById('mgBoard').children[i].firstElementChild;if(f&&(document.activeElement===document.body||!document.activeElement))f.focus({preventScroll:true});};
+  if(p&&p.ch===sel.ch&&p.t===sel.t&&sel.t<MG_TOP){const a=sel.id;mgSel=null;mgDoMerge(a,p.id);refocus();return;}
+  if(!p){const a=sel.id;mgSel=null;mgDoMove(a,i);refocus();return;}
+  mgSel=p.id;SFX.click();renderBooth();
+}
+const mgPairsOf=p=>S.mg.cells.some(x=>{const q=mgParse(x);return q&&q.id!==p.id&&q.ch===p.ch&&q.t===p.t;});
+function mgKeys(e){
+  const k=e.key,i=mgFocus;let n=-1;
+  if(k==='ArrowRight')n=i%MG_W<MG_W-1?i+1:i;else if(k==='ArrowLeft')n=i%MG_W?i-1:i;else if(k==='ArrowDown')n=i+MG_W<MG_N?i+MG_W:i;else if(k==='ArrowUp')n=i-MG_W>=0?i-MG_W:i;
+  else if(k==='Escape'&&mgSel){e.stopPropagation();mgSel=null;renderBooth();return;}
+  if(n<0)return;e.preventDefault();mgFocus=n;renderBooth();const f=document.getElementById('mgBoard').children[n].firstElementChild;if(f)f.focus();
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&mgOpen&&!overlayOpen&&!mgSel)closeBooth();});
+// ---- sheets
+function mgNextFix(){const v=S.village;let best=null;v.levels.forEach((l,i)=>{const c=v.damaged[i]?repairCost(i):l<4?cost(v.n,i,l+1):null;if(c!=null&&(!best||c<best.c))best={c,name:villageDef(v.n).b[i]};});return best;}
+function mgGetSheet(){
+  openOverlay((sh,close)=>{
+    const price=mgPrice(),room=MG_JAR-S.sparks,can=Math.max(0,Math.min(room,Math.floor(S.coins/price)));let n=Math.max(1,Math.min(5,can||1));
+    const draw=()=>{const c=n*price,ok=n>=1&&n<=can,fix=mgNextFix(),keep=S.coins-c,pct=fix?Math.max(0,Math.min(100,keep/fix.c*100)):0;
+      sh.innerHTML=`<div class="center"><p class="eyebrow">Prize Booth</p><h2>Get sparks</h2><p class="sub">Each merge uses 1 spark. Your prizes come from your goals.</p></div>
+       <div class="mg-trade"><div>${SYM.coin}<span>${fmt(price)} coins</span></div>${MG_ARROW}<div>${mgUse('spark')}<span>1 spark</span></div></div>
+       ${can<1?`<p class="sub center">${room<1?`The jar is full: ${MG_JAR} sparks.`:`A spark costs ${fmt(price)} coins. You have ${fmt(S.coins)}.`}</p>`:`
+       <div class="mg-stepper"><button class="mg-step" data-s="-1" aria-label="One spark fewer"${n<=1?' disabled':''}>−</button><div class="mg-qty" aria-live="polite">${mgUse('spark')}<b>${n}</b><small>${n===1?'spark':'sparks'}</small></div><button class="mg-step" data-s="1" aria-label="One spark more"${n>=can?' disabled':''}>+</button></div>
+       <div class="mg-quick">${[1,5,10].map(q=>`<button data-q="${q}" class="${q===n?'on':''}"${q>can?' disabled':''}>${q}</button>`).join('')}</div>
+       <div class="mg-ledger"><div class="ln"><span>Costs</span><b>${SYM.coin}${fmt(c)}</b></div><div class="ln"><span>You keep</span><b>${SYM.coin}${fmt(keep)}</b></div>
+        ${fix?`<div class="ln"><span>Next fix-up: ${esc(fix.name)}</span><b>${SYM.coin}${fmt(fix.c)}</b></div><div class="bar"><span style="width:${pct.toFixed(0)}%"></span></div>`:''}
+        <div class="ln"><span>Spark jar</span><b>${mgUse('jar')}${S.sparks} → ${S.sparks+n} of ${MG_JAR}</b></div></div>
+       <button class="btn gold wide" id="mgBuy"${ok?'':' disabled'}>Buy ${plural(n,'spark')} · ${SYM.coin} ${fmt(c)}</button>`}
+       <button class="btn plain wide" data-close>Not now</button>`;
+      sh.querySelectorAll('[data-s]').forEach(b=>b.addEventListener('click',()=>{n=Math.max(1,Math.min(can,n+ +b.dataset.s));draw();}));
+      sh.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>{n=Math.min(can,+b.dataset.q);draw();}));
+      const buy=sh.querySelector('#mgBuy');if(buy)buy.addEventListener('click',()=>{
+        const r=mgBuy(n);if(r!=='ok'){toast(r==='jar'?'The jar holds 30 sparks.':'Not enough coins for that many.');SFX.sad();return;}
+        mgLast=null;mgFlash=null;mgNoSpark=false;SFX.spark();persist(4000);close();renderHUD();renderBooth();
+        const j=document.getElementById('mgJar');if(j){j.classList.remove('bump');void j.offsetWidth;j.classList.add('bump');}
+        mgSay(`Bought ${plural(n,'spark')}. ${S.sparks} in the jar.`);});
+    };draw();
+  });
+}
+function mgChainSheet(ch){
+  if(!MG_CHAINS.includes(ch))ch='bear';
+  const A=window.MERGE_ART,title=(A&&A.chains&&A.chains[ch]&&A.chains[ch].name)||{bear:'Prize Bears',balloon:'Balloons',ribbon:'Ribbons & Trophies'}[ch];
+  const on={};S.mg.cells.forEach(x=>{const p=mgParse(x);if(p&&p.ch===ch)on[p.t]=(on[p.t]||0)+1;});
+  const best=Math.max(mgNum(S.mg.life.best[ch]),...Object.keys(on).map(Number),ch==='ribbon'?2:1),sel=mgSel?mgCellOf(mgSel):null;
+  const rows=[];for(let t=1;t<=MG_TOP;t++){
+    const known=t<=best||t===MG_TOP,p=mgPayFor(t),pay=t===1?'<span class="pay none">free</span>':`<span class="pay">${SYM.coin}${fmt(p.co)}${p.ch?chestSVG(p.ch):''}${p.jk?' + Joker':''}</span>`;
+    const sub=t===1?MG_SRC[ch][0]:t===2&&MG_SRC[ch][1]?MG_SRC[ch][1]:t===MG_TOP?'2 × tier 7 · goes on the Prize Shelf':`2 × ${known?mgName(ch,t-1):'tier '+(t-1)} · 1 spark`;
+    rows.push(`<li class="mg-rung${sel&&sel.ch===ch&&sel.t===t?' here':''}${known?'':' locked'}${t===MG_TOP?' top':''}"><span class="ico">${mgUse(ch+'-'+t)}<span class="mg-pip">${t}</span></span><span class="nm"><b>${known?mgName(ch,t):'Not made yet'}${on[t]?` <span class="mg-tag">${on[t]} ON BOARD</span>`:''}</b><small>${sub}</small></span>${pay}</li>`);}
+  openOverlay(sh=>{sh.innerHTML=`<div class="center"><p class="eyebrow">Prize chain</p><h2>${esc(title)}</h2><p class="sub">Two of a kind make the next one, for 1 spark. Each row shows what making it pays.</p></div><ul class="mg-ladder">${rows.join('')}</ul><button class="btn plain wide" data-close>Close</button>`;});
+}
+function mgGrand(op){
+  const C=mgParse(op.c),n=S.mg.shelf.length;
+  confetti();coinRain(18);
+  openOverlay((sh,close)=>{
+    const last=S.mg.shelf.slice(-5);let slots='';last.forEach((x,k)=>{const p=mgParse(x.c);slots+=`<span class="s">${p?mgUse(p.ch+'-8'):''}</span>`;});for(let i=last.length;i<5;i++)slots+='<span class="s empty"></span>';
+    sh.innerHTML=`<div class="center"><p class="eyebrow">Grand prize!</p><h2>${mgName(C.ch,8)}</h2><p class="sub">Two ${mgName(C.ch,7)}s made your ${n===1?'first':n===2?'2nd':n===3?'3rd':n+'th'} grand prize. It goes up on the Prize Shelf, and its hook is free again.</p></div>
+     <div class="mg-shelfbig"><div class="r">${slots}</div><div class="plank"></div></div><div class="mg-shelfcap"><span>Prize Shelf</span><span>${n} won</span></div>
+     <div class="mg-gainrow"><div>${SYM.coin}<b>+${fmt(op.d.co)}</b><small>coins</small></div><div>${chestSVG('gold')}<b>Gold chest</b><small>opens in Stickers</small></div><div>${IC.star}<b>Joker</b><small>any sticker you're missing</small></div></div>
+     <button class="btn gold wide" id="mgPick">Pick my Joker sticker</button><button class="btn plain wide" data-close>Later</button>`;
+    sh.querySelector('#mgPick').addEventListener('click',()=>{close();mgJokerSheet();});
+  },{dismissible:false});
+}
+function mgJokerSheet(){
+  if(S.mg.jk<1)return;
+  const miss=ALLCARDS.filter(c=>setUnlocked(c.set)&&!(S.cards[c.id]>0));
+  openOverlay((sh,close)=>{
+    const pick=id=>{const op=mgJokerCore(id);if(!op)return;mgLast=null;const sets=op.card?checkSets():[];persist();close();renderAll();
+      if(op.card){const c=cardById(op.card);toast(`${c.name} is in your sticker book`);SFX.win();}else{toast('A gold chest is waiting in Stickers');SFX.win();}
+      sets.forEach(st=>celebrate({eyebrow:'Set complete',title:st.name,body:'Every sticker in this set is in your book.',reward:'+100 spins'}));};
+    if(!miss.length){sh.innerHTML=`<div class="center"><p class="eyebrow">Joker sticker</p><h2>You have them all</h2><p class="sub">Every sticker you can get so far is in your book, so this Joker becomes a gold chest.</p></div><button class="btn gold wide" id="mgGold">Take the gold chest</button><button class="btn plain wide" data-close>Later</button>`;
+      sh.querySelector('#mgGold').addEventListener('click',()=>pick(null));return;}
+    sh.innerHTML=`<div class="center"><p class="eyebrow">Joker sticker</p><h2>Pick a sticker</h2><p class="sub">Any one you're missing goes straight into your book.</p></div><div class="mg-picks">${miss.map((c,k)=>`<button data-card="${c.id}" aria-label="${esc(c.name)}, ${c.set.name}">${cardHTML(c,1,'',k)}</button>`).join('')}</div><button class="btn plain wide" data-close>Later</button>`;
+    sh.querySelectorAll('[data-card]').forEach(b=>b.addEventListener('click',()=>pick(b.dataset.card)));
+  });
+}
+// ---- the ways in: a card on the Park tab, a row on the Spin screen once the day's spins are done
+function mgFly(fromEl,c){   // a new prize flies from the goal to the Park tab, where the Booth's card is
+  const p=mgParse(c),to=document.querySelector('.tab[data-tab="village"]');if(!p||!fromEl||!fromEl.getBoundingClientRect||!to||reduced||mgOpen)return;
+  const a=fromEl.getBoundingClientRect(),b=to.getBoundingClientRect();if(!b.width||!a.width)return;
+  const s=document.createElement('div');s.className='flyer';s.innerHTML=mgUse(p.ch+'-'+p.t);fx.appendChild(s);
+  const x0=a.right-48,y0=a.top+a.height/2-13,x1=b.left+b.width/2-13,y1=b.top+b.height/2-13;
+  s.animate([{transform:`translate(${x0}px,${y0}px) scale(.7)`,opacity:0},{transform:`translate(${(x0+x1)/2}px,${Math.min(y0,y1)-50}px) scale(1.25)`,opacity:1,offset:.4},{transform:`translate(${x1}px,${y1}px) scale(.6)`,opacity:.9}],{duration:950,easing:'cubic-bezier(.45,0,.55,1)',fill:'forwards'}).onfinish=()=>s.remove();
+  setTimeout(()=>{to.classList.remove('bump');void to.offsetWidth;to.classList.add('bump');},950);
+}
+function mgCardHTML(){
+  if(!mgOn())return '';
+  const nw=mgNewIds(S.mg.seen),all=S.mg.cells.concat(S.mg.wagon).map(mgParse).filter(Boolean),fresh=all.filter(p=>nw.has(p.id));
+  const what=fresh.length?plural(fresh.length,'new prize'):all.length?plural(all.length,'prize')+' on the board':'Prizes come from your goals';
+  const minis=fresh.slice(-6).map(p=>mgUse(p.ch+'-'+p.t)).join('');
+  return `<button class="mg-card" data-act="booth"><span class="art">${mgUse('bear-5')}</span><span><b>Prize Booth</b><small>${what} · ${plural(S.sparks,'spark')}</small>${minis?`<span class="minis">${minis}</span>`:''}</span><span class="open">Open${MG_CHEV}</span></button>`;
+}
+function mgDoneHTML(){
+  if(!mgOn()||S.spins>=1)return '';
+  const pr=mgPairs();
+  return `<div class="card mg-donecard"><h3>Done for today</h3><button class="mg-row" data-act="booth">${mgUse('booth')}<span><b>Prize Booth</b><small>${plural(S.sparks,'spark')} to spend · ${plural(pr,'pair')} ready</small></span><span class="go">Open${MG_CHEV}</span></button></div>`;
+}
+
 /* ============ Weight ============ */
 let goalEdit=false;
 function weightProgress(){
@@ -2162,7 +2824,7 @@ function logWeight(){
   if(e)e.w=v;else{E.push({d:t,w:v});E.sort((a,b)=>a.d<b.d?-1:1);}
   if(!S.weight.start)S.weight.start=v;
   const L=logFor(t);
-  if(!L.weighPaid){L.weighPaid=true;addTrail();gainSpins(WEIGH_REWARD,inp);note('wi:'+today(),{sp:WEIGH_REWARD,tr:1});toast(`Weigh-in logged: +${WEIGH_REWARD} spins`);SFX.check();}
+  if(!L.weighPaid){L.weighPaid=true;addTrail();gainSpins(WEIGH_REWARD,inp);note('wi:'+today(),{sp:WEIGH_REWARD,tr:1});const dr=mgDrop('wi:'+today(),'balloon',1);if(dr)mgFly(inp,dr);toast(`Weigh-in logged: +${WEIGH_REWARD} spins${dr?` · ${mgName('balloon',1)} → Prize Booth`:''}`);SFX.check();}
   else toast('Today’s weigh-in updated');
   checkWeightMilestones();checkVillageComplete(false);persist();renderAll();
 }
@@ -2240,7 +2902,7 @@ const pausedNote=()=>isPaused(today())?`<div class="paused-note">${IC.pause}<spa
 function dayRow(g,L,sub,past){
   const yest=!!past,dd=past?` data-day="${past}"`:'',when=past?(past===addDays(today(),-1)?'yesterday':'on '+shortDay(past)):'today',W='Done '+when;
   if((g.target||1)>1){const c=(L.c&&L.c[g.id])||0,d=(L.done||[]).includes(g.id),paid=(L.paid||[]).includes(g.id);return `<div class="row wk${d?' done':''}"><span class="wkp"><span><b>${c}</b>/${g.target}</span></span><span class="nm">${esc(g.name)}${g.kind==='flex'?'<span class="tag">Flex</span>':''}<small>${sub?sub+' · ':''}${d?(paid?W+' · earned':W):`${g.target-c} to go · +${rewardOf(g)}`}</small></span><span class="wk-btns">${c>0?`<button class="mini-btn" data-act="duntap" data-id="${g.id}"${dd} aria-label="Undo one ${when} for ${esc(g.name)}">−</button>`:''}<button class="mini-btn plus" data-act="dtap" data-id="${g.id}"${dd} aria-label="Log one ${when} for ${esc(g.name)}">+1</button></span></div>`;}
-  const d=(L.done||[]).includes(g.id),paid=(L.paid||[]).includes(g.id);if(d&&(L.hc||[]).includes(g.id))sub=(sub?sub+' · ':'')+'From the Health brief';return `<button class="row${d?' done':''}" data-act="day" data-id="${g.id}"${dd} aria-pressed="${d}"${yest?` aria-label="${esc(g.name)}, ${d?'done':'not done'} ${when}"`:''}><span class="check">${IC.check}</span><span class="nm">${esc(g.name)}${g.kind==='flex'?'<span class="tag">Flex</span>':''}${sub?`<small>${sub}</small>`:''}</span><span class="reward">${paid?'Earned':`${SYM.bolt}+${rewardOf(g)}`}</span></button>`;}
+  const d=(L.done||[]).includes(g.id),paid=(L.paid||[]).includes(g.id);if(d&&(L.hc||[]).includes(g.id))sub=(sub?sub+' · ':'')+'From the Health brief';return `<button class="row${d?' done':''}" data-act="day" data-id="${g.id}"${dd} aria-pressed="${d}"${yest?` aria-label="${esc(g.name)}, ${d?'done':'not done'} ${when}"`:''}><span class="check">${IC.check}</span><span class="nm">${esc(g.name)}${g.kind==='flex'?'<span class="tag">Flex</span>':''}${sub?`<small>${sub}</small>`:''}</span><span class="reward">${paid?'Earned':`${SYM.bolt}+${rewardOf(g)}${mgOn()?`<span class="mg-dot"></span>${mgUse('bear-1','mg-mini')}`:''}`}</span></button>`;}
 function weekRow(g,wk,minus){
   if(g.limit){const c=weekCount(g.id,wk),over=c>g.target;const sub=over?`${c} logged this week · thanks for logging it`:`${g.target-c} left this week · +${rewardOf(g)} and a gold chest if you stay under, on a week with 4+ kept days`;return `<div class="row wk${over?'':' done'}"><span class="wkp"><span><b>${c}</b>/${g.target}</span></span><span class="nm">${esc(g.name)}<span class="tag">Limit</span><small>${sub}</small></span><span class="wk-btns">${minus&&c>0?`<button class="mini-btn" data-act="wuntap" data-id="${g.id}" aria-label="Undo one for ${esc(g.name)}">−</button>`:''}<button class="mini-btn plus" data-act="wtap" data-id="${g.id}" aria-label="Log one for ${esc(g.name)}">+1</button></span></div>`;}
   const c=weekCount(g.id,wk),done=c>=g.target;const sub=done?(c>g.target?`Done · ${c} this week`:'Done this week'):`${g.target-c} to go · +${rewardOf(g)} and a ${g.kind==='flex'?'gold':'silver'} chest`;return `<div class="row wk${done?' done':''}"><span class="wkp"><span><b>${c}</b>/${g.target}</span></span><span class="nm">${esc(g.name)}${g.kind==='flex'?'<span class="tag">Flex</span>':''}<small>${sub}</small></span><span class="wk-btns">${minus?`<button class="mini-btn" data-act="wuntap" data-id="${g.id}" aria-label="Undo one for ${esc(g.name)}">−</button>`:''}<button class="mini-btn plus" data-act="wtap" data-id="${g.id}" aria-label="Log one for ${esc(g.name)}">+1</button></span></div>`;}
@@ -2258,10 +2920,11 @@ function renderSpin(){
   if(flex.length)rows+=`<p class="subhead">Flex today · optional</p><div class="rows">${flex.map(g=>dayRow(g,L)).join('')}</div>`;
   if(weekly.length)rows+=`<p class="subhead">This week</p><div class="rows">${weekly.map(g=>weekRow(g,wk,false)).join('')}</div>`;
   const foot=L.perfectPaid?'Perfect day. Bonus collected.':`Finish all ${core.length} daily goals for a <b>+${PERFECT_REWARD} spin</b> perfect-day bonus and a chest.`;
+  $('#mgDone').innerHTML=mgDoneHTML();
   $('#earn').innerHTML=`<div class="card-head"><h3>Earn spins</h3><span>${left?`${plural(left,'daily goal')} left`:'Daily goals done'}</span></div>${rows}<p class="earn-foot">${foot}</p>`;
 }
 // a one-tap monthly check on how the game feels (the psychologist's review, Nov 5)
-function feelCard(){const m=today().slice(0,7);S.feel=S.feel&&typeof S.feel==='object'?S.feel:{};if(S.feel[m])return '';
+function feelCard(){const m=today().slice(0,7);S.feel=S.feel&&typeof S.feel==='object'?S.feel:{};if(S.feel[m])return S.feel[m]==='pressure'&&mgOn()?`<p class="sub mg-pressure">If the Prize Booth adds to it, you can turn it off (your board is kept). <button class="link-btn" data-act="booth-off">Turn off the Prize Booth</button></p>`:'';
   return `<div class="feel-wrap"><p class="sub" style="margin-top:10px">This month, how does Daily Spin feel?</p><div class="feel">${[['fun','Fun'],['fine','Fine'],['pressure','Pressure']].map(([k,l])=>`<button class="btn plain sm" data-act="feel" data-v="${k}">${l}</button>`).join('')}</div></div>`;}
 let goalDay=null;   // a past day being edited from the date strip (a date key), or null for today
 // any of the strip's last 13 days since the game started, unless it was paused
@@ -2351,7 +3014,7 @@ function renderVillage(){
   }).join('');
   const pines=tn<=40?`<div class="boardwalk" aria-hidden="true">${Array.from({length:tn},(_,k)=>PLANK_ICON(k<tr)).join('')}</div>`:`<div class="bar fern" style="margin:6px 0 10px"><span style="width:${tr/tn*100}%"></span></div>`;
   const prevSpins=v.n>1?Math.round(spinsFor(v.n-1)/10)*10:null;
-  $('#v-village').innerHTML=`<div class="v-head"><div><p class="eyebrow">Bay Beach · Phase ${v.n}</p><h2>${esc(V.name)}</h2><p class="sub">${V.blurb}</p></div><div class="v-count"><b>${ups}</b>/20</div></div>
+  $('#v-village').innerHTML=mgCardHTML()+`<div class="v-head"><div><p class="eyebrow">Bay Beach · Phase ${v.n}</p><h2>${esc(V.name)}</h2><p class="sub">${V.blurb}</p></div><div class="v-count"><b>${ups}</b>/20</div></div>
    ${sceneHTML('')}<div class="bar" aria-hidden="true"><span style="width:${ups/20*100}%"></span></div>
    <div class="card"><div class="card-head"><h3>Boardwalk to ${esc(nx.name)}</h3><span>${tr}/${tn} goals</span></div>${pines}
     <p class="sub">${tr>=tn?'Boardwalk done. Get every ride running to open the next phase.':`Every goal you finish lays a plank: daily, flex, weekly check-ins and weigh-ins. ${tn-tr} more to go.`}</p></div>
@@ -2448,7 +3111,7 @@ function renderBadges(){
   set('cards',S.chests.length?`<span class="badge">${S.chests.length}</span>`:'');
 }
 const VIEWS={spin:()=>renderSpin(),goals:()=>renderGoals(),village:()=>renderVillage(),cards:()=>renderCards(),progress:()=>renderProgress()};
-function renderAll(){renderHUD();VIEWS[current]();renderBadges();if(current!=='spin')renderSpinBits();}
+function renderAll(){renderHUD();VIEWS[current]();renderBadges();if(current!=='spin')renderSpinBits();if(mgOpen)renderBooth();}
 function setTab(t,instant){
   t={habits:'goals',weight:'progress',park:'village'}[t]||t;
   if(!VIEWS[t])t='spin';
@@ -2528,6 +3191,7 @@ function showSettings(){
   openOverlay(sh=>{
     const draw=()=>{const paused=isPaused(today());sh.innerHTML=`<div class="center"><p class="eyebrow">Settings</p><h2>Park settings</h2></div>
      <div class="setting"><p>Sound<small>Reel clicks, coins and wins. Your iPhone's silent switch mutes this too.</small></p><button class="switch" id="swSound" role="switch" aria-checked="${S.settings.sound}" aria-label="Sound"></button></div>
+     <div class="setting"><p>Prize Booth<small>Prizes from your goals, merged with sparks. Off hides it and keeps your board.</small></p><button class="switch" id="swBooth" role="switch" aria-checked="${mgOn()}" aria-label="Prize Booth"></button></div>
      <div class="setting"><p>Pause streaks<small>For trips or sick days. Missed days and weeks won’t count until you turn this off.</small></p><button class="switch" id="swPause" role="switch" aria-checked="${paused}" aria-label="Pause streaks"></button></div>
      <div class="setting"><p>Week starts on<small>When weekly goals reset</small></p><div class="seg" role="group" aria-label="Week starts on"><button class="${S.settings.weekStart===1?'on':''}" data-ws="1">Mon</button><button class="${S.settings.weekStart===0?'on':''}" data-ws="0">Sun</button></div></div>
      <div class="setting"><p>Saving<small>${cloudOn?'Progress saves to your own database and follows you to your other devices.':'Progress saves on this device until you sign in.'}</small></p></div>
@@ -2542,6 +3206,7 @@ function showSettings(){
      <div class="setting"><p>Start over<small>A fresh park: spins, coins, rides, stickers, streak and history start again. Your goals and weigh-ins stay. Download a backup first.</small></p><button class="btn rust sm" id="btnReset">Reset</button></div>
      <button class="btn plain wide" data-close>Close</button>`;
       sh.querySelector('#swSound').addEventListener('click',()=>{S.settings.sound=!S.settings.sound;persist();unlockAudio();SFX.click();draw();});
+      sh.querySelector('#swBooth').addEventListener('click',()=>{S.settings.booth=!mgOn();persist();SFX.click();draw();renderAll();toast(mgOn()?'Prize Booth on':'Prize Booth off. Your board is kept.');});
       sh.querySelector('#swPause').addEventListener('click',()=>{setPause(!isPaused(today()));toast(isPaused(today())?'Streaks paused':'Streaks back on');draw();});
       sh.querySelectorAll('[data-ws]').forEach(b=>b.addEventListener('click',()=>{const ws=+b.dataset.ws;if(S.settings.weekStart===ws)return;S.settings.weekStart=ws;S.lastWeek=addDays(weekOf(today()),-7);persist();draw();toast('Weekly goals now reset on '+(ws===1?'Monday':'Sunday'));}));
       const rb=sh.querySelector('#btnReset');rb.addEventListener('click',()=>{if(!arm('reset',rb,'Tap again to erase'))return;startOver();shownCoins=null;persist();flush();resetReels();closeOverlay();toast('Fresh park. Your goals are still here.');});
@@ -2559,7 +3224,8 @@ function bind(){
   $('#hudShields').addEventListener('click',()=>toast(`${S.shields} of ${MAXSH} rain checks. Each one covers a missed day.`));
   $('#hudStreak').addEventListener('click',()=>setTab('goals'));
   $('#hudCoins').addEventListener('click',()=>setTab('village'));
-  document.addEventListener('pointerdown',unlockAudio,{passive:true});
+  document.addEventListener('pointerdown',unlockAudio,{passive:true});document.addEventListener('pointerup',unlockAudio,{passive:true});
+  mgSprite();
   $('#btnBet').addEventListener('click',()=>{unlockAudio();const i=BETS.indexOf(S.bet);let nb=BETS[(i+1)%BETS.length];if(!betOk(nb))nb=1;S.bet=nb;SFX.click();renderSpinBits();persist();});
   const sp=$('#btnSpin');let holdT=null,held=false,skipUp=false;
   sp.addEventListener('pointerdown',e=>{if(e.button>0)return;sp.classList.add('pressed');held=false;if(auto){auto=false;renderAuto();skipUp=true;return;}holdT=setTimeout(()=>{held=true;sp.classList.remove('pressed');if(S.spins<1){outOfSpins();return;}auto=true;renderAuto();toast('Auto-spin on. Tap Spin to stop.');autoLoop();},550);});
@@ -2583,6 +3249,8 @@ function bind(){
     else if(a==='upgrade')upgrade(+t.dataset.i);
     else if(a==='repair')repair(+t.dataset.i);
     else if(a==='open-chest')openChest(+t.dataset.i);
+    else if(a==='booth'){SFX.click();openBooth(t);}
+    else if(a==='booth-off'){S.settings.booth=false;persist();renderAll();toast('Prize Booth off. Your board is kept; Settings turns it back on.');}
     else if(a==='feel'){S.feel=S.feel&&typeof S.feel==='object'?S.feel:{};S.feel[today().slice(0,7)]=t.dataset.v;persist();renderAll();toast(t.dataset.v==='pressure'?'Thanks. Ease off any goal that feels like a chore: edit it or make it flex.':'Thanks. See you next month.');}
     else if(a==='edit-goals'){editMode=!editMode;renderGoals();}
     else if(a==='archive')archiveGoal(t.dataset.id,t);
