@@ -1,7 +1,7 @@
 /* Daily Spin works offline: its files come from the network when it answers within 2.5 seconds and from this cache
    otherwise. It also keeps the shared runtime (../runtime.js, ../firebase.js, ../config.js), which pages it controls
    load from outside its folder, and the Google fonts once they've loaded. Up Next has its own worker and cache. */
-const CACHE = "daily-spin-v4";   // v3 (Nov 10): the Lakeshore Midway skin (midway.css, kit.js, its own fonts)
+const CACHE = "daily-spin-v5";   // v3 (Nov 10): the Lakeshore Midway skin (midway.css, kit.js, its own fonts)
 const SHELL = ["./", "index.html", "rewards.js", "merge-art.js", "midway.css", "kit.js", "fonts/lilita-one-latin-400-normal.woff2", "fonts/fredoka-latin-500-normal.woff2", "fonts/fredoka-latin-600-normal.woff2", "fonts/fredoka-latin-700-normal.woff2", "fonts/nunito-latin-600-normal.woff2", "fonts/nunito-latin-700-normal.woff2", "fonts/nunito-latin-800-normal.woff2", "fonts/nunito-latin-900-normal.woff2", "fonts/shrikhand-latin-400-normal.woff2", "art.js", "art_rooms_b.js", "gb.js", "gb.css", "manifest.webmanifest", "icons/icon-192.png", "icons/apple-touch-icon.png", "../runtime.js", "../firebase.js", "../config.js"];
 const fresh = (u) => new Request(u, { cache: "no-cache", credentials: "same-origin" });
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL.map(fresh))).then(() => self.skipWaiting())); });
