@@ -266,6 +266,13 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--accent);outline-
 .vibe-chips .chip{min-height:44px;padding:8px 15px}
 .chip.ghostchip{background:none;border-style:dashed}
 .vibe-why{margin:0;font-size:14px;color:var(--muted)}
+.dayrow{display:flex;gap:6px;flex-wrap:wrap}
+.dayrow .chip{min-height:44px;padding:5px 13px;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.15}
+.dayrow .chip small{font-size:11px;font-weight:600;opacity:.75}
+.dayrow .chip.has::before{content:'';position:absolute;top:6px;right:8px;width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.6;pointer-events:none}
+.planbar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;background:var(--stage);border:1px solid var(--line);border-radius:18px;padding:12px 16px;margin:0 0 16px}
+.planbar p{margin:0;flex:1;min-width:200px;font-size:14.5px;line-height:1.4}
+.planbar[hidden]{display:none}
 .shuf-why{margin:-6px 0 16px;display:flex;flex-direction:column;gap:8px}
 .shuf-why:empty{display:none}
 .why-txt{margin:0;font-size:15px;line-height:1.45}
@@ -650,13 +657,25 @@ const PH_BLANK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAA
 function phSrc(id, kind){ return (ASSETS && ASSETS.peek && ASSETS.peek(id, kind || 'thumb')) || PH_BLANK; }
 function phAttr(id, kind){ return `data-ph="${esc(id)}" data-k="${kind || 'thumb'}"`; }
 async function fetchPhoto(id){ try { return id && ASSETS && ASSETS.blob ? await ASSETS.blob(id) : null; } catch { return null; } }
+// a photo loads when it comes near the screen, six at a time, so a big closet opens quickly on cell data;
+// photos already on the phone show at once, and those in an open sheet or a drawn fabric load right away
+const phQ = {n:0, wait:[]}, phSeen = new Set();
+function phRun(job){ if (phQ.n >= 6){ phQ.wait.push(job); return; } phQ.n++; job().finally(() => { phQ.n--; const nx = phQ.wait.shift(); if (nx) phRun(nx); }); }
+function phLoad(el){
+  const id = el.getAttribute('data-ph'), kind = el.getAttribute('data-k') || 'thumb', key = kind + ':' + id, attr = el.localName === 'image' ? 'href' : 'src';
+  const have = ASSETS.peek && ASSETS.peek(id, kind);
+  if (have){ if (el.getAttribute(attr) !== have) el.setAttribute(attr, have); return; }
+  phRun(() => Promise.resolve(ASSETS.url(id, kind)).then(u => { if (u && el.__phKey === key && el.getAttribute(attr) !== u) el.setAttribute(attr, u); }).catch(() => {}));
+}
+const phIO = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ phIO.unobserve(e.target); phSeen.delete(e.target); phLoad(e.target); } }), {rootMargin:'1000px 0px'}) : null;
 function hydratePhotos(root){
   if (!ASSETS || !ASSETS.url) return;
+  if (phIO) for (const el of phSeen) if (!el.isConnected){ phIO.unobserve(el); phSeen.delete(el); }
   (root || document).querySelectorAll('[data-ph]').forEach(el => {
     const id = el.getAttribute('data-ph'), kind = el.getAttribute('data-k') || 'thumb', key = kind + ':' + id;
     if (el.__phKey === key) return; el.__phKey = key;
-    const attr = el.localName === 'image' ? 'href' : 'src';
-    Promise.resolve(ASSETS.url(id, kind)).then(u => { if (u && el.__phKey === key && el.getAttribute(attr) !== u) el.setAttribute(attr, u); }).catch(() => {});
+    if (!phIO || el.localName === 'image' || el.closest('.overlay') || (ASSETS.peek && ASSETS.peek(id, kind))) phLoad(el);
+    else { phSeen.add(el); phIO.observe(el); }
   });
 }
 { let t = 0; new MutationObserver(() => { if (!t) t = setTimeout(() => { t = 0; hydratePhotos(); }, 16); }).observe(document.body, {childList:true, subtree:true}); }
@@ -1291,7 +1310,7 @@ const S = {
   view: (() => { const h = (location.hash || '').slice(1); return VIEWS.includes(h) ? h : 'closet'; })(),
   display: lsGet('cl-display') === 'model' ? 'model' : 'photo', filter:'all', ctype:'all', color:'all', season:'all', q:'', sort: ['new','brand','color','worn','acq'].includes(lsGet('cl-sort')) ? lsGet('cl-sort') : 'color',
   weekStart: mondayOf(new Date()),
-  shuf:{ pieces:{}, locks:{}, layer:'auto', extra:false, noClash:true, spinning:false, season:null, smart:{level:null, vibe:null, touched:false}, claude:{busy:false, list:[], idx:0, err:''}, source:'smart', reason:'', fits:(() => { try { const v = JSON.parse(lsGet('cl-fits') || 'null'); if (Array.isArray(v) && v.length) return v; } catch {} return ['loose','right','tight']; })() },
+  shuf:{ day:null, pieces:{}, locks:{}, layer:'auto', extra:false, noClash:true, spinning:false, season:null, smart:{level:null, vibe:null, touched:false}, claude:{busy:false, list:[], idx:0, err:''}, source:'smart', reason:'', fits:(() => { try { const v = JSON.parse(lsGet('cl-fits') || 'null'); if (Array.isArray(v) && v.length) return v; } catch {} return ['loose','right','tight']; })() },
   runs:{}, binUI:{}, modal:null,
   caps:{ db:false, assets:false, sample:false, images:false, mcp:false }
 };
@@ -1408,8 +1427,9 @@ function renderLake(){
     title = its.length ? (dressy ? 'Dressed up <em>for today</em>' : 'Today’s <em>outfit</em>') : dressy ? 'A dressy day' : 'What are we wearing?';
     sub = (dr && dr.text ? esc(dr.text) + ' ' : '') + (its.length ? 'Planned: <b>' + esc(names.join(', ')) + '</b>' : closetItems().length ? 'Nothing planned for today yet.' : 'Add a few pieces and the closet can dress you.');
     pics = its.length ? its.map(it => `<span class="tc-pic">${visual(it)}</span>`).join('') : '';
-    const label = dressy ? (its.length ? 'Dressier pick for today' : 'Pick a dressy outfit') : (its.length ? 'Shuffle today' : "Pick today's outfit");
-    act = closetItems().length ? `<div class="tc-act"><button class="btn primary small" data-act="lake-roll">${label}</button></div>` : '';
+    // once today is planned, the button plans tomorrow (it never replaces today's outfit); the Shuffle tab can still redo today
+    const label = its.length ? 'Plan tomorrow' : dressy ? 'Pick a dressy outfit' : "Pick today's outfit";
+    act = closetItems().length ? `<div class="tc-act"><button class="btn primary small" data-act="${its.length ? 'plan-tomorrow' : 'lake-roll'}">${label}</button></div>` : '';
   } else sub = esc(sub);
   const html = `<div class="tc-txt"><p class="tc-ey">${ey}</p><h1 class="tc-title" id="tcTitle">${title}</h1><p class="tc-sub">${sub}</p></div>${pics ? `<div class="tc-pics" aria-hidden="true">${pics}</div>` : ''}${act}`;
   if (el.__html !== html){ const fk = window.GB ? GB.focusKey() : null; el.innerHTML = html; el.__html = html; if (fk && window.GB) GB.refocus(fk); }
@@ -1419,7 +1439,7 @@ async function lakeRoll(){
   const ws = mondayOf(new Date()), se = weekSeason(ws);
   if (!pool('top').length || !pool('bottom').length){ toast('Add at least one top and one bottom first.'); return; }
   const td = todayDress(), w = LAKE && LAKE.weather;
-  const p = smartRoll({level: td.level, vibe: td.vibe, season: se, temp: w && typeof w.temp === 'number' ? w.temp : null, layer: 'auto'});
+  const p = smartRoll({level: td.level, vibe: td.vibe, season: se, temp: w && typeof w.temp === 'number' ? w.temp : null, fc: forecastOn(todayKey()), layer: 'auto'});
   if (await setDay(todayDn(), {...p, label: dressy ? 'Dressy pick' : 'Today’s pick'}, ws)) toast(dressy ? 'Dressed up for today.' : "Today's outfit is set.");
   renderLake();
 }
@@ -1646,7 +1666,7 @@ function rollOutfit({layer = 'auto', extra = false, noClash = true, locked = {},
 const DRESS_LEVELS = [[1,'Lounge'],[2,'Casual'],[3,'Smart casual'],[4,'Business'],[5,'Dressy']];
 const levelLabel = v => { const r = Math.max(1, Math.min(5, Math.round((Number(v) || 3) - .01))); return DRESS_LEVELS[r - 1][1]; };
 const levelText = v => { v = Number(v) || 3; const lo = Math.floor(v), hi = Math.ceil(v); return lo === hi || v - lo < .25 || hi - v < .25 ? levelLabel(v) : DRESS_LEVELS[lo - 1][1] + ' to ' + DRESS_LEVELS[hi - 1][1].toLowerCase(); };
-const cfgKey = cfg => [cfg.level, cfg.vibe, cfg.temp, cfg.season].join('|');
+const cfgKey = cfg => [cfg.level, cfg.vibe, cfg.temp, cfg.season, cfg.day].join('|');
 function inferFormality(it){
   const t = TYPES[it?.type] ? it.type : 'other';
   const n = ((it?.name || '') + ' ' + (it?.brand || '')).toLowerCase();
@@ -1724,26 +1744,46 @@ const VIBES = [
 const VIBE = Object.fromEntries(VIBES.map(v => [v.id, v]));
 const vibesAvailable = () => { const c = closetItems().filter(([, it]) => fitsNow(it)); return VIBES.filter(v => v.needs(c)); };
 
-// what today calls for, from the shell's calendar dress level
-function todayDress(){
-  const dr = LAKE && LAKE.dress, wd = new Date().getDay(), weekend = wd === 0 || wd === 6;
+// the day the Shuffle plans: tomorrow unless another day was picked (a picked day that has passed goes back to tomorrow)
+const todayKey = () => dkey(new Date()), tomorrowKey = () => dkey(addDays(new Date(), 1));
+const keyDate = k => new Date(k + 'T12:00:00');
+function shufDay(){ const d = S.shuf.day; return d && d >= todayKey() ? d : tomorrowKey(); }
+// "today", "tomorrow" or the weekday's name; with on: "on Tuesday"
+function dayWord(k, {cap = false, on = false} = {}){ const w = k === todayKey() ? 'today' : k === tomorrowKey() ? 'tomorrow' : (on ? 'on ' : '') + WD[keyDate(k).getDay()]; return cap ? w[0].toUpperCase() + w.slice(1) : w; }
+const dayPossessive = k => { const w = dayWord(k); return w + '’s'; };
+// the outfit already planned for a day, if any
+function planOn(k){ const d = keyDate(k); return S.weeks.get(dkey(mondayOf(d)))?.days?.[DAYS[(d.getDay() + 6) % 7]] || null; }
+// a day's dress call: today's from the map's dress; later days from its dressDays ({date, level, text, reason}) when it sends them
+function dressOn(k){ if (k === todayKey()) return LAKE && LAKE.dress; const L = LAKE && Array.isArray(LAKE.dressDays) ? LAKE.dressDays : []; return L.find(d => d && d.date === k) || null; }
+// a day's forecast {low, high, precip, phrase}: today's from the map's forecast; later days from forecastDays (Home Base) or days (the app)
+function forecastOn(k){
+  if (!LAKE) return null;
+  if (k === todayKey()) return LAKE.forecast && typeof LAKE.forecast === 'object' ? LAKE.forecast : null;
+  const d = (Array.isArray(LAKE.forecastDays) ? LAKE.forecastDays : Array.isArray(LAKE.days) ? LAKE.days : []).find(x => x && x.date === k);
+  if (!d || typeof d.low !== 'number') return null;
+  return {low:d.low, high:d.high, precip: d.precip != null ? d.precip : (Number(d.pop) >= 40 ? d.phrase || 'rain' : ''), phrase:d.phrase || ''};
+}
+// what a day calls for, from the calendar dress level (today's always; later days' when the map sends them)
+function dayDress(k){
+  const dr = dressOn(k), wd = keyDate(k).getDay(), weekend = wd === 0 || wd === 6, isToday = k === todayKey(), W1 = dayWord(k, {cap:true});
   if (dr && dr.level === 'dressy'){
     const title = String(dr.reason || '').trim(), at = (String(dr.text || '').match(/ at (.+)$/) || [])[1];
     const lvl = /gala|wedding|funeral|banquet|ceremony|commencement|reception|awards?/i.test(title) ? 5 : 4;
     const vibe = /council|committee|board|hearing|commission/i.test(title) ? 'council' : null;
-    return {level:lvl, vibe, why:(title ? title + (at ? ' at ' + at : '') : 'A dressy event today') + ', so ' + levelLabel(lvl) + '.'};
+    return {level:lvl, vibe, why:(isToday ? '' : W1 + ': ') + (title ? title + (at ? ' at ' + at : '') : 'A dressy event ' + dayWord(k)) + ', so ' + levelLabel(lvl) + '.'};
   }
-  if (dr && dr.level === 'casual') return {level:2, vibe:null, why:'Nothing on the work calendars today, so Casual.'};
-  if (dr && dr.level === 'everyday') return weekend ? {level:2, vibe:null, why:'A weekend with nothing formal, so Casual.'} : {level:3, vibe:'office', why:'A regular workday, so Smart casual.'};
-  return weekend ? {level:2, vibe:null, why:'It’s the weekend, so Casual. Pick another level any time.'} : {level:3, vibe:null, why:'A weekday, so Smart casual. Pick another level any time.'};
+  if (dr && dr.level === 'casual') return {level:2, vibe:null, why:'Nothing on the work calendars ' + dayWord(k, {on:true}) + ', so Casual.'};
+  if (dr && dr.level === 'everyday') return weekend ? {level:2, vibe:null, why:(isToday ? 'A weekend' : W1 + ' is a weekend day') + ' with nothing formal, so Casual.'} : {level:3, vibe:'office', why:(isToday ? 'A regular workday' : W1 + ' is a regular workday') + ', so Smart casual.'};
+  return weekend ? {level:2, vibe:null, why:(isToday ? 'It’s the weekend' : W1 + ' is a weekend day') + ', so Casual. Pick another level any time.'} : {level:3, vibe:null, why:(isToday ? 'A weekday' : W1 + ' is a weekday') + ', so Smart casual. Pick another level any time.'};
 }
+function todayDress(){ return dayDress(todayKey()); }
 function smartCfg(){
-  const sh = S.shuf, sm = sh.smart, td = todayDress();
+  const sh = S.shuf, sm = sh.smart, day = shufDay(), isToday = day === todayKey(), td = dayDress(day);
   const level = sm.level != null ? sm.level : (sm.vibe ? VIBE[sm.vibe].level : td.level);
   const vibe = sm.touched ? sm.vibe : (sm.vibe || td.vibe);
-  const w = LAKE && LAKE.weather, temp = w && typeof w.temp === 'number' ? w.temp : null;
-  const fc = LAKE && LAKE.forecast && typeof LAKE.forecast === 'object' ? LAKE.forecast : null;   // {low, high, precip, phrase} for today, when the map has it
-  return {level, vibe, temp, phrase: w && w.phrase ? String(w.phrase) : '', fc, season: shufSeason(), why: sm.touched ? '' : td.why};
+  const w = isToday && LAKE && LAKE.weather, temp = w && typeof w.temp === 'number' ? w.temp : null;   // the temperature outside now counts only for today
+  const fc = forecastOn(day);   // {low, high, precip, phrase} for the planned day, when the map has it
+  return {level, vibe, temp, phrase: w && w.phrase ? String(w.phrase) : '', fc, season: shufSeason(), why: sm.touched ? '' : td.why, day, dayWord: dayWord(day, {on:true})};
 }
 
 function lastWornDays(){ const m = wornStats(), today = new Date(), out = new Map(); for (const [id, v] of m) if (v.last) out.set(id, Math.round((today - new Date(v.last + 'T00:00:00')) / 86400000)); return out; }
@@ -1909,9 +1949,9 @@ function cancelClaude(){ claudeToken++; if (claudeCtl){ try { claudeCtl.abort();
 function outfitPrompt(cfg, locked, cands){
   const lines = cands.map(([id, it]) => { const w = lastWornDays().get(id); return {id, slot: SLOTS.filter(s => SLOT_TYPES[s].includes(it.type)).join('/'), kind: typeLabel(it), name: it.name || undefined, brand: it.brand || undefined, color: colorName(it.color), color2: it.color2 ? colorName(it.color2) : undefined, pattern: patName(it), dressiness: Math.round(formalityOf(it) * 2) / 2, seasons: seasonsText(it), wornDaysAgo: w != null && w >= 0 && w < 15 ? w : undefined}; });
   const lk = SLOTS.filter(s => locked[s]).map(s => s + '=' + locked[s]);
-  return `You are styling an outfit from Joey's closet. Pick pieces that genuinely look good together.\n` +
+  return `You are styling an outfit from Joey's closet for ${cfg.dayWord || 'today'}. Pick pieces that genuinely look good together.\n` +
     `Target dressiness: ${levelText(cfg.level)} (${cfg.level} on a 1-5 scale: 1 lounge, 2 casual, 3 smart casual, 4 business, 5 dressy)` + (cfg.vibe ? `. Vibe: ${VIBE[cfg.vibe].label}` : '') + `.\n` +
-    `Weather: ${cfg.temp != null ? Math.round(cfg.temp) + '°F' + (cfg.phrase ? ', ' + cfg.phrase : '') : 'unknown'}${cfg.fc ? ` (today ${Math.round(cfg.fc.low)}° to ${Math.round(cfg.fc.high)}°${cfg.fc.precip ? ', ' + cfg.fc.precip : ''})` : ''}; season: ${cfg.season}. Nothing worn in the last 7 days unless there's no other fit.\n` +
+    `Weather: ${cfg.temp != null ? Math.round(cfg.temp) + '°F' + (cfg.phrase ? ', ' + cfg.phrase : '') : cfg.fc ? 'forecast only' : 'unknown'}${cfg.fc ? ` (${cfg.day && cfg.day !== todayKey() ? dayWord(cfg.day) : 'today'} ${Math.round(cfg.fc.low)}° to ${Math.round(cfg.fc.high)}°${cfg.fc.precip ? ', ' + cfg.fc.precip : ''})` : ''}; season: ${cfg.season}. Nothing worn in the last 7 days unless there's no other fit.\n` +
     (lk.length ? `Locked pieces that must stay exactly as given: ${lk.join(', ')}.\n` : '') +
     `Pieces (JSON, "dressiness" is 1-5): ${JSON.stringify(lines)}\n` +
     `Rules: one top, one bottom and one pair of shoes from the list; add a layer only if it suits the weather and the vibe; add an extra (tie or hat) only if it fits the look; use only ids from the list, each piece at most once, in a slot its "slot" allows; match the target dressiness; at most one loud colour or pattern; colours should harmonise; prefer pieces not worn in the last few days.\n` +
@@ -1968,14 +2008,16 @@ async function askClaudeOutfit(){
 
 V.shuffle = {
   mount(el){
-    el.innerHTML = `<div class="head"><h2>Shuffle</h2><p class="sub">Pick how dressy and the vibe, and the smart shuffle puts together pieces that go. Lock the ones you like and shuffle again.</p></div>
+    el.innerHTML = `<div class="head"><h2>Shuffle</h2><p class="sub">Pick the day, how dressy and the vibe, and the smart shuffle puts together pieces that go. Lock the ones you like and shuffle again. Nothing is planned until you tap Plan.</p></div>
       <div class="vibe" id="vibePanel">
+        <div class="vibe-row"><span class="lbl" id="dayLbl">Planning for</span><div class="dayrow" role="group" aria-labelledby="dayLbl" id="dayChips"></div></div>
         <div class="vibe-row"><span class="lbl" id="dressLbl">How dressy</span><div class="dress-scale" role="group" aria-labelledby="dressLbl" id="dressSeg"></div></div>
         <div class="vibe-row"><span class="lbl" id="vibeLbl">Vibe</span><div class="chips vibe-chips" role="group" aria-labelledby="vibeLbl" id="vibeChips"></div></div>
         <p class="vibe-why" id="vibeWhy"></p>
       </div>
       <div class="reels" id="reels"></div>
       <div class="shuf-why" id="shufWhy" aria-live="polite"></div>
+      <div class="planbar" id="planBar" hidden></div>
       <div class="shuf-ctrls">
         <div class="field"><span>Layer</span><div class="seg" role="group" aria-label="Layer" id="layerSeg"></div></div>
         <div class="field"><span>Season</span><div class="seg" role="group" aria-label="Season" id="shufSeason"></div></div>
@@ -1994,7 +2036,12 @@ V.shuffle = {
     $('#optClash', el).addEventListener('change', e => { S.shuf.noClash = e.target.checked; });
   },
   update(){
-    const sh = S.shuf, cfg = smartCfg();
+    const sh = S.shuf, cfg = smartCfg(), day = cfg.day;
+    $('#dayChips').innerHTML = [0, 1, 2, 3, 4, 5, 6].map(i => {
+      const d = addDays(new Date(), i), k = dkey(d), has = S.loaded && !!planOn(k), top = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : WD[d.getDay()].slice(0, 3);
+      return `<button class="chip${has ? ' has' : ''}" data-act="shuf-day" data-val="${k}" aria-pressed="${k === day}" aria-label="${top}, ${fmtDay(d)}${has ? ', outfit planned' : ''}">${top}<small>${fmtDay(d)}</small></button>`;
+    }).join('');
+    $('#planBar').hidden = true;
     $('#layerSeg').innerHTML = segBtn('shuf-layer','auto','Sometimes',sh.layer) + segBtn('shuf-layer','always','Always',sh.layer) + segBtn('shuf-layer','never','Never',sh.layer);
     const se = shufSeason();
     $('#shufSeason').innerHTML = SEASONS.map(([k, l]) => `<button data-act="shuf-season" data-val="${k}" aria-pressed="${se === k}">${SEASON_ICON[k]}${l}</button>`).join('') + `<button data-act="shuf-season" data-val="any" aria-pressed="${se === 'any'}">Any</button>`;
@@ -2003,8 +2050,8 @@ V.shuffle = {
     $('#dressSeg').innerHTML = DRESS_LEVELS.map(([v, l]) => `<button data-act="shuf-level" data-val="${v}" aria-pressed="${lvR === v}">${l}</button>`).join('');
     const vibes = S.loaded ? vibesAvailable() : VIBES;
     $('#vibeChips').innerHTML = vibes.map(v => `<button class="chip" data-act="shuf-vibe" data-val="${v.id}" aria-pressed="${cfg.vibe === v.id}">${v.label}</button>`).join('') + (cfg.vibe ? `<button class="chip ghostchip" data-act="shuf-vibe" data-val="" aria-label="Clear vibe">No vibe</button>` : '');
-    const wx = cfg.fc && typeof cfg.fc.low === 'number' ? ` ${Math.round(cfg.fc.low)}° this morning, up to ${Math.round(cfg.fc.high)}°${cfg.fc.precip ? ', ' + String(cfg.fc.precip).toLowerCase() : ''}.` : cfg.temp != null ? ' ' + Math.round(cfg.temp) + '°' + (cfg.phrase ? ' and ' + cfg.phrase.toLowerCase() : '') + ' out.' : '';
-    $('#vibeWhy').textContent = (cfg.why || ('Dressing for ' + (cfg.vibe ? VIBE[cfg.vibe].label.toLowerCase() + ', ' : '') + levelText(cfg.level).toLowerCase() + '.')) + wx;
+    const wx = cfg.fc && typeof cfg.fc.low === 'number' ? ` ${Math.round(cfg.fc.low)}° ${day === todayKey() ? 'this morning' : 'in the morning'}, up to ${Math.round(cfg.fc.high)}°${cfg.fc.precip ? ', ' + String(cfg.fc.precip).toLowerCase() : ''}.` : cfg.temp != null ? ' ' + Math.round(cfg.temp) + '°' + (cfg.phrase ? ' and ' + cfg.phrase.toLowerCase() : '') + ' out.' : '';
+    $('#vibeWhy').textContent = (cfg.why || ('Dressing for ' + (cfg.vibe ? VIBE[cfg.vibe].label.toLowerCase() + ', ' : '') + levelText(cfg.level).toLowerCase() + (day === todayKey() ? '' : ' ' + dayWord(day, {on:true})) + '.')) + wx;
     const reels = $('#reels'), why = $('#shufWhy');
     if (!S.loaded){ reels.innerHTML = loadingHTML(); why.innerHTML = ''; return; }
     const has = (sea, f) => pool('top', undefined, sea, f).length && pool('bottom', undefined, sea, f).length;
@@ -2038,9 +2085,31 @@ V.shuffle = {
     const nextBtn = sh.source === 'claude' && cl.list && cl.list.length > 1 ? `<button class="btn small" data-act="shuf-next">Next idea (${(cl.idx + 1) % cl.list.length + 1} of ${cl.list.length})</button>` : '';
     why.innerHTML = (sh.reason && !sh.spinning ? `<p class="why-txt">${tag}${esc(sh.reason)}</p>` : '') + (cl.err ? `<p class="why-err">${esc(cl.err)}</p>` : '') + ((askBtn || nextBtn) && !sh.spinning ? `<div class="why-acts">${nextBtn}${askBtn}</div>` : '');
     $('#sSave').disabled = $('#sWear').disabled = S.readOnly || sh.spinning;
+    // the plan bar: what the day already has, and one button that saves the shuffle to that day only
+    const pb = $('#planBar');
+    if (!S.readOnly && sh.pieces.top && sh.pieces.bottom){
+      const cur = planOn(day), curIts = cur ? SLOTS.map(s => cur[s] && S.items.get(cur[s])).filter(Boolean) : [];
+      const same = !!cur && SLOTS.every(s => (cur[s] || null) === (sh.pieces[s] || null));
+      const when = dayWord(day, {cap:true}) + (day === todayKey() || day === tomorrowKey() ? ', ' + fmtDay(keyDate(day)) : '');
+      pb.innerHTML = `<p>${same ? `<b>This is ${esc(dayPossessive(day))} outfit.</b>` : curIts.length ? `${esc(when)} already has: <b>${esc(curIts.map(it => it.name || typeLabel(it)).join(', '))}</b>.` : `Nothing planned for ${esc(dayWord(day))} (${esc(fmtDay(keyDate(day)))}) yet.`}</p>` +
+        (same ? '' : `<button class="btn primary" data-act="shuf-plan" ${sh.spinning ? 'disabled' : ''}>${curIts.length ? 'Replace ' + esc(dayPossessive(day)) + ' outfit' : 'Plan for ' + esc(dayWord(day))}</button>`);
+      pb.hidden = false;
+    }
   }
 };
-function shufSeason(){ return S.shuf.season || weekSeason(mondayOf(new Date())); }
+// save the shuffled pieces to the Shuffle's day, and only that day
+async function planShuffled(){
+  const sh = S.shuf, k = shufDay(), d = keyDate(k);
+  if (!sh.pieces.top || !sh.pieces.bottom){ toast('Shuffle a top and a bottom first.'); return; }
+  const day = {label: sh.source === 'claude' ? 'Claude’s pick' : 'Shuffled'}; for (const s of SLOTS) day[s] = sh.pieces[s] || null;
+  if (await setDay(DAYS[(d.getDay() + 6) % 7], day, mondayOf(d))) toast('Planned for ' + dayWord(k) + ', ' + fmtDay(d) + '.');
+}
+function setShufDay(k){
+  const sh = S.shuf; if (k === shufDay()) return false;
+  sh.day = k; sh.smart = {level:null, vibe:null, touched:false};   // a new day brings its own dress call
+  return true;
+}
+function shufSeason(){ return S.shuf.season || weekSeason(mondayOf(keyDate(shufDay()))); }
 function shufLocked(){ const sh = S.shuf, locked = {}; for (const s of SLOTS) if (sh.locks[s]) locked[s] = sh.pieces[s]; if (sh.layer === 'never') locked.layer = null; return locked; }
 function smartPick(){ const sh = S.shuf, cfg = smartCfg(); return smartRoll({level:cfg.level, vibe:cfg.vibe, locked:shufLocked(), season:cfg.season, fits:sh.fits, temp:cfg.temp, layer:sh.layer, extra:sh.extra, prev:sh.pieces}); }
 // re-pick the unlocked pieces right away (after the level, vibe, season or fits change)
@@ -2647,8 +2716,10 @@ function topsThisWeek(exceptDay){ const wk = S.weeks.get(dkey(S.weekStart)); con
 // weekends casual, and only today gets the forecast
 function dayPlan(dn, ws = S.weekStart){
   const date = addDays(ws, DAYS.indexOf(dn)), isToday = dkey(date) === dkey(new Date()), weekend = dn === 'sat' || dn === 'sun';
-  if (isToday){ const td = todayDress(), w = LAKE && LAKE.weather; return {level:td.level, vibe:td.vibe, temp:w && typeof w.temp === 'number' ? w.temp : null, fc:undefined}; }
-  return {level:weekend ? 2 : 3, vibe:weekend ? null : 'office', temp:null, fc:null};
+  if (isToday){ const td = todayDress(), w = LAKE && LAKE.weather; return {level:td.level, vibe:td.vibe, temp:w && typeof w.temp === 'number' ? w.temp : null, fc:forecastOn(todayKey())}; }
+  const k = dkey(date), dr = dressOn(k);
+  if (dr && (dr.level === 'dressy' || dr.level === 'casual' || dr.level === 'everyday')){ const td = dayDress(k); return {level:td.level, vibe:td.vibe, temp:null, fc:forecastOn(k)}; }
+  return {level:weekend ? 2 : 3, vibe:weekend ? null : 'office', temp:null, fc:forecastOn(k)};
 }
 function smartDay(dn, avoidTops, se, ws = S.weekStart){
   const d = dayPlan(dn, ws);
@@ -2718,6 +2789,9 @@ document.addEventListener('click', async e => {
     case 'day-shuffle': await shuffleDay(b.dataset.day); break;
     case 'day-clear': await setDay(b.dataset.day, null); break;
     case 'shuf-go': spin('smart'); break;
+    case 'shuf-day': if (setShufDay(b.dataset.val)) reroll(); break;
+    case 'shuf-plan': await planShuffled(); break;
+    case 'plan-tomorrow': { const moved = setShufDay(tomorrowKey()); if (S.view !== 'shuffle') go('shuffle'); if (moved) reroll(); break; }
     case 'shuf-random': spin('random'); break;
     case 'shuf-level': { const sm = S.shuf.smart; sm.level = Number(b.dataset.val); sm.touched = true; reroll(); break; }
     case 'shuf-vibe': { const sm = S.shuf.smart, v = b.dataset.val; sm.touched = true; if (!v || sm.vibe === v){ sm.vibe = null; } else { sm.vibe = v; sm.level = VIBE[v].level; } reroll(); break; }

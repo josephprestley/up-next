@@ -73,3 +73,14 @@ html.hb-gated body{overflow:hidden}
   .chip{min-height:40px}
 }
 .offline-note{position:fixed;left:50%;transform:translateX(-50%);bottom:max(14px,env(safe-area-inset-bottom,0px));z-index:40;background:var(--ink);color:var(--bg);border-radius:99px;padding:8px 14px;font-size:13px}
+
+/* Home-screen app: the status bar is white text over the page (black-translucent), so it sits on a taupe band to stay readable */
+body::before{background:#4a3d34}
+/* Phones: the five sections sit in a bar at the bottom, in thumb's reach, above the home indicator */
+@media (max-width:700px){
+  .tabs{position:fixed;left:0;right:0;bottom:0;top:auto;z-index:15;background:rgba(244,242,239,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line);border-bottom:0;padding-bottom:env(safe-area-inset-bottom,0px)}
+  .tabs .wrap{padding-block:0 4px}
+  .tab[aria-current="page"]{box-shadow:inset 0 2px 0 var(--ink);font-weight:600}
+  body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
+  .toast,.offline-note{bottom:calc(78px + env(safe-area-inset-bottom,0px))}
+}

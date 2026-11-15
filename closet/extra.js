@@ -380,4 +380,21 @@
   }, 600);
   setTimeout(() => clearInterval(poll), 20000);
   window.ClosetApp = {addMenu, openMenu, startBatch, sortPhotos, cleanFields, get batch() { return BATCH; }};
+
+  // ------------------------------------------------------------------ tabs keep their place
+  // Switching sections with the tab bar comes back to where you were in each one; tapping the open tab goes to the top.
+  // Buttons elsewhere that open a section (Plan tomorrow, Shuffle one) still open it at the top.
+  if (typeof window.go === 'function') {
+    const pageGo = window.go, place = {};
+    let byTab = false;
+    document.addEventListener('click', (e) => { byTab = !!(e.target.closest && e.target.closest('#tabs .tab')); }, true);
+    window.go = function (view) {
+      const from = S.view, tab = byTab; byTab = false;
+      if (tab && view === from) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+      place[from] = window.scrollY;
+      pageGo(view);
+      const y = tab ? place[view] || 0 : 0;
+      if (y) requestAnimationFrame(() => window.scrollTo(0, y));
+    };
+  }
 })();
