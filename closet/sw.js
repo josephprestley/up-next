@@ -2,7 +2,7 @@
    otherwise. It also keeps the shared Firebase files that pages under it load from outside its folder (../firebase.js,
    ../config.js) and the Google fonts once they've loaded. Your pieces are cached by Firebase and your photos by the app
    itself (closet-photos-v1), not here. Up Next and Daily Spin have their own workers and caches. */
-const CACHE = "closet-v4";
+const CACHE = "closet-v5";
 const SHELL = ["./", "index.html", "runtime.js", "extra.js", "app.css", "gb.js", "gb.css", "manifest.webmanifest", "icons/icon-192.png", "icons/apple-touch-icon.png", "../firebase.js", "../config.js"];
 const fresh = (u) => new Request(u, { cache: "no-cache", credentials: "same-origin" });
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL.map(fresh))).then(() => self.skipWaiting())); });

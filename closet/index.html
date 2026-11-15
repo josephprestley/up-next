@@ -1,7 +1,7 @@
 <!doctype html><html lang="en" data-app="closet" data-app-name="My Closet" data-signup="off" data-install-first="on"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest?v=4">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png?v=4">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png?v=4">
 <meta name="theme-color" content="#4a3d34">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1308,7 +1308,7 @@ const S = {
   items:new Map(), outfits:new Map(), weeks:new Map(), settings:{minNet:20},
   loaded:false, mode:'loading', readOnly:false,
   view: (() => { const h = (location.hash || '').slice(1); return VIEWS.includes(h) ? h : 'closet'; })(),
-  display: lsGet('cl-display') === 'model' ? 'model' : 'photo', filter:'all', ctype:'all', color:'all', season:'all', q:'', sort: ['new','brand','color','worn','acq'].includes(lsGet('cl-sort')) ? lsGet('cl-sort') : 'color',
+  display: lsGet('cl-view') === 'photo' ? 'photo' : 'model',   /* models unless Photos was picked (a new key, so an old Photos choice doesn't stick) */ filter:'all', ctype:'all', color:'all', season:'all', q:'', sort: ['new','brand','color','worn','acq'].includes(lsGet('cl-sort')) ? lsGet('cl-sort') : 'color',
   weekStart: mondayOf(new Date()),
   shuf:{ day:null, pieces:{}, locks:{}, layer:'auto', extra:false, noClash:true, spinning:false, season:null, smart:{level:null, vibe:null, touched:false}, claude:{busy:false, list:[], idx:0, err:''}, source:'smart', reason:'', fits:(() => { try { const v = JSON.parse(lsGet('cl-fits') || 'null'); if (Array.isArray(v) && v.length) return v; } catch {} return ['loose','right','tight']; })() },
   runs:{}, binUI:{}, modal:null,
@@ -2773,7 +2773,7 @@ document.addEventListener('click', async e => {
       sh.fits = ['loose','right','tight'].filter(x => next.includes(x)); lsSet('cl-fits', JSON.stringify(sh.fits));
       reroll(); break;
     }
-    case 'display': S.display = b.dataset.val; lsSet('cl-display', S.display); refresh(); break;
+    case 'display': S.display = b.dataset.val; lsSet('cl-view', S.display); refresh(); break;
     case 'add-item': if (!S.readOnly) { if (window.ClosetApp) ClosetApp.addMenu(); else openEditor(null); } break;
     case 'open-item': openEditor(id); break;
     case 'new-outfit': openOutfitBuilder(null); break;
