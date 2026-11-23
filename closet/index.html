@@ -244,7 +244,13 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--accent);outline-
 .reels{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
 .reel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
 .reel.locked{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
-.reel-win{height:200px;display:grid;place-items:center;background:var(--stage);border-radius:13px;overflow:hidden}
+.reel-win{height:200px;display:grid;place-items:center;background:var(--stage);border-radius:13px;overflow:hidden;position:relative;width:100%;border:0;padding:0;font:inherit;color:inherit;cursor:pointer}
+.reel-win:disabled{cursor:default}
+.reel-win .pickme{position:absolute;right:8px;bottom:8px;font-size:11px;font-weight:700;letter-spacing:.04em;padding:3px 9px;border-radius:99px;background:var(--panel);color:var(--muted);border:1px solid var(--line);opacity:.92}
+.reel-win:hover .pickme,.reel-win:focus-visible .pickme{color:var(--ink,inherit);border-color:var(--accent)}
+.reel-win.spin .pickme,.reel-win:disabled .pickme{display:none}
+.pickhead{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.pickhead input{flex:1;min-width:160px}
 .reel-win .g{height:88%;width:auto;filter:drop-shadow(0 6px 6px var(--drop))}
 .reel-win .ph{height:100%}
 .reel-win .none{color:var(--muted);font:600 20px/1 var(--f-hand)}
@@ -2008,7 +2014,7 @@ async function askClaudeOutfit(){
 
 V.shuffle = {
   mount(el){
-    el.innerHTML = `<div class="head"><h2>Shuffle</h2><p class="sub">Pick the day, how dressy and the vibe, and the smart shuffle puts together pieces that go. Lock the ones you like and shuffle again. Nothing is planned until you tap Plan.</p></div>
+    el.innerHTML = `<div class="head"><h2>Shuffle</h2><p class="sub">Pick the day, how dressy and the vibe, and the smart shuffle puts together pieces that go. Already know your shirt or pants? Tap that slot to choose it, and the rest gets built around it. Lock the ones you like and shuffle again. Nothing is planned until you tap Plan.</p></div>
       <div class="vibe" id="vibePanel">
         <div class="vibe-row"><span class="lbl" id="dayLbl">Planning for</span><div class="dayrow" role="group" aria-labelledby="dayLbl" id="dayChips"></div></div>
         <div class="vibe-row"><span class="lbl" id="dressLbl">How dressy</span><div class="dress-scale" role="group" aria-labelledby="dressLbl" id="dressSeg"></div></div>
@@ -2074,9 +2080,9 @@ V.shuffle = {
     reels.innerHTML = show.map(s => {
       const it = S.items.get(sh.pieces[s]);
       return `<div class="reel ${sh.locks[s] ? 'locked' : ''}">
-        <div class="reel-win" id="reel-${s}">${it ? visual(it) : '<span class="none">None</span>'}</div>
+        <button type="button" class="reel-win" id="reel-${s}" data-act="shuf-choose" data-slot="${s}" aria-label="Choose your own ${esc(SLOT_LABEL[s].toLowerCase())}" ${sh.spinning || S.readOnly ? 'disabled' : ''}>${it ? visual(it) : '<span class="none">None</span>'}<span class="pickme" aria-hidden="true">Choose</span></button>
         <div class="reel-name" id="rn-${s}">${it ? esc(itemTitle(it)) : '&nbsp;'}</div>
-        <div class="reel-foot"><span class="lbl">${SLOT_LABEL[s]}${it ? ` <span class="lvl" title="Dressiness">${esc(levelLabel(formalityOf(it)))}</span>` : ''}</span><button class="lock" data-act="lock" data-slot="${s}" aria-pressed="${!!sh.locks[s]}" ${it ? '' : 'disabled'}>${sh.locks[s] ? 'Locked' : 'Lock'}</button></div>
+        <div class="reel-foot"><span class="lbl">${SLOT_LABEL[s]}${it ? ` <span class="lvl" title="Dressiness">${esc(levelLabel(formalityOf(it)))}</span>` : ''}</span><button class="lock" data-act="lock" data-slot="${s}" aria-pressed="${!!sh.locks[s]}" ${it || sh.locks[s] ? '' : 'disabled'}>${sh.locks[s] ? 'Locked' : 'Lock'}</button></div>
       </div>`;
     }).join('');
     const cl = sh.claude || {};
@@ -2131,6 +2137,54 @@ async function spin(mode = 'smart'){
     const t = setInterval(() => { const p = cands[n % cands.length]; win.innerHTML = visual(p[1]); n++; if (n >= stopAt){ clearInterval(t); win.classList.remove('spin'); res(); } }, 85);
   })));
   done();
+}
+
+// choose a piece yourself: it is locked, and the unlocked slots are re-picked around it
+function openShufPicker(slot){
+  const sh = S.shuf; if (sh.spinning || S.readOnly) return;
+  const se = shufSeason(), optional = slot !== 'top' && slot !== 'bottom';
+  const rank = it => (fitsNow(it) ? 0 : 2) + (fitsSeason(it, se) ? 0 : 1);
+  const all = pool(slot, undefined, 'any', 'all').sort((a, b) => rank(a[1]) - rank(b[1]) || itemTitle(a[1]).localeCompare(itemTitle(b[1])));
+  const tag = it => !fitsNow(it) ? FIT_LABEL[fitOf(it)] : (!fitsSeason(it, se) ? 'Not ' + SEASON_LABEL[se].toLowerCase() : '');
+  const word = SLOT_LABEL[slot].toLowerCase();
+  const html = `<header><h2>Choose your ${esc(word)}</h2><button class="x" data-close aria-label="Close">&times;</button></header>
+    <div class="body">
+      <p class="note" style="margin:0 0 10px">The shuffle keeps this ${esc(word)} and puts the rest of ${esc(dayPossessive(shufDay()))} outfit together around it.</p>
+      <div class="pickhead"><input type="search" id="pq" placeholder="Search by name, color or type" aria-label="Search your ${esc(word)}s" data-autofocus>${sh.locks[slot] ? `<button type="button" class="btn small" id="pfree">Let the shuffle pick</button>` : ''}</div>
+      <div id="plist"></div>
+    </div>`;
+  openModal(html, sheet => {
+    const q = x => sheet.querySelector(x);
+    const draw = () => {
+      const t = q('#pq').value.trim().toLowerCase();
+      const hit = ([, it]) => !t || [itemTitle(it), it.name, typeLabel(it), colorName(it.color), it.brand, it.notes].filter(Boolean).join(' ').toLowerCase().includes(t);
+      const list = all.filter(hit);
+      q('#plist').innerHTML = (list.length || optional) ? `<div class="pickgrid">${optional && !t ? `<button type="button" class="pick" data-pick="" aria-pressed="${!!sh.locks[slot] && !sh.pieces[slot]}"><span class="sv" style="height:76px;display:grid;place-items:center">—</span><span>None</span></button>` : ''}${list.map(([cid, it]) => `<button type="button" class="pick ${rank(it) ? 'later' : ''}" data-pick="${esc(cid)}" aria-pressed="${!!sh.locks[slot] && sh.pieces[slot] === cid}">${visual(it)}<span>${esc(it.name || typeLabel(it))}</span>${tag(it) ? `<span class="note">${esc(tag(it))}</span>` : ''}</button>`).join('')}</div>` : `<p class="note">${t ? 'Nothing matches that search.' : 'Nothing in your closet fits this slot yet.'}</p>`;
+      if (typeof hydratePhotos === 'function') hydratePhotos(q('#plist'));
+    };
+    draw();
+    q('#pq').addEventListener('input', draw);
+    q('#pfree')?.addEventListener('click', () => { closeModal(); delete sh.locks[slot]; reroll(); });
+    sheet.addEventListener('click', e => { const pk = e.target.closest('[data-pick]'); if (!pk) return; closeModal(); choosePiece(slot, pk.dataset.pick || null); });
+    sheet.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => closeModal()));
+  }, {label: 'Choose your ' + word});
+}
+function choosePiece(slot, id){
+  const sh = S.shuf, it = id ? S.items.get(id) : null;
+  sh.pieces[slot] = id; sh.locks[slot] = true;
+  if (slot === 'extra' && id) sh.extra = true;
+  if (slot === 'layer' && id && sh.layer === 'never') sh.layer = 'auto';
+  // a piece far from the day's dress level moves the level to it, so the rest matches what you chose
+  let moved = '';
+  if (it && (slot === 'top' || slot === 'bottom')){
+    const f = formalityOf(it), cur = smartCfg().level;
+    if (Math.abs(f - cur) > 1.5){ const sm = sh.smart; sm.level = Math.max(1, Math.min(5, Math.round(f))); sm.vibe = null; sm.touched = true; moved = ' Dressiness moved to ' + levelLabel(sm.level).toLowerCase() + ' to match it.'; }
+  }
+  cancelClaude(); sh.claude = {busy:false, list:[], idx:0, err:''};
+  const cfg = smartCfg(); sh.pieces = smartPick(); sh.source = 'smart'; sh.cfgKey = cfgKey(cfg);
+  const mine = SLOTS.filter(s => sh.locks[s] && sh.pieces[s]).map(s => S.items.get(sh.pieces[s])).filter(Boolean).map(x => x.name || typeLabel(x));
+  sh.reason = (mine.length ? 'Built around your ' + mine.join(' and ') + '. ' : '') + outfitReason(sh.pieces, cfg) + moved;
+  V.shuffle.update();
 }
 
 /* ---------- for-sale bin ---------- */
@@ -2798,6 +2852,7 @@ document.addEventListener('click', async e => {
     case 'shuf-claude': askClaudeOutfit(); break;
     case 'shuf-next': { const sh = S.shuf, cl = sh.claude; if (!cl.list.length) break; cl.idx = (cl.idx + 1) % cl.list.length; for (const s of SLOTS) if (!sh.locks[s]) sh.pieces[s] = cl.list[cl.idx].pieces[s] || null; sh.reason = cl.list[cl.idx].reason; sh.source = 'claude'; V.shuffle.update(); break; }
     case 'shuf-layer': S.shuf.layer = b.dataset.val; if (b.dataset.val === 'never'){ S.shuf.pieces.layer = null; delete S.shuf.locks.layer; } V.shuffle.update(); break;
+    case 'shuf-choose': openShufPicker(b.dataset.slot); break;
     case 'lock': { const s = b.dataset.slot; S.shuf.locks[s] = !S.shuf.locks[s]; V.shuffle.update(); break; }
     case 'shuf-save': { const p = {}; SLOTS.forEach(s => p[s] = S.shuf.pieces[s] || null); openOutfitBuilder(null, p); break; }
     case 'shuf-wear': { const p = {}; SLOTS.forEach(s => p[s] = S.shuf.pieces[s] || null); openDayChooser(p, 'Shuffled'); break; }
