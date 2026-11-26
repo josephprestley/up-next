@@ -1430,7 +1430,7 @@ function renderLake(){
   if (S.loaded && !S.readOnly){
     const wk = S.weeks.get(dkey(mondayOf(now)));
     const day = wk?.days?.[todayDn()];
-    const its = day ? ['layer','top','bottom','shoes','extra'].map(k => day[k] && S.items.get(day[k])).filter(Boolean) : [];
+    const its = day ? ['coat','layer','top','bottom','shoes','extra'].map(k => day[k] && S.items.get(day[k])).filter(Boolean) : [];
     const names = its.map(it => it.name || typeLabel(it));
     const dressy = dr && dr.level === 'dressy';
     title = its.length ? (dressy ? 'Dressed up <em>for today</em>' : 'Today’s <em>outfit</em>') : dressy ? 'A dressy day' : 'What are we wearing?';
