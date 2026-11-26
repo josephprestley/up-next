@@ -707,9 +707,12 @@ const TYPES = {
   shoes:{label:'Shoes', group:'shoes'}, hat:{label:'Hat', group:'extras'}, tie:{label:'Tie', group:'extras'}, other:{label:'Other', group:'extras'}
 };
 const GROUPS = [['tops','Tops'],['layers','Layers'],['bottoms','Bottoms'],['shoes','Shoes'],['extras','Extras']];
-const SLOTS = ['layer','top','bottom','shoes','extra'];
-const SLOT_LABEL = {layer:'Layer', top:'Top', bottom:'Bottom', shoes:'Shoes', extra:'Extra'};
-const SLOT_TYPES = {layer:['jacket','vest','overshirt','sweater','sweatshirt','hoodie'], top:['tee','polo','henley','dress','sweater','sweatshirt','hoodie'], bottom:['pants','jeans','shorts'], shoes:['shoes'], extra:['hat','tie','other']};
+const SLOTS = ['coat','layer','top','bottom','shoes','extra'];
+// a coat is outerwear you take off at the door: overcoats and topcoats. It has its own slot, so a sport coat (layer) and an overcoat (coat) can be worn together
+const isCoat = it => it?.type === 'jacket' && (it.style === 'overcoat' || /\b(over ?coat|top ?coat|pea ?coat|trench|car coat|camel coat|parka)\b/i.test(it.name || ''));
+const slotOk = (s, it) => !!it && SLOT_TYPES[s].includes(it.type) && (s === 'coat' ? isCoat(it) : s === 'layer' ? !isCoat(it) : true);
+const SLOT_LABEL = {coat:'Coat', layer:'Layer', top:'Top', bottom:'Bottom', shoes:'Shoes', extra:'Extra'};
+const SLOT_TYPES = {coat:['jacket'], layer:['jacket','vest','overshirt','sweater','sweatshirt','hoodie'], top:['tee','polo','henley','dress','sweater','sweatshirt','hoodie'], bottom:['pants','jeans','shorts'], shoes:['shoes'], extra:['hat','tie','other']};
 const PATTERNS = [['solid','Solid'],['stripes','Stripes'],['pinstripe','Pinstripe'],['plaid','Plaid'],['gingham','Gingham'],['dots','Dots'],['heather','Heather'],['denim','Denim']];
 const CONDITIONS = ['New with tags','Like new','Good','Fair','Worn out'];
 const SEASONS = [['spring','Spring'],['summer','Summer'],['fall','Fall'],['winter','Winter']];
@@ -1563,7 +1566,7 @@ function cardHTML(id, it){
 function fitHTML(p){
   const g = s => { const it = p && p[s] ? S.items.get(p[s]) : null; return it ? `<div class="fit-${s}">${visual(it)}</div>` : ''; };
   const main = g('top') + g('bottom');
-  return `<div class="fit"><div class="fit-main">${main || '<div class="fit-empty">No pieces</div>'}</div><div class="fit-side">${g('layer')}${g('shoes')}${g('extra')}</div></div>`;
+  return `<div class="fit"><div class="fit-main">${main || '<div class="fit-empty">No pieces</div>'}</div><div class="fit-side">${g('coat')}${g('layer')}${g('shoes')}${g('extra')}</div></div>`;
 }
 function outfitSeasons(p){ const its = SLOTS.map(s => p?.[s] && S.items.get(p[s])).filter(Boolean); return SEASONS.map(x => x[0]).filter(se => its.every(it => fitsSeason(it, se))); }
 function seasonsRow(p){ const ss = outfitSeasons(p); if (ss.length === 4) return `<div class="seasons-row">${SEASONS.map(([k]) => SEASON_ICON[k]).join('')}<span>Year-round</span></div>`; if (!ss.length) return `<div class="seasons-row">Pieces don't share a season</div>`; return `<div class="seasons-row">${ss.map(k => SEASON_ICON[k]).join('')}<span>${ss.map(k => SEASON_LABEL[k]).join(', ')}</span></div>`; }
@@ -1633,7 +1636,7 @@ async function setDay(dn, day, ws = S.weekStart){
 }
 
 /* ---------- shuffle logic ---------- */
-function pool(slot, excludeIds = new Set(), season = 'any', fits = null){ return closetItems().filter(([id, it]) => SLOT_TYPES[slot].includes(it.type) && !excludeIds.has(id) && fitsSeason(it, season) && (fits === 'all' ? true : Array.isArray(fits) ? fits.includes(fitOf(it)) : fitsNow(it))); }
+function pool(slot, excludeIds = new Set(), season = 'any', fits = null){ return closetItems().filter(([id, it]) => slotOk(slot, it) && !excludeIds.has(id) && fitsSeason(it, season) && (fits === 'all' ? true : Array.isArray(fits) ? fits.includes(fitOf(it)) : fitsNow(it))); }
 let LAYER_KIND_T = .6;   // how sharply the final pick prefers the best-scoring kind of layer
 const pickOne = arr => arr.length ? arr[Math.floor(Math.random() * arr.length)] : null;
 // layers come in kinds; the shuffle draws a kind first so one big kind (blazers) doesn't crowd out the rest
@@ -1664,6 +1667,7 @@ function rollOutfit({layer = 'auto', extra = false, noClash = true, locked = {},
   } else out.layer = null;
   if (out.layer && out.top && out.layer === out.top) out.layer = null;
   choose('shoes');
+  if (locked.coat !== undefined) out.coat = locked.coat; else if (season === 'winter' || Math.random() < .25) choose('coat'); else out.coat = null;
   if (locked.extra !== undefined) out.extra = locked.extra; else if (extra) choose('extra', it => it.type === 'tie' ? S.items.get(out.top)?.type === 'dress' : true); else out.extra = null;
   return out;
 }
@@ -1800,7 +1804,7 @@ function scoreOutfit(o, cfg, ctx){
   const its = {}, fs = {};
   for (const s of SLOTS) if (o[s]){ its[s] = S.items.get(o[s]); fs[s] = ctx.feat.get(o[s]) || feat(its[s]); }
   let sc = 0;
-  const W = {top:1.25, bottom:1.05, shoes:.95, layer:.6, extra:.55};   // the layer flexes most: a work shirt can dress down a smart-casual day
+  const W = {top:1.25, bottom:1.05, shoes:.95, layer:.6, coat:.3, extra:.55};   // the layer flexes most: a work shirt can dress down a smart-casual day
   const fl = [];
   for (const s of SLOTS) if (fs[s]){ const d = fs[s].f - L; sc -= W[s] * d * d * .8; if (s !== 'extra') fl.push(fs[s].f); }
   if (fl.length > 1){ const spread = Math.max(...fl) - Math.min(...fl); if (spread > 1.6) sc -= (spread - 1.6) * .8; }
@@ -1831,7 +1835,8 @@ function scoreOutfit(o, cfg, ctx){
   }
   // weather
   const warmTop = ['sweater','sweatshirt','hoodie'].includes(tt);
-  if (cold && !its.layer) sc -= warmTop ? .4 : 1.3;
+  if (cold && !its.layer && !its.coat) sc -= warmTop ? .4 : 1.3;
+  if (its.coat){ if (cold) sc += .5; else if (hot) sc -= 2.5; else if (!cool) sc -= 1; if (L >= 3.5) sc += .2; }
   if (cool && !cold && !its.layer && !warmTop) sc -= .3;
   if (hot && its.layer) sc -= (lt === 'jacket' && fs.layer.f >= 4 && L >= 4) ? .4 : lt === 'vest' ? .3 : 1.1;
   if (cold && lt === 'vest') sc -= .8;
@@ -1875,7 +1880,7 @@ function smartRoll({level, vibe = null, locked = {}, season = 'any', fits = null
   const used0 = new Set(Object.values(locked).filter(Boolean));
   for (const s of SLOTS){
     let c = pool(s, used0, season, fits);
-    if (!c.length && s !== 'extra' && s !== 'layer') c = pool(s, used0, 'any', fits);     // nothing tagged for the season: use what there is
+    if (!c.length && s !== 'extra' && s !== 'layer' && s !== 'coat') c = pool(s, used0, 'any', fits);     // nothing tagged for the season: use what there is
     c.forEach(([id, it]) => ctx.feat.set(id, feat(it)));
     // keep pieces near the target level when there's enough choice
     const near = c.filter(([id]) => Math.abs(ctx.feat.get(id).f - L) <= 1.5);
@@ -1885,6 +1890,7 @@ function smartRoll({level, vibe = null, locked = {}, season = 'any', fits = null
   if (!pools.top.length || !pools.bottom.length) return rollOutfit({layer, extra, noClash:S.shuf.noClash, locked, season, fits});
   for (const s of SLOTS) if (locked[s]) ctx.feat.set(locked[s], feat(S.items.get(locked[s])));
   const wantLayer = layer === 'always' ? 1 : layer === 'never' ? 0 : (cold ? .95 : cool ? .6 : .25) + (L >= 4 ? .3 : 0) + (vibe === 'night' || vibe === 'date' ? .15 : 0);
+  const wantCoat = cold ? .8 : cool ? (L >= 4 ? .4 : .2) : 0;
   const tieOk = L >= 4 && pools.extra.some(([, it]) => it.type === 'tie');
   const hatOk = L <= 2.5 && (vibe === 'outdoors' || vibe === 'cozy') && pools.extra.some(([, it]) => it.type === 'hat');
   const pick = arr => arr.length ? arr[Math.floor(Math.random() * arr.length)][0] : null;
@@ -1896,6 +1902,8 @@ function smartRoll({level, vibe = null, locked = {}, season = 'any', fits = null
     if (locked.layer !== undefined) o.layer = locked.layer;
     else if (Math.random() < wantLayer) take('layer'); else o.layer = null;
     if (o.layer && o.layer === o.top) o.layer = null;
+    if (locked.coat !== undefined) o.coat = locked.coat;
+    else if (pools.coat.length && Math.random() < wantCoat) take('coat'); else o.coat = null;
     if (locked.extra !== undefined) o.extra = locked.extra;
     else {
       const tt = S.items.get(o.top)?.type;
@@ -1932,6 +1940,7 @@ function outfitReason(o, cfg){
   if (it('layer')) s = nm(it('layer')) + ' over ' + s;
   if (it('shoes')) s += ', ' + nm(it('shoes'));
   if (it('extra')) s += ' and ' + nm(it('extra'));
+  if (it('coat')) s += ', ' + nm(it('coat')) + ' on top for outside';
   const notes = [];
   const fs = SLOTS.filter(k => it(k)).map(k => [k, feat(it(k))]);
   const loud = fs.filter(([k, f]) => k !== 'extra' && (f.loud || f.pat));
@@ -1953,15 +1962,15 @@ function outfitReason(o, cfg){
 let claudeToken = 0, claudeCtl = null;
 function cancelClaude(){ claudeToken++; if (claudeCtl){ try { claudeCtl.abort(); } catch {} claudeCtl = null; } }
 function outfitPrompt(cfg, locked, cands){
-  const lines = cands.map(([id, it]) => { const w = lastWornDays().get(id); return {id, slot: SLOTS.filter(s => SLOT_TYPES[s].includes(it.type)).join('/'), kind: typeLabel(it), name: it.name || undefined, brand: it.brand || undefined, color: colorName(it.color), color2: it.color2 ? colorName(it.color2) : undefined, pattern: patName(it), dressiness: Math.round(formalityOf(it) * 2) / 2, seasons: seasonsText(it), wornDaysAgo: w != null && w >= 0 && w < 15 ? w : undefined}; });
+  const lines = cands.map(([id, it]) => { const w = lastWornDays().get(id); return {id, slot: SLOTS.filter(s => slotOk(s, it)).join('/'), kind: typeLabel(it), name: it.name || undefined, brand: it.brand || undefined, color: colorName(it.color), color2: it.color2 ? colorName(it.color2) : undefined, pattern: patName(it), dressiness: Math.round(formalityOf(it) * 2) / 2, seasons: seasonsText(it), wornDaysAgo: w != null && w >= 0 && w < 15 ? w : undefined}; });
   const lk = SLOTS.filter(s => locked[s]).map(s => s + '=' + locked[s]);
   return `You are styling an outfit from Joey's closet for ${cfg.dayWord || 'today'}. Pick pieces that genuinely look good together.\n` +
     `Target dressiness: ${levelText(cfg.level)} (${cfg.level} on a 1-5 scale: 1 lounge, 2 casual, 3 smart casual, 4 business, 5 dressy)` + (cfg.vibe ? `. Vibe: ${VIBE[cfg.vibe].label}` : '') + `.\n` +
     `Weather: ${cfg.temp != null ? Math.round(cfg.temp) + '°F' + (cfg.phrase ? ', ' + cfg.phrase : '') : cfg.fc ? 'forecast only' : 'unknown'}${cfg.fc ? ` (${cfg.day && cfg.day !== todayKey() ? dayWord(cfg.day) : 'today'} ${Math.round(cfg.fc.low)}° to ${Math.round(cfg.fc.high)}°${cfg.fc.precip ? ', ' + cfg.fc.precip : ''})` : ''}; season: ${cfg.season}. Nothing worn in the last 7 days unless there's no other fit.\n` +
     (lk.length ? `Locked pieces that must stay exactly as given: ${lk.join(', ')}.\n` : '') +
     `Pieces (JSON, "dressiness" is 1-5): ${JSON.stringify(lines)}\n` +
-    `Rules: one top, one bottom and one pair of shoes from the list; add a layer only if it suits the weather and the vibe; add an extra (tie or hat) only if it fits the look; use only ids from the list, each piece at most once, in a slot its "slot" allows; match the target dressiness; at most one loud colour or pattern; colours should harmonise; prefer pieces not worn in the last few days.\n` +
-    `Reply with only a JSON object: {"outfits":[{"layer":id or null,"top":id,"bottom":id,"shoes":id or null,"extra":id or null,"reason":"one short sentence, under 20 words, on why these go together"}]} with 1 to 3 different outfits, best first.`;
+    `Rules: one top, one bottom and one pair of shoes from the list; add a layer only if it suits the weather and the vibe; add a coat (worn outside over everything, even over a sport coat) only on cold or wet days; add an extra (tie or hat) only if it fits the look; use only ids from the list, each piece at most once, in a slot its "slot" allows; match the target dressiness; at most one loud colour or pattern; colours should harmonise; prefer pieces not worn in the last few days.\n` +
+    `Reply with only a JSON object: {"outfits":[{"coat":id or null,"layer":id or null,"top":id,"bottom":id,"shoes":id or null,"extra":id or null,"reason":"one short sentence, under 20 words, on why these go together"}]} with 1 to 3 different outfits, best first.`;
 }
 function parseClaudeOutfits(res, locked = {}){
   const arr = Array.isArray(res?.outfits) ? res.outfits : Array.isArray(res) ? res : [];
@@ -1973,7 +1982,7 @@ function parseClaudeOutfits(res, locked = {}){
       if (locked[s] !== undefined){ p[s] = locked[s]; if (locked[s]) used.add(locked[s]); continue; }
       const id = o[s] == null ? null : String(o[s]);
       const it = id ? S.items.get(id) : null;
-      if (id && (!it || (it.status || 'closet') !== 'closet' || !SLOT_TYPES[s].includes(it.type) || used.has(id))){ if (s === 'top' || s === 'bottom') ok = false; p[s] = null; continue; }
+      if (id && (!it || (it.status || 'closet') !== 'closet' || !slotOk(s, it) || used.has(id))){ if (s === 'top' || s === 'bottom') ok = false; p[s] = null; continue; }
       p[s] = id || null; if (id) used.add(id);
     }
     if (!ok || !p.top || !p.bottom) continue;
@@ -2076,7 +2085,7 @@ V.shuffle = {
     // first pick, or today's dress level just arrived from the shell and nothing has been touched or locked yet
     const stale = sh.source === 'smart' && !sh.smart.touched && sh.cfgKey && sh.cfgKey !== cfgKey(cfg) && !SLOTS.some(s => sh.locks[s]) && !(sh.claude && sh.claude.busy);
     if ((!sh.pieces.top || stale) && !sh.spinning){ Object.assign(sh.pieces, smartPick()); sh.source = 'smart'; sh.reason = outfitReason(sh.pieces, cfg); sh.cfgKey = cfgKey(cfg); }
-    const show = SLOTS.filter(s => (s !== 'layer' || sh.layer !== 'never') && (s !== 'extra' || sh.extra || sh.pieces.extra));
+    const show = SLOTS.filter(s => (s !== 'layer' || sh.layer !== 'never') && (s !== 'extra' || sh.extra || sh.pieces.extra) && (s !== 'coat' || sh.pieces.coat || sh.locks.coat || shufSeason() !== 'summer'));
     reels.innerHTML = show.map(s => {
       const it = S.items.get(sh.pieces[s]);
       return `<div class="reel ${sh.locks[s] ? 'locked' : ''}">
@@ -2664,7 +2673,7 @@ function openEditor(id){
 /* ---------- outfit builder ---------- */
 function openOutfitBuilder(id, preset, day){
   const src = id ? S.outfits.get(id) : null;
-  const o = src ? {...src} : {name:'', top:null, bottom:null, layer:null, shoes:null, extra:null, ...(preset || {})};
+  const o = src ? {...src} : {name:'', top:null, bottom:null, coat:null, layer:null, shoes:null, extra:null, ...(preset || {})};
   const se = day ? weekSeason(day.ws) : null;
   const order = ['top','bottom','shoes'];
   const touched = new Set(SLOTS.filter(s => o[s]));
@@ -2706,7 +2715,7 @@ function openOutfitBuilder(id, preset, day){
     q('#useSaved')?.addEventListener('click', () => { closeModal(); openOutfitChooser(day.dn); });
     q('#osave').addEventListener('click', async () => {
       const now = new Date().toISOString();
-      const pieces = {top:o.top, bottom:o.bottom, layer:o.layer || null, shoes:o.shoes || null, extra:o.extra || null};
+      const pieces = {top:o.top, bottom:o.bottom, coat:o.coat || null, layer:o.layer || null, shoes:o.shoes || null, extra:o.extra || null};
       if (day){
         const also = q('#o-also').checked; const nm = q('#o-name').value.trim();
         closeModal();
@@ -2759,7 +2768,7 @@ function openOutfitChooser(dn){
     sheet.addEventListener('click', async e => {
       const b = e.target.closest('[data-oid]'); if (!b) return;
       const o = S.outfits.get(b.dataset.oid); if (!o) return;
-      closeModal(); await setDay(dn, {top:o.top, bottom:o.bottom, layer:o.layer || null, shoes:o.shoes || null, extra:o.extra || null, label:o.name || 'Outfit', outfitId:b.dataset.oid});
+      closeModal(); await setDay(dn, {top:o.top, bottom:o.bottom, coat:o.coat || null, layer:o.layer || null, shoes:o.shoes || null, extra:o.extra || null, label:o.name || 'Outfit', outfitId:b.dataset.oid});
     });
     sheet.querySelector('#dshuf').addEventListener('click', () => { closeModal(); shuffleDay(dn); });
     sheet.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => closeModal()));
@@ -2833,13 +2842,13 @@ document.addEventListener('click', async e => {
     case 'new-outfit': openOutfitBuilder(null); break;
     case 'edit-outfit': openOutfitBuilder(id); break;
     case 'del-outfit': { const done = () => toast('Outfit deleted.'); if (await delDoc('outfits', id, done)) done(); break; }
-    case 'plan-outfit': { const o = S.outfits.get(id); if (o) openDayChooser({top:o.top, bottom:o.bottom, layer:o.layer || null, shoes:o.shoes || null, extra:o.extra || null}, o.name, id); break; }
+    case 'plan-outfit': { const o = S.outfits.get(id); if (o) openDayChooser({top:o.top, bottom:o.bottom, coat:o.coat || null, layer:o.layer || null, shoes:o.shoes || null, extra:o.extra || null}, o.name, id); break; }
     case 'week-prev': S.weekStart = addDays(S.weekStart, -7); V.week.update(); break;
     case 'week-next': S.weekStart = addDays(S.weekStart, 7); V.week.update(); break;
     case 'week-today': S.weekStart = mondayOf(new Date()); V.week.update(); break;
     case 'week-fill': await fillWeek(); break;
     case 'week-clear': { const k = dkey(S.weekStart); if (S.weeks.has(k)) await delDoc('weeks', k); break; }
-    case 'day-pick': { const dn = b.dataset.day; const cur = S.weeks.get(dkey(S.weekStart))?.days?.[dn]; openOutfitBuilder(null, cur ? {top:cur.top || null, bottom:cur.bottom || null, layer:cur.layer || null, shoes:cur.shoes || null, extra:cur.extra || null} : null, {dn, ws:S.weekStart}); break; }
+    case 'day-pick': { const dn = b.dataset.day; const cur = S.weeks.get(dkey(S.weekStart))?.days?.[dn]; openOutfitBuilder(null, cur ? {top:cur.top || null, bottom:cur.bottom || null, coat:cur.coat || null, layer:cur.layer || null, shoes:cur.shoes || null, extra:cur.extra || null} : null, {dn, ws:S.weekStart}); break; }
     case 'day-shuffle': await shuffleDay(b.dataset.day); break;
     case 'day-clear': await setDay(b.dataset.day, null); break;
     case 'shuf-go': spin('smart'); break;
