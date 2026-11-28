@@ -27,6 +27,7 @@
     const email = (window.__hbAccount && window.__hbAccount.email) || '';
     const html = `<header><h2>Your closet</h2><button class="x" data-close aria-label="Close">&times;</button></header>
       <div class="menu-list">${email ? `<p class="who">Signed in as ${esc(email)}</p>` : ''}
+        ${BATCH && live().length ? `<button class="menu-item" data-m="continue"><b>Continue adding (${live().length} waiting)</b><span>Back to the batch you were reviewing.</span></button>` : ''}
         <button class="menu-item" data-m="several"><b>Add several pieces</b><span>Pick photos from your camera roll. Claude sorts them into pieces and fills each one in.</span></button>
         <button class="menu-item" data-m="download"><b>Download my closet</b><span>One file with every piece, photo and planned week.</span></button>
         <button class="menu-item" data-m="restore"><b>Restore from file</b><span>Bring in a closet file, such as the copy from Home Base. It keeps what is already here unless you say otherwise.</span></button>
@@ -36,7 +37,8 @@
       sheet.addEventListener('click', e => {
         const b = e.target.closest('[data-m]'); if (!b) return;
         const m = b.dataset.m;
-        if (m === 'several') pickPhotos();          // must start inside this tap so the phone allows the photo picker
+        if (m === 'continue') { closeModal(); paint(); }
+        else if (m === 'several') pickPhotos();          // must start inside this tap so the phone allows the photo picker
         else if (m === 'download') downloadCloset();
         else if (m === 'restore') pickRestore();
         else if (m === 'signout') window.__hbAccount.signOut();
@@ -296,7 +298,7 @@
     const c = counts(), all = live().filter(r => r.state === 'ready'), ready = all.filter(r => !r.dup), flagged = all.length - ready.length, unset = ready.filter(r => !r.fit).length, working = live().filter(r => r.state === 'working').length;
     h.innerHTML = `<span class="as-count">${c.hung} hung · ${c.binned} to the bin · ${c.waiting} waiting${working ? ' · Claude is reading ' + working : ''}</span><span class="grow"></span>` +
       (BATCH.last ? `<button class="btn ghost" data-a="undo">Undo</button>` : '') +
-      `<button class="btn primary" data-a="hang-rest"${ready.length && !unset && !working ? '' : ' disabled'}>Hang the rest</button>`;
+      `<button class="btn primary" data-a="hang-rest"${ready.length && !unset && !working && !BATCH.hanging ? '' : ' disabled'}>${BATCH.hanging ? 'Hanging…' : 'Hang the rest'}</button>`;
     const end = document.getElementById('asEnd');
     if (end) end.innerHTML = !c.waiting && BATCH.rows.length ? `<b>Done.</b> Hung ${c.hung} · ${c.binned} to the bin · ${c.skipped} skipped. <button class="btn" data-close>Close</button>` : [unset ? `${unset} still need a fit` : '', flagged ? `${fmtN(flagged, 'piece looks', 'pieces look')} like one you already have: decide those yourself` : ''].filter(Boolean).map(t => `<span class="as-count">${t}</span>`).join(' · ');
   }
@@ -326,6 +328,7 @@
     const r = rowById(t.closest('[data-r]').dataset.r); if (!r || !r.fields) return;
     r.fields[t.dataset.f] = t.value;
     if (t.dataset.f === 'type') delete r.fields.style;   // a style belongs to one kind of piece
+    clearTimeout(r.__dt); r.__dt = setTimeout(() => saveDraft(r), 600);   // name, brand and size survive a closed app too
   }
   async function onClick(e) {
     const b = e.target.closest('[data-a]'); if (!b || b.disabled) return;
@@ -337,11 +340,16 @@
       if (!r.fit) { r.note = 'Pick a fit first.'; paintRow(r); return; }
       await place(r, a === 'bin');
     }
-    else if (a === 'hang-rest') { for (const x of live().filter(x => x.state === 'ready' && x.fit && !x.dup)) await place(x, false); }
+    else if (a === 'hang-rest') {
+      if (BATCH.hanging) return; BATCH.hanging = true; paintHead();
+      try { for (const x of live().filter(x => x.state === 'ready' && x.fit && !x.dup)) await place(x, false); }
+      finally { BATCH.hanging = false; paintHead(); }
+    }
     else if (a === 'undo') await undo();
   }
   // save one piece: its photos, then the piece itself (if the piece can't be saved the photos go again)
   async function place(r, bin) {
+    if (r.state !== 'ready') return;   // a second tap, or "Hang it" while "Hang the rest" runs, never hangs a piece twice
     r.state = 'saving'; r.note = ''; paintRow(r);
     const made = [];
     try {

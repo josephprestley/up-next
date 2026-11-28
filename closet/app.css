@@ -78,9 +78,15 @@ html.hb-gated body{overflow:hidden}
 body::before{background:#4a3d34}
 /* Phones: the five sections sit in a bar at the bottom, in thumb's reach, above the home indicator */
 @media (max-width:700px){
-  .tabs{position:fixed;left:0;right:0;bottom:0;top:auto;z-index:15;background:rgba(244,242,239,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line);border-bottom:0;padding-bottom:env(safe-area-inset-bottom,0px)}
+  .tabs{position:fixed;left:0;right:0;bottom:0;top:auto;z-index:15;background:color-mix(in srgb,var(--bg) 92%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line);border-bottom:0;padding-bottom:env(safe-area-inset-bottom,0px)}
   .tabs .wrap{padding-block:0 4px}
+  #tabs .tab{flex:1;justify-content:center}
   .tab[aria-current="page"]{box-shadow:inset 0 2px 0 var(--ink);font-weight:600}
   body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
-  .toast,.offline-note{bottom:calc(78px + env(safe-area-inset-bottom,0px))}
+  .toast,.offline-note,.upd-bar{bottom:calc(78px + env(safe-area-inset-bottom,0px))}
+  body.shuf-bar .toast,body.shuf-bar .upd-bar{bottom:calc(140px + env(safe-area-inset-bottom,0px))}
 }
+
+/* "A new version is ready" (Nov 27) */
+.upd-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:max(16px,env(safe-area-inset-bottom,0px));z-index:41;display:flex;gap:12px;align-items:center;background:var(--ink);color:var(--bg);border-radius:4px;padding:6px 6px 6px 16px;font-size:14px;box-shadow:var(--shadow);max-width:calc(100% - 24px)}
+.upd-bar button{border:0;background:var(--bg);color:var(--ink);font:600 14px var(--f-body);border-radius:2px;min-height:40px;padding:0 14px;cursor:pointer}
